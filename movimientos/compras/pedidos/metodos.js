@@ -445,8 +445,7 @@ function listarDetalles(){
     .done(function(resultado) {
         var lista = "";
         for (rs of resultado) {
-            lista += "<tr class=\"item-list\" onclick=\"seleccionPedidoDet(" + rs.producto_id + ", '" + rs.prod_desc + "', " + rs.pedido_comp_cant + ");\">";
-            
+            lista += lista + "<tr class=\"item-list\" onclick=\"seleccionPedidoDet(" + rs.producto_id + ", '" + rs.prod_desc + "', " + rs.pedido_comp_cant + ");\">";
                 lista += "<td>";
                 lista += rs.producto_id;
                 lista += "</td>";
@@ -460,7 +459,7 @@ function listarDetalles(){
             cantidadDetalle++;
         }
         $("#tableDetalles").html(lista);
-        if ($("#txtEstado").val() === "PENDIENTE" && cantidadDetalle>0){
+        if($("#txtEstado").val() === "PENDIENTE" && cantidadDetalle > 0){
             $("#btnConfirmar").removeAttr("disabled");
         }else{
             $("#btnConfirmar").attr("disabled","true");
