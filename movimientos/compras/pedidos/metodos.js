@@ -1,9 +1,6 @@
 listar();
 campofecha();
 function formatoTabla(){
-    if ($.fn.DataTable.isDataTable('.js-exportable')) {
-        $('.js-exportable').DataTable().destroy();
-    }
     //Exportable table
     $('.js-exportable').DataTable({
         dom: 'Bfrtip',
@@ -60,10 +57,10 @@ function agregar(){
     $("#emp_descripcion").removeAttr("disabled");
     $("#suc_descripcion").removeAttr("disabled");
 
-    $("#btnAgregar").attr("disabled","true");
-    $("#btnEditar").attr("disabled","true");
-    $("#btnAnular").attr("disabled","true");
-    $("#btnConfirmar").attr("disabled","true");
+    $("#btnAgregar").attr("disabled", "true");
+    $("#btnEditar").attr("disabled", "true");
+    $("#btnAnular").attr("disabled", "true");
+    $("#btnConfirmar").attr("disabled", "true");
 
     $("#btnGrabar").removeAttr("disabled");
     $("#btnCancelar").removeAttr("disabled");
@@ -72,7 +69,6 @@ function agregar(){
     $("#registros").attr("style","display:none");
 
 }
-
 function editar(){
     $("#txtOperacion").val(2);
     $("#txtFecha").removeAttr("disabled");
@@ -80,41 +76,38 @@ function editar(){
     $("#emp_descripcion").removeAttr("disabled");
     $("#suc_descripcion").removeAttr("disabled");
 
-    $("#btnAgregar").attr("disabled","true");
-    $("#btnEditar").attr("disabled","true");
-    $("#btnAnular").attr("disabled","true");
-    $("#btnConfirmar").attr("disabled","true");
+    $("#btnAgregar").attr("disabled", "true");
+    $("#btnEditar").attr("disabled", "true");
+    $("#btnAnular").attr("disabled", "true");
+    $("#btnConfirmar").attr("disabled", "true");
 
     $("#btnGrabar").removeAttr("disabled");
     $("#btnCancelar").removeAttr("disabled");
 
     $(".form-line").attr("class","form-line focused");
 }
-
 function anular(){
     $("#txtOperacion").val(3);
 
-    $("#btnAgregar").attr("disabled","true");
-    $("#btnEditar").attr("disabled","true");
-    $("#btnAnular").attr("disabled","true");
-    $("#btnConfirmar").attr("disabled","true");
+    $("#btnAgregar").attr("disabled", "true");
+    $("#btnEditar").attr("disabled", "true");
+    $("#btnAnular").attr("disabled", "true");
+    $("#btnConfirmar").attr("disabled", "true");
 
     $("#btnGrabar").removeAttr("disabled");
     $("#btnCancelar").removeAttr("disabled");
 }
-
 function confirmar(){
     $("#txtOperacion").val(4);
 
-    $("#btnAgregar").attr("disabled","true");
-    $("#btnEditar").attr("disabled","true");
-    $("#btnAnular").attr("disabled","true");
-    $("#btnConfirmar").attr("disabled","true");
+    $("#btnAgregar").attr("disabled", "true");
+    $("#btnEditar").attr("disabled", "true");
+    $("#btnAnular").attr("disabled", "true");
+    $("#btnConfirmar").attr("disabled", "true");
 
     $("#btnGrabar").removeAttr("disabled");
     $("#btnCancelar").removeAttr("disabled");
 }
-
 function confirmarOperacion() {
     var oper = parseInt($("#txtOperacion").val());
     var titulo = "AGREGAR";
@@ -128,10 +121,10 @@ function confirmarOperacion() {
         titulo = "ANULAR";
         pregunta = "¿DESEA ANULAR EL REGISTRO SELECCIONADO?";
     }
-    if(oper===4){
+    /*if(oper===4){
         titulo = "CONFIRMAR";
         pregunta = "¿DESEA CONFIRMAR EL REGISTRO SELECCIONADO?";
-    }
+    }*/
     swal({
         title: titulo,
         text: pregunta,
@@ -174,8 +167,7 @@ function listar(){
     })
     .fail(function(a,b,c){
         alert(c);
-    });
-    
+    }); 
 }
 function seleccionPedidoCab(id_pedido_comp, ped_comp_fecha, ped_comp_fec_aprob, emp_id, emp_descripcion, suc_id, suc_descripcion, ped_estado){
     $("#id").val(id_pedido_comp);
@@ -192,18 +184,18 @@ function seleccionPedidoCab(id_pedido_comp, ped_comp_fecha, ped_comp_fec_aprob, 
     $("#formDetalles").attr("style","display:none;");
     listarDetalles();
 
-    $("#btnAgregar").attr("disabled","true");
-    $("#btnEditar").attr("disabled","true");
-    $("#btnGrabar").attr("disabled","true");
-    $("#btnCancelar").attr("disabled","true");
-    $("#btnAnular").attr("disabled","true");
-    $("#btnConfirmar").attr("disabled","true");
+    $("#btnAgregar").attr("disabled", "true");
+    $("#btnEditar").attr("disabled", "true");
+    $("#btnGrabar").attr("disabled", "true");
+    $("#btnCancelar").attr("disabled", "true");
+    $("#btnAnular").attr("disabled", "true");
+    $("#btnConfirmar").attr("disabled", "true");
 
     $("#btnCancelar").removeAttr("disabled");
 
     if(ped_estado === "PENDIENTE"){
-        $("#btnAgregar").attr("disabled","true");
-        $("#btnGrabar").attr("disabled","true");
+        $("#btnAgregar").attr("disabled", "true");
+        $("#btnGrabar").attr("disabled", "true");
 
         $("#btnAnular").removeAttr("disabled");
         $("#btnConfirmar").removeAttr("disabled");
@@ -212,7 +204,6 @@ function seleccionPedidoCab(id_pedido_comp, ped_comp_fecha, ped_comp_fec_aprob, 
     }
     $(".form-line").attr("class","form-line focused");
 }
-
 function grabar(){
     var endpoint = "pedido_comp_cab/create";
     var metodo = "POST";
@@ -347,6 +338,8 @@ function agregarDetalle(){
 }
 function editarDetalle(){
     $("#txtOperacionDetalle").val(2);
+    $("#prod_desc").removeAttr("disabled");
+    $("#txtCant").removeAttr("disabled");
     $("#btnAgregarDetalle").attr("style","display:none");
     $("#btnEditarDetalle").attr("style","display:none");
     $("#btnEliminarDetalle").attr("style","display:none");
@@ -362,6 +355,7 @@ function eliminarDetalle(){
 function grabarDetalle(){
     var endpoint = "pedido_comp_det/create";
     var metodo = "POST";
+
     if($("#txtOperacionDetalle").val()==2){
         endpoint = "pedido_comp_det/update/"+$("#id").val()+"/"+$("#prod_id").val();
         metodo = "PUT";
@@ -382,7 +376,6 @@ function grabarDetalle(){
             "pedido_comp_precio": $("#txtPrecio").val(),
             "stock_id": $("#txtStock").val(),
             "deposito_id": $("#txtDeposito").val()
-            
         }
     })
     .done(function(respuesta){
@@ -438,7 +431,7 @@ function seleccionProductos(producto_id, prod_desc){
 function listarDetalles(){
     var cantidadDetalle = 0;
     $.ajax({
-        url: getUrl() + "pedido_comp_det/read/" + $("#id").val(),
+        url:getUrl()+"pedido_comp_det/read/"+$("#id").val(),
         method: "GET",
         dataType: "json"
     })
@@ -446,25 +439,24 @@ function listarDetalles(){
         var lista = "";
         for (rs of resultado) {
             lista += lista + "<tr class=\"item-list\" onclick=\"seleccionPedidoDet(" + rs.producto_id + ", '" + rs.prod_desc + "', " + rs.pedido_comp_cant + ");\">";
-                lista += "<td>";
-                lista += rs.producto_id;
-                lista += "</td>";
-                lista += "<td>";
-                lista += rs.prod_desc;
-                lista += "</td>";
-                lista += "<td>"; 
-                lista += rs.pedido_comp_cant;
-                lista += "</td>";
-            lista += "</tr>";
+                lista += lista + "<td>";
+                lista = lista + rs.producto_id;
+                lista = lista + "</td>";
+                lista = lista + "<td>";
+                lista = lista + rs.prod_desc;
+                lista = lista + "</td>";
+                lista = lista + "<td>"; 
+                lista = lista + rs.pedido_comp_cant;
+                lista = lista + "</td>";
+            lista = lista + "</tr>";
             cantidadDetalle++;
         }
         $("#tableDetalles").html(lista);
         if($("#txtEstado").val() === "PENDIENTE" && cantidadDetalle > 0){
             $("#btnConfirmar").removeAttr("disabled");
         }else{
-            $("#btnConfirmar").attr("disabled","true");
+            $("#btnConfirmar").attr("disabled", "true");
         }
-
     })
     .fail(function(a,b,c) {
         alert(c);
