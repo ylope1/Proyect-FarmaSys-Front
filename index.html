@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>Acceso FarmaSys</title>
+    <!-- Favicon-->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+
+    <!-- Bootstrap Core Css -->
+    <link href="plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Waves Effect Css -->
+    <link href="plugins/node-waves/waves.css" rel="stylesheet" />
+
+    <!-- Animation Css -->
+    <link href="plugins/animate-css/animate.css" rel="stylesheet" />
+
+    <!-- Custom Css -->
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- Estilos personalizados para el fondo de la página -->
+    <style>
+        body.login-page {
+            background-image: url('images/fondo_acceso.jpeg');
+            background-size: cover; 
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            height: 100vh;
+            margin: 0; 
+            padding: 0;
+        }
+
+        .login-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%; 
+            max-width: 400px; 
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body class="login-page">
+    <div class="login-box">
+        <div class="logo">
+            <a href="javascript:void(0);">BIENVENIDO</b></a>
+            <small>Sistema de Gestion - FarmaSys</small>
+        </div>
+        <div class="card">
+            <div class="body">
+                <div class="msg">Inicia sesión para continuar</div>
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <i class="material-icons">person</i>
+                    </span>
+                    <div class="form-line">
+                        <input type="text" class="form-control" id="login" placeholder="Usuario" required autofocus>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <i class="material-icons">lock</i>
+                    </span>
+                    <div class="form-line">
+                        <input type="password" class="form-control" id="password" placeholder="Contraseña" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-8 p-t-5">
+                        <input type="checkbox" name="rememberme" id="rememberme" class="filled-in chk-col-green">
+                        <label for="rememberme">Recordarme</label>
+                    </div>
+                    <div class="col-xs-4">
+                        <button class="btn btn-block bg-green waves-effect" type="button" onclick="validarUsuario();">INGRESAR</button>
+                    </div>
+                </div>
+                <div class="row m-t-15 m-b--20">
+                    <div class="col-xs-6">
+                        <a href="sign-up.html">Regístrate ahora</a>
+                    </div>
+                    <div class="col-xs-6 align-right">
+                        <a href="forgot-password.html">¿Olvidaste tu contraseña?</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Jquery Core Js -->
+    <script src="plugins/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core Js -->
+    <script src="plugins/bootstrap/js/bootstrap.js"></script>
+
+    <!-- Waves Effect Plugin Js -->
+    <script src="plugins/node-waves/waves.js"></script>
+
+    <!-- Validation Plugin Js -->
+    <script src="plugins/jquery-validation/jquery.validate.js"></script>
+
+    <!-- Custom Js -->
+    <script src="js/admin.js"></script>
+    <script src="js/pages/examples/sign-in.js"></script>
+    <script src="js/ruta.js"></script>
+    <script>
+        sessionStorage.removeItem('datosSesion');
+        function validarUsuario(){
+            sessionStorage.removeItem('datosSesion');
+            $.ajax({
+                url:getUrl()+"login",
+                method:"POST",
+                dataType:"json",
+                data: {
+                    "password":$("#password").val(),
+                    "login":$("#login").val()
+                }
+            })
+            .done(function(resultado){
+                sessionStorage.setItem('datosSesion',JSON.stringify(resultado));
+                console.log(sessionStorage.getItem('datosSesion'));
+                window.location = 'menu.php';
+            })
+            .fail(function(a,b,c){
+                var error = JSON.parse(a.responseText);
+                alert(error.message);
+                console.log(a.responseText);
+            })
+        }
+    </script>
+</body>
+
+</html>
