@@ -423,6 +423,7 @@
                         <ul class="ml-menu">
                             <li>
                                 <a href="javascript:void(0);" class="menu-toggle">
+                                    <i class="material-icons">shopping_cart</i>
                                     <span>Compras</span>
                                 </a>
                                 <ul class="ml-menu">
@@ -440,6 +441,7 @@
                             </li>
                             <li>
                                 <a href="javascript:void(0);" class="menu-toggle">
+                                    <i class="material-icons">business_center</i>
                                     <span>Ventas y Cobros</span>
                                 </a>
                                 <ul class="ml-menu">
@@ -462,6 +464,7 @@
                             </li>
                             <li>
                                 <a href="javascript:void(0);" class="menu-toggle">
+                                    <i class="material-icons">monetization_on</i>
                                     <span>Tesorería</span>
                                 </a>
                                 <ul class="ml-menu">
