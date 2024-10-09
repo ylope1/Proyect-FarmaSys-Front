@@ -265,7 +265,7 @@
                 <ul class="list">
                     <li class="header">MENU PRINCIPAL</li>
                     <li>
-                        <a href="../../../index.html">
+                        <a href="http://localhost/ProyectFarmaSys-front/menu.php">
                             <i class="material-icons">home</i>
                             <span>Menu</span>
                         </a>
@@ -375,6 +375,40 @@
                                     <li>
                                         <a href="referenciales/compras/tipo_facturas">
                                             <span>Tipo de Facturas</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);" class="menu-toggle">
+                                    <span>Ventas</span>
+                                </a>
+                                <ul class="ml-menu">
+                                    <li>
+                                        <a href="referenciales/ventas/forma_cobro">
+                                            <span>Formas de Cobros</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="referenciales/ventas/cajas">
+                                            <span>Cajas</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);" class="menu-toggle">
+                                    <span>Tesoreria</span>
+                                </a>
+                                <ul class="ml-menu">
+                                    <li>
+                                        <a href="referenciales/tesoreria/rubro">
+                                            <span>Rubros</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="referenciales/tesoreria/documentos">
+                                            <span>Documentos</span>
                                         </a>
                                     </li>
                                 </ul>
