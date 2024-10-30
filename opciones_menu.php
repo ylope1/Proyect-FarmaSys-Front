@@ -433,7 +433,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="javascript:void(0);">
+                                        <a href="movimientos/compras/presupuestos">
                                             <span>Presupuestos Compras</span>
                                         </a>
                                     </li>

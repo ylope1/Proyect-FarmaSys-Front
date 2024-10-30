@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>GUI PEDIDOS COMPRAS</title>
+    <title>GUI PRESUPUESTOS</title>
     <!-- Favicon-->
     <link rel="icon" href="../../../favicon.ico" type="image/x-icon">
 
@@ -50,14 +50,13 @@
                     
                     <div class="card">
                         <div class="header">
-                            <h2>Gestionar Pedidos de Compras <small>CRUD de Pedidos y su detalle</small> </h2>
+                            <h2>Gestionar Presupuestos de Compras <small>CRUD de Presupuestos y sus detalles</small> </h2>
                         </div>
                         <div class="body">
                             <div class="row clearfix">
                                 <input type="hidden" value="0" id="txtOperacion"/>
-                                <input type="hidden" value="1" id="funcionario_id"/>
-                                <input type="hidden" value="0" id="func_nombre"/>
-                                <input type="hidden" value="PENDIENTE" id="pedido_estado"/>
+                                <input type="hidden" value="1" id="user_id"/>
+                                <input type="hidden" value="PENDIENTE" id="pre_estado"/>
                                 <!-- CAMPO PARA CODIGO CON 4 COLUMNAS -->
                                 <div class="col-sm-4">
                                     <div class="form-group form-float">
@@ -81,48 +80,73 @@
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="text" id="txtFecAprob" class="datetimepicker form-control" disabled>
-                                            <label class="form-label">Fecha Aprobacion</label>
+                                            <label class="form-label">Fecha Aprobación</label>
                                         </div>
                                     </div>
                                 </div>
-                                 <!-- CAMPO PARA EMPRESA CON 6 COLUMNAS -->
-                                 <div class="col-sm-6">
+                                <!-- CAMPO PARA BUSCAR PROVEEDOR CON 4 COLUMNAS -->
+                                <div class="col-sm-4">
                                     <div class="form-group form-float">
                                         <div class="form-line">
-                                            <input type="hidden" id="emp_id" value="0"/>
-                                            <input type="text" id="emp_descrip" class="form-control" disabled onkeyup="buscarEmpresas();">
+                                            <input type="hidden" id="proveedor_id" value="0"/>
+                                            <input type="text" id="proveedor_descrip" class="form-control" disabled onkeyup="buscarProveedores();">
+                                            <label class="form-label">Proveedor</label>
+                                        </div>
+                                        <div id="listaProveedores" style="display:none;"></div>
+                                    </div>
+                                </div>
+                                <!-- CAMPO PARA EMPRESA CON 4 COLUMNAS -->
+                                <div class="col-sm-4">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="hidden" id="empresa_id" value="0"/>
+                                            <input type="text" id="empresa_desc" class="form-control" disabled onkeyup="buscarEmpresas();">
                                             <label class="form-label">Empresa</label>
                                         </div>
                                         <div id="listaEmpresas" style="display:none;"></div>
                                     </div>
                                 </div>
-                                 <!-- CAMPO PARA SUCURSAL CON 6 COLUMNAS -->
-                                <div class="col-sm-6">
+                                <!-- CAMPO PARA SUCURSAL CON 4 COLUMNAS -->
+                                <div class="col-sm-4">
                                     <div class="form-group form-float">
                                         <div class="form-line">
-                                            <input type="hidden" id="suc_id" value="0"/>
-                                            <input type="text" id="suc_descrip" class="form-control" disabled onkeyup="buscarSucursales();">
+                                            <input type="hidden" id="sucursal_id" value="0"/>
+                                            <input type="text" id="suc_desc" class="form-control" disabled onkeyup="buscarSucursales();">
                                             <label class="form-label">Sucursal</label>
                                         </div>
-                                    <div id="listaSucursales" style="display:none;"></div>
+                                        <div id="listaSucursales" style="display:none;"></div>
+                                    </div>
+                                </div>
+                                <!-- CAMPO PARA BUSCAR PEDIDOS CON 12 COLUMNAS -->
+                                <div class="col-sm-12">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="hidden" id="pedido_comp_id" value="0"/>
+                                            <input type="text" id="pedido" class="form-control" disabled onkeyup="buscarPedidos();">
+                                            <label class="form-label">Pedidos</label>
+                                        </div>
+                                        <div id="listaPedidos" style="display:none;"></div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="button-demo">
-                            <button type="button" id="btnAgregar" class="btn btn-success waves-effect" onclick="agregar();">AGREGAR</button>
-                            <button type="button" id="btnEditar" class="btn btn-primary waves-effect" onclick="editar();" disabled>EDITAR</button>
-                            <button type="button" id="btnAnular" class="btn btn-danger waves-effect" onclick="anular();"disabled>ANULAR</button>
-                            <button type="button" id="btnConfirmar" class="btn btn-success waves-effect" onclick="confirmar();"disabled>CONFIRMAR</button>
-                            <button type="button" id="btnGrabar" class="btn btn-default waves-effect" disabled onclick="confirmarOperacion();">GRABAR</button>
-                            <button type="button" id="btnCancelar" class="btn btn-warning waves-effect" onclick="cancelar();">CANCELAR</button> 
-                        </div>
-                    </div>
-                </div>
 
-                <div class="card" id="detalles" style="display:none">
-                    <div class="header">
-                        <h2>Detalles del Pedido Compras</h2>
+                            <div class="button-demo">
+                                <button type="button" id="btnAgregar" class="btn btn-success waves-effect" onclick="agregar();">AGREGAR</button>
+                                <button type="button" id="btnEditar" class="btn btn-primary waves-effect" onclick="editar();" disabled>EDITAR</button>
+                                <button type="button" id="btnAnular" class="btn btn-danger waves-effect" onclick="anular();"disabled>ANULAR</button>
+                                <button type="button" id="btnConfirmar" class="btn btn-success waves-effect" onclick="confirmar();"disabled>CONFIRMAR</button>
+                                <button type="button" id="btnRechazar" class="btn btn-danger waves-effect" onclick="rechazar();"disabled>RECHAZAR</button>
+                                <button type="button" id="btnAprobar" class="btn btn-success waves-effect" onclick="aprobar();"disabled>APROBAR</button>
+                                <button type="button" id="btnGrabar" class="btn btn-default waves-effect" disabled onclick="confirmarOperacion();">GRABAR</button>
+                                <button type="button" id="btnCancelar" class="btn btn-warning waves-effect" onclick="cancelar();" disabled>CANCELAR</button> 
+                            </div>
+                        </div>
                     </div>
+
+                    <div class="card" id="detalles" style="display:none"> 
+                        <div class="header">
+                            <h2>Detalles del Presupuesto</h2>
+                        </div>
                         <div class="body">
                             <div class="row clearfix" id="formDetalles">
                                 <input type="hidden" value="0" id="txtOperacionDetalle"/>
@@ -135,12 +159,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA FECHA DE DESCRIPCION CON 5 COLUMNAS -->
-                                <div class="col-sm-5">
+                                <!-- CAMPO PARA BUSCAR PRODUCTOS CON 4 COLUMNAS -->
+                                <div class="col-sm-4">
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="text" id="prod_desc" class="form-control" disabled onkeyup="buscarProductos();">
-                                            <label class="form-label">Producto</label>
+                                            <label class="form-label">Productos</label>
                                         </div>
                                         <div id="ListaProductos" style="display:none;"></div>
                                     </div>
@@ -154,8 +178,17 @@
                                         </div>
                                     </div>
                                 </div>
-                                    
-                                <div class="col-sm-3">
+                                <!-- CAMPO PARA PRECIO COMPRA CON 2 COLUMNAS -->
+                                <div class="col-sm-2">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="text" id="det_costo" class="form-control" disabled>
+                                            <label class="form-label">Precio Compra</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-2">
                                     <div class="icon-button-demo">
                                         <button type="button" id="btnAgregarDetalle" class="btn btn-primary waves-effect" onclick="agregarDetalle();">
                                             <i class="material-icons">add</i>
@@ -179,26 +212,26 @@
                                             <th>Código</th>
                                             <th>Producto</th>
                                             <th>Cantidad</th>
+                                            <th>Precio Compra</th>
+                                            <th>Sub Total</th>
                                         </tr>
                                     </thead>
                                     <tbody id="tableDetalles">
                                         
                                     </tbody>
                                     <tfoot>
-                                        <tr style="background-color: #e6e6e6;">
-                                            <th>Código</th>
-                                            <th>Producto</th>
-                                            <th>Cantidad</th>
+                                        <tr>
+                                            <th colspan="4">Total General</th>
+                                            <th class="text-right">0</th>
                                         </tr>
                                     </tfoot>    
                                 </table>
                             </div>
-                        </div>
+                         </div>
                     </div>
-
                     <div class="card" id="registros">
                         <div class="header">
-                            <h2>Registros de Pedidos de Compras</h2>
+                            <h2>Registros de Presupuesto de Compras</h2>
                         </div>
                         <div class="body">
                             <div class="table-responsive">
@@ -207,11 +240,12 @@
                                         <tr style="background-color: #e6e6e6;">
                                             <th>Código</th>
                                             <th>Fecha</th>
-                                            <th>Fecha Aprobacion</th>
-                                            <th>Empresa</th>
+                                            <th>Fecha Aprobación</th>
+                                            <th>Proveedor</th>
                                             <th>Sucursal</th>
                                             <th>Usuario</th>
                                             <th>Estado</th>
+                                            <th>Pedido</th>
                                         </tr>
                                     </thead>
                                     <tbody id="tableBody">
@@ -221,22 +255,22 @@
                                         <tr style="background-color: #e6e6e6;">
                                             <th>Código</th>
                                             <th>Fecha</th>
-                                            <th>Fecha Aprobacion</th>
-                                            <th>Empresa</th>
+                                            <th>Fecha Aprobación</th>
+                                            <th>Proveedor</th>
                                             <th>Sucursal</th>
                                             <th>Usuario</th>
                                             <th>Estado</th>
+                                            <th>Pedido</th>
                                         </tr>
                                     </tfoot>    
                                 </table>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>  
             </div>
         </div>
     </section>
-
 
     <!-- Jquery Core Js -->
     <script src="../../../plugins/jquery/jquery.min.js"></script>
