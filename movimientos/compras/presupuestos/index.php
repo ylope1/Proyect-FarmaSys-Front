@@ -56,6 +56,7 @@
                             <div class="row clearfix">
                                 <input type="hidden" value="0" id="txtOperacion"/>
                                 <input type="hidden" value="1" id="user_id"/>
+                                <input type="hidden" value="0" id="user_name"/>
                                 <input type="hidden" value="PENDIENTE" id="pre_estado"/>
                                 <!-- CAMPO PARA CODIGO CON 4 COLUMNAS -->
                                 <div class="col-sm-4">
@@ -89,7 +90,7 @@
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="hidden" id="proveedor_id" value="0"/>
-                                            <input type="text" id="proveedor_descrip" class="form-control" disabled onkeyup="buscarProveedores();">
+                                            <input type="text" id="proveedor_desc" class="form-control" disabled onkeyup="buscarProveedores();">
                                             <label class="form-label">Proveedor</label>
                                         </div>
                                         <div id="listaProveedores" style="display:none;"></div>
@@ -222,48 +223,51 @@
                                     <tfoot>
                                         <tr>
                                             <th colspan="4">Total General</th>
-                                            <th class="text-right">0</th>
+                                            <th class="text-right" id="txtTotalGral">0</th>
                                         </tr>
                                     </tfoot>    
                                 </table>
                             </div>
-                         </div>
-                    </div>
-                    <div class="card" id="registros">
-                        <div class="header">
-                            <h2>Registros de Presupuesto de Compras</h2>
                         </div>
-                        <div class="body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-striped table-hover dataTable js-exportable">
-                                    <thead>
-                                        <tr style="background-color: #e6e6e6;">
-                                            <th>Código</th>
-                                            <th>Fecha</th>
-                                            <th>Fecha Aprobación</th>
-                                            <th>Proveedor</th>
-                                            <th>Sucursal</th>
-                                            <th>Usuario</th>
-                                            <th>Estado</th>
-                                            <th>Pedido</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tableBody">
-                                        
-                                    </tbody>
-                                    <tfoot>
-                                        <tr style="background-color: #e6e6e6;">
-                                            <th>Código</th>
-                                            <th>Fecha</th>
-                                            <th>Fecha Aprobación</th>
-                                            <th>Proveedor</th>
-                                            <th>Sucursal</th>
-                                            <th>Usuario</th>
-                                            <th>Estado</th>
-                                            <th>Pedido</th>
-                                        </tr>
-                                    </tfoot>    
-                                </table>
+                    </div>  
+                        <div class="card" id="registros">
+                            <div class="header">
+                                <h2>Registros de Presupuesto de Compras</h2>
+                            </div>
+                            <div class="body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                                        <thead>
+                                            <tr style="background-color: #e6e6e6;">
+                                                <th>Código</th>
+                                                <th>Fecha</th>
+                                                <th>Fecha Aprobación</th>
+                                                <th>Proveedor</th>
+                                                <th>Empresa</th>
+                                                <th>Sucursal</th>
+                                                <th>Usuario</th>
+                                                <th>Estado</th>
+                                                <th>Pedido</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tableBody">
+                                            
+                                        </tbody>
+                                        <tfoot>
+                                            <tr style="background-color: #e6e6e6;">
+                                                <th>Código</th>
+                                                <th>Fecha</th>
+                                                <th>Fecha Aprobación</th>
+                                                <th>Proveedor</th>
+                                                <th>Sucursal</th>
+                                                <th>Empresa</th>
+                                                <th>Usuario</th>
+                                                <th>Estado</th>
+                                                <th>Pedido</th>
+                                            </tr>
+                                        </tfoot>    
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>

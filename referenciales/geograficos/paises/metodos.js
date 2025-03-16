@@ -117,7 +117,7 @@ function validaciones() {   // Función para validar los campos
     }
     return true; // Si todas las validaciones pasan
 }
-
+ 
 
 function confirmarOperacion() {
     if (!validaciones()) {
@@ -219,8 +219,21 @@ function grabar(){
             }
         });
     })
-    .fail(function(a,b,c){
-        alert(c);
-        console.log(a.responseText);
-    })
+    .fail(function(a, b, c) {
+        let mensajeError = "Ocurrió un error inesperado.";
+        if (a.status === 500) {
+            // El backend devuelve un error de validación
+            let respuesta = JSON.parse(a.responseText);
+            mensajeError = respuesta.mensaje || "Datos duplicados o inválidos.";
+        } else if (a.responseText) {
+            // Otros errores con mensajes
+            mensajeError = a.responseText;
+        }
+            swal({
+            title: "Error",
+            text: mensajeError,
+            type: "error"
+        });
+        console.error(a.responseText); // Para depurar
+    });
 }

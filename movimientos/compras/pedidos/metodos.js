@@ -76,7 +76,7 @@ function editar(){
     $("#txtFecAprob").removeAttr("disabled");
     $("#emp_descrip").removeAttr("disabled");
     $("#suc_descrip").removeAttr("disabled");
-
+    
     $("#btnAgregar").attr("disabled","true");
     $("#btnEditar").attr("disabled","true");
     $("#btnAnular").attr("disabled","true");
@@ -170,21 +170,12 @@ function listar(){
                 lista = lista + "<td>";
                 lista = lista + rs.pedido_comp_fec_aprob;
                 lista = lista +"</td>";
-                //lista = lista + "<td>";
-                //lista = lista + rs.empresa_id;
-                //lista = lista +"</td>";
                 lista = lista + "<td>";
                 lista = lista + rs.empresa_desc;
                 lista = lista +"</td>";
-                //lista = lista + "<td>";
-                //lista = lista + rs.sucursal_id;
-                //lista = lista +"</td>";
                 lista = lista + "<td>";
                 lista = lista + rs.suc_desc;
                 lista = lista +"</td>";
-                //lista = lista + "<td>";
-                //lista = lista + rs.funcionario_id;
-                //lista = lista +"</td>";
                 lista = lista + "<td>";
                 lista = lista + rs.func_nombre;
                 lista = lista +"</td>";
@@ -202,18 +193,7 @@ function listar(){
 }
 
 function seleccionPedido(id_pedido, pedido_fecha, pedido_fec_aprob, empresa_id, emp_descrip, sucursal_id, suc_descrip, funcionario_id, func_nombre, pedido_estado) {
-    console.log("Datos recibidos en seleccionPedido:", {
-        id_pedido,
-        pedido_fecha,
-        pedido_fec_aprob,
-        empresa_id,
-        emp_descrip,
-        sucursal_id,
-        suc_descrip,
-        funcionario_id,
-        func_nombre,
-        pedido_estado
-    });
+    
     $("#id").val(id_pedido);
     $("#txtFecha").val(pedido_fecha);
     $("#txtFecAprob").val(pedido_fec_aprob);
@@ -234,9 +214,7 @@ function seleccionPedido(id_pedido, pedido_fecha, pedido_fec_aprob, empresa_id, 
     $("#btnCancelar").removeAttr("disabled");
 
     if(pedido_estado === "PENDIENTE") {
-        //$("#btnAgregarDetalle, #btnEditarDetalle, #btnEliminarDetalle").attr("style","display:inline;");
-        //$("#btnGrabarDetalle").attr("style","display:none;");
-        //$("#btnAnular, #btnConfirmar, #btnEditar").removeAttr("disabled");
+        
         $("#btnAgregar").attr("disabled","true");
         $("#btnGrabar").attr("disabled","true");
 
@@ -248,7 +226,6 @@ function seleccionPedido(id_pedido, pedido_fecha, pedido_fec_aprob, empresa_id, 
 
     $(".form-line").attr("class","form-line focused");
 }
-
 
 function grabar(){
     var endpoint = "pedido_comp_cab/create";
@@ -391,6 +368,8 @@ function agregarDetalle(){
 
 function editarDetalle(){
     $("#txtOperacionDetalle").val(2);
+    console.log("Operación de editarDetalle activada, txtOperacionDetalle:", $("#txtOperacionDetalle").val());
+    $("#det_cantidad").removeAttr("disabled")
     $("#btnAgregarDetalle").attr("Style","display:none");
     $("#btnEditarDetalle").attr("Style","display:none");
     $("#btnEliminarDetalle").attr("Style","display:none");

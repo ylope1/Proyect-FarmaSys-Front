@@ -31,7 +31,7 @@ function formatoTabla(){
                 title:'Listado de Presupuestos de Compras'
             }
         ],
-        iDisplayLength:3,
+        iDisplayLength:5,
         language:{
             sSearch: 'Buscar: ',
             sInfo: 'Mostrando resultados del _START_ al _END_ de un total de _TOTAL_ registros',
@@ -54,7 +54,7 @@ function agregar(){
     $("#id").val(0);
     $("#txtFecha").removeAttr("disabled");
     $("#txtFecAprob").removeAttr("disabled");
-    $("#proveedor_descrip").removeAttr("disabled");
+    $("#proveedor_desc").removeAttr("disabled");
     $("#empresa_desc").removeAttr("disabled");
     $("#suc_desc").removeAttr("disabled");
     $("#pedido").removeAttr("disabled");
@@ -64,7 +64,7 @@ function agregar(){
     $("#btnAnular").attr("disabled","true");
     $("#btnConfirmar").attr("disabled","true");
     $("#btnRechazar").attr("disabled","true");
-    $("#btnAprobado").attr("disabled","true");
+    $("#btnAprobar").attr("disabled","true");
 
     $("#btnGrabar").removeAttr("disabled");
     $("#btnCancelar").removeAttr("disabled");
@@ -77,7 +77,7 @@ function editar(){
     $("#txtOperacion").val(2);
     $("#txtFecha").removeAttr("disabled");
     $("#txtFecAprob").removeAttr("disabled");
-    $("#proveedor_descrip").removeAttr("disabled");
+    $("#proveedor_desc").removeAttr("disabled");
     $("#empresa_desc").removeAttr("disabled");
     $("#suc_desc").removeAttr("disabled");
     $("#pedido").removeAttr("disabled");
@@ -141,7 +141,6 @@ function aprobar(){
     $("#btnRechazar").attr("disabled","true");
     $("#btnAprobar").attr("disabled","true");
 
-
     $("#btnGrabar").removeAttr("disabled");
     $("#btnCancelar").removeAttr("disabled");
 }
@@ -199,24 +198,33 @@ function listar(){
     .done(function(resultado){
         var lista = "";
         for(rs of resultado){
-            lista = lista + "<tr class=\"item-list\" onclick=\"seleccionPresupuesto("+rs.id+","+rs.user_id+",'"+rs.u.name+"',"+rs.proveedor_id+",'"+rs.proveedor_desc+"','"+rs.prov_razonsocial+"','"+rs.prov_ruc+"','"+rs.prov_telefono+"','"+rs.prov_correo+"',"+rs.pedido_id+",'"+rs.pedido+"');\">";
+            lista = lista + "<tr class=\"item-list\" onclick=\"seleccionPresupuesto("+rs.id+",'"+rs.presup_comp_fec+"','"+rs.presup_comp_fec_aprob+"',"+rs.proveedor_id+",'"+rs.proveedor_desc+"',"+rs.sucursal_id+",'"+rs.suc_desc+"',"+rs.empresa_id+",'"+rs.empresa_desc+"',"+rs.pedido_comp_id+",'"+rs.pedido+"','"+rs.presup_comp_estado+"',"+rs.user_id+",'"+rs.name+"');\">";
                 lista = lista + "<td>";
                 lista = lista + rs.id;
                 lista = lista +"</td>";
                 lista = lista + "<td>";
-                lista = lista + rs.pre_vence;
+                lista = lista + rs.presup_comp_fec;
                 lista = lista +"</td>";
                 lista = lista + "<td>";
-                lista = lista + rs.pre_observaciones;
+                lista = lista + rs.presup_comp_fec_aprob;
+                lista = lista +"</td>";
+                lista = lista + "<td>";
+                lista = lista + rs.proveedor_desc;
+                lista = lista +"</td>";
+                lista = lista + "<td>";
+                lista = lista + rs.empresa_desc;
+                lista = lista +"</td>";
+                lista = lista + "<td>";
+                lista = lista + rs.suc_desc;
                 lista = lista +"</td>";
                 lista = lista + "<td>";
                 lista = lista + rs.name;
                 lista = lista +"</td>";
                 lista = lista + "<td>";
-                lista = lista + rs.pre_estado;
+                lista = lista + rs.presup_comp_estado;
                 lista = lista +"</td>";
                 lista = lista + "<td>";
-                lista = lista + rs.nro_pedido;
+                lista = lista + rs.pedido;
                 lista = lista +"</td>";
             lista = lista + "</tr>";
         }
@@ -229,18 +237,19 @@ function listar(){
     })
 }
 
-function seleccionPresupuesto(id,pre_vence, pre_observaciones, pre_estado, proveedor_id, prov_razonsocial, prov_ruc, prov_telefono, prov_correo, pedido_id, pedido){
+function seleccionPresupuesto(id,presup_comp_fec, presup_comp_fec_aprob, proveedor_id, proveedor_desc, empresa_id, empresa_desc, sucursal_id, suc_desc, pedido_comp_id, pedido, pre_estado){
     $("#id").val(id);
-    $("#pre_vence").val(pre_vence);
-    $("#pre_observaciones").val(pre_observaciones);
-    $("#pre_estado").val(pre_estado);
+    $("#txtFecha").val(presup_comp_fec);
+    $("#txtFecAprob").val(presup_comp_fec_aprob);
     $("#proveedor_id").val(proveedor_id);
-    $("#prov_razonsocial").val(prov_razonsocial);
-    $("#prov_ruc").val(prov_ruc);   
-    $("#prov_telefono").val(prov_telefono);
-    $("#prov_correo").val(prov_correo);
-    $("#pedido_id").val(pedido_id);
-    $("#pedido").val(pedido);        
+    $("#proveedor_desc").val(proveedor_desc);
+    $("#empresa_id").val(empresa_id);
+    $("#empresa_desc").val(empresa_desc);   
+    $("#sucursal_id").val(sucursal_id);
+    $("#suc_desc").val(suc_desc);
+    $("#pedido_comp_id").val(pedido_comp_id);
+    $("#pedido").val(pedido);
+    $("#pre_estado").val(pre_estado);
 
     $("#detalles").attr("style","display:block;");
     $("#registros").attr("style","display:none;");
@@ -251,7 +260,7 @@ function seleccionPresupuesto(id,pre_vence, pre_observaciones, pre_estado, prove
     $("#btnEditar").attr("disabled","true");
     $("#btnGrabar").attr("disabled","true");
     $("#btnCancelar").attr("disabled","true");
-    $("#btnEliminar").attr("disabled","true");
+    $("#btnAnular").attr("disabled","true");
     $("#btnConfirmar").attr("disabled","true");
     $("#btnRechazar").attr("disabled","true");
     $("#btnAprobar").attr("disabled","true");
@@ -262,7 +271,7 @@ function seleccionPresupuesto(id,pre_vence, pre_observaciones, pre_estado, prove
         $("#btnAgregar").attr("disabled","true");
         $("#btnGrabar").attr("disabled","true");
 
-        $("#btnEliminar").removeAttr("disabled");
+        $("#btnAnular").removeAttr("disabled");
         $("#btnConfirmar").removeAttr("disabled");
         $("#btnEditar").removeAttr("disabled");
         $("#formDetalles").attr("style","display:block;");
@@ -275,36 +284,35 @@ function seleccionPresupuesto(id,pre_vence, pre_observaciones, pre_estado, prove
         $("#btnRechazar").removeAttr("disabled");
         $("#btnAprobar").removeAttr("disabled");
         }
-
     $(".form-line").attr("class","form-line focused");
 }
 
 function grabar(){
-    var endpoint = "presupuestos/create";
+    var endpoint = "presup_comp_cab/create";
     var metodo = "POST";
     var estado = "PENDIENTE";
     
     if($("#txtOperacion").val()==2){
-        endpoint = "presupuestos/update/"+$("#id").val();
+        endpoint = "presup_comp_cab/update/"+$("#id").val();
         metodo = "PUT";
     }
     if($("#txtOperacion").val()==3){
-        endpoint = "presupuestos/anular/"+$("#id").val();
+        endpoint = "presup_comp_cab/anular/"+$("#id").val();
         metodo = "PUT";
         estado = "ANULADO";
     }
     if($("#txtOperacion").val()==4){
-        endpoint = "presupuestos/confirmar/"+$("#id").val();
+        endpoint = "presup_comp_cab/confirmar/"+$("#id").val();
         metodo = "PUT";
         estado = "CONFIRMADO";
-    }
+    } //pendiente de correccion operacion rechazar
     if($("#txtOperacion").val()==5){
-        endpoint = "presupuestos/rechazar/"+$("#id").val();
+        endpoint = "presup_comp_cab/rechazar/"+$("#id").val();
         metodo = "PUT";
         estado = "RECHAZADO";
-    }
+    } // pendiente de correccion operacion aprobar
     if($("#txtOperacion").val()==6){
-        endpoint = "presupuestos/aprobar/"+$("#id").val();
+        endpoint = "presup_comp_cab/aprobar/"+$("#id").val();
         metodo = "PUT";
         estado = "APROBADO";
     }
@@ -314,15 +322,16 @@ function grabar(){
         dataType: "json",
         data: { 
             'id': $("#id").val(), 
-            'pre_vence': $("#pre_vence").val(), 
-            'pre_observaciones': $("#pre_observaciones").val(),
-            'proveedor_id': $("#proveedor_id").val(), 
             'user_id': $("#user_id").val(),
-            'pedido_id': $("#pedido_id").val(),  
-            'pre_estado': estado,
+            'proveedor_id': $("#proveedor_id").val(),
+            'sucursal_id': $("#sucursal_id").val(),
+            'empresa_id': $("#empresa_id").val(),
+            'pedido_comp_id': $("#pedido_comp_id").val(),
+            'presup_comp_fec': $("#txtFecha").val(), 
+            'presup_comp_fec_aprob': $("#txtFecAprob").val(),              
+            'presup_comp_estado': estado,
             'operacion': $("#txtOperacion").val()
         }
-
     })
     .done(function(resultado){
         swal({
@@ -336,7 +345,7 @@ function grabar(){
                 $("#id").val(resultado.registro.id);
                 $("#detalles").attr("style","display:block;");
                 listarDetalles();
-                if(resultado.registro.pre_estado!= "PENDIENTE"){
+                if(resultado.registro.estado!= "PENDIENTE"){
                     location.reload(true);
                 }
             }
@@ -358,8 +367,8 @@ function campoFecha(){
 
 function agregarDetalle(){
     $("#txtOperacionDetalle").val(1);
-    //$("#item_descripcion").removeAttr("disabled");
-    $("#det_costo").removeAttr("disabled");
+    $("#prod_desc").removeAttr("disabled");
+    $("#det_cantidad").removeAttr("disabled");
     $("#btnAgregarDetalle").attr("Style","display:none");
     $("#btnEditarDetalle").attr("Style","display:none");
     $("#btnEliminarDetalle").attr("Style","display:none");
@@ -368,8 +377,8 @@ function agregarDetalle(){
 
 function editarDetalle(){
     $("#txtOperacionDetalle").val(2);
-    //$("#item_descripcion").removeAttr("disabled");
-    $("#det_costo").removeAttr("disabled");
+    $("#prod_desc").removeAttr("disabled");
+    $("#det_cantidad").removeAttr("disabled");
     $("#btnAgregarDetalle").attr("Style","display:none");
     $("#btnEditarDetalle").attr("Style","display:none");
     $("#btnEliminarDetalle").attr("Style","display:none");
@@ -384,7 +393,7 @@ function eliminarDetalle(){
     $("#btnGrabarDetalle").attr("Style","display:inline");
 }
 
-function grabarDetalle(){
+function grabarDetalle(){ //corregir esta parte
     var endpoint = "presupuestos-detalles/create";
     var metodo = "POST";
     
@@ -396,7 +405,7 @@ function grabarDetalle(){
         endpoint = "presupuestos-detalles/delete/"+$("#id").val()+"/"+$("#item_id").val();
         metodo = "DELETE";
     }
-
+    //corregir esta parte
     $.ajax({
         url:getUrl()+endpoint,
         method: metodo,
@@ -422,39 +431,38 @@ function grabarDetalle(){
     $("#btnGrabarDetalle").attr("Style","display:none");
 
     $("#txtOperacionDetalle").val(1);
-    $("#item_descripcion").val("");
+    $("#prod_desc").val("");
     $("#det_cantidad").val("");
     $("#det_costo").val("");
 }
 
 function buscarProductos(){
     $.ajax({
-        url:getUrl()+"items/buscar",
+        url:getUrl()+"producto/search",
         method:"POST",
         dataType: "json",
         data: {
-            'item_descripcion': $("#item_descripcion").val(),
-            'tipo_descripcion': "PRODUCTO"
+            'prod_desc': $("#prod_desc").val()
         }
     })
     .done(function(resultado){
         var lista = "<ul class=\"list-group\">";
         for(rs of resultado){
-            lista += "<li class=\"list-group-item\" onclick=\"seleccionProducto("+rs.item_id+",'"+rs.item_descripcion+"');\">"+rs.item_descripcion+"</li>";
+            lista += "<li class=\"list-group-item\" onclick=\"seleccionProducto("+rs.producto_id+",'"+rs.prod_desc+"');\">"+rs.prod_desc+"</li>";
         }
         lista += "</ul>";
         $("#ListaProductos").html(lista);
         $("#ListaProductos").attr("style","display:block; position:absolute; z-index:2000;");
     })
-    .fail(function(xhr, status, error) {
-        alert("Error: " + error);
-        console.error(xhr.responseText);
+    .fail(function(a,b,c) {
+        alert(c);
+        console.log(a.responseText);
     });
 }
 
-function seleccionProducto(item_id,item_descripcion){
-    $("#item_id").val(item_id);
-    $("#item_descripcion").val(item_descripcion);
+function seleccionProducto(producto_id, prod_desc){
+    $("#producto_id").val(producto_id);
+    $("#prod_desc").val(prod_desc);
 
     $("#ListaProductos").html("");
     $("#ListaProductos").attr("style","display:none;");
@@ -466,32 +474,32 @@ function listarDetalles() {
     var cantidadDetalle = 0;
     var totalGral = 0;
     $.ajax({
-        url:getUrl()+"presupuestos-detalles/read/"+$("#id").val(),
+        url:getUrl()+"presup_comp_det/read/"+$("#id").val(),
         method:"GET",
         dataType: "json"
     })
     .done(function(resultado){
         var lista = "";
         for(rs of resultado){
-            lista = lista + "<tr class=\"item-list\" onclick=\"seleccionDetalle("+rs.item_id+",'"+rs.item_descripcion+"',"+rs.det_cantidad+","+rs.det_costo+");\">";
-                lista = lista + "<td>";
-                lista = lista + rs.item_id;
-                lista = lista +"</td>";
-                lista = lista + "<td>";
-                lista = lista + rs.item_descripcion;
-                lista = lista +"</td>";
-                lista = lista + "<td>";
-                lista = lista + rs.det_cantidad;
-                lista = lista +"</td>";
-                lista = lista + "<td class='text-right'>";
-                lista = lista + rs.det_costo;
-                lista = lista +"</td>";
-                lista = lista + "<td class='text-right'>";
-                lista = lista + (rs.det_cantidad*rs.det_costo);
-                lista = lista +"</td>";
+            lista = lista + "<tr class=\"item-list\" onclick=\"seleccionDetalle("+rs.producto_id+",'"+rs.prod_desc+"',"+rs.presup_comp_cant+","+rs.presup_comp_costo+");\">";
+            lista = lista + "<td>";
+            lista = lista + rs.producto_id;
+            lista = lista +"</td>";
+            lista = lista + "<td>";
+            lista = lista + rs.prod_desc;
+            lista = lista +"</td>";
+            lista = lista + "<td>";
+            lista = lista + rs.presup_comp_cant;
+            lista = lista +"</td>";
+            lista = lista + "<td class='text-right'>";
+            lista = lista + rs.presup_comp_costo;
+            lista = lista +"</td>";
+            lista = lista + "<td class='text-right'>";
+            lista = lista + (rs.presup_comp_cant*rs.presup_comp_costo);
+            lista = lista +"</td>";
             lista = lista + "</tr>";
             cantidadDetalle++;
-            totalGral +=(rs.det_cantidad*rs.det_costo);
+            totalGral +=(rs.presup_comp_cant*rs.presup_comp_costo);
         }
         $("#tableDetalles").html(lista);
         $("#txtTotalGral").text(totalGral);
@@ -501,59 +509,56 @@ function listarDetalles() {
             $("#btnConfirmar").attr("disabled","true");
         }
     })
-    .fail(function(xhr, status, error) {
-        alert("Error: " + error);
-        console.error(xhr.responseText);
+    .fail(function(a, b, c) {
+        alert(c);
+        console.log(a.responseText);
     })
 }
 
-function seleccionDetalle(item_id, item_descripcion, det_cantidad, det_costo){
-    $("#item_id").val(item_id);
-    $("#item_descripcion").val(item_descripcion);
-    $("#det_cantidad").val(det_cantidad);
-    $("#det_costo").val(det_costo);
+function seleccionDetalle(producto_id, prod_desc, presup_comp_cant, presup_comp_costo){
+    $("#producto_id").val(producto_id);
+    $("#prod_desc").val(prod_desc);
+    $("#det_cantidad").val(presup_comp_cant);
+    $("#det_costo").val(presup_comp_costo);
 }
 
 function buscarProveedores(){
     $.ajax({
-        url:getUrl()+"proveedores/buscar",
+        url:getUrl()+"proveedore/buscar",
         method:"POST",
         dataType: "json",
         data: {
-            "prov_razonsocial": $("#prov_razonsocial").val()
+            "proveedor_desc": $("#proveedor_desc").val()
         }
     })
     .done(function(resultado){
         var lista = "<ul class=\"list-group\">";
         for(rs of resultado){
-            lista += "<li class=\"list-group-item\" onclick=\"seleccionProveedor("+rs.proveedor_id+",'"+rs.prov_razonsocial+"','"+rs.prov_ruc+"','"+rs.prov_telefono+"','"+rs.prov_correo+"');\">"+rs.prov_razonsocial+" - "+rs.prov_ruc+"</li>";
+            lista += "<li class=\"list-group-item\" onclick=\"seleccionProveedor("+rs.proveedor_id+",'"+rs.proveedor_desc+"');\">"+rs.proveedor_desc+"</li>";
         }
         lista += "</ul>";
-        $("#ListaProveedores").html(lista);
-        $("#ListaProveedores").attr("style","display:block; position:absolute; z-index:2000;");
+        $("#listaProveedores").html(lista);
+        $("#listaProveedores").attr("style","display:block; position:absolute; z-index:2000;");
     })
-    .fail(function(xhr, status, error) {
-        alert("Error: " + error);
-        console.error(xhr.responseText);
+    .fail(function(a,b,c) {
+        alert(c);
+        console.log(a.responseText);
     });
 }
 
-function seleccionProveedor(proveedor_id, prov_razonsocial, prov_ruc, prov_telefono, prov_correo){
+function seleccionProveedor(proveedor_id, proveedor_desc){
     $("#proveedor_id").val(proveedor_id);
-    $("#prov_razonsocial").val(prov_razonsocial);
-    $("#prov_ruc").val(prov_ruc);
-    $("#prov_telefono").val(prov_telefono);
-    $("#prov_correo").val(prov_correo);
+    $("#proveedor_desc").val(proveedor_desc);
 
-    $("#ListaProveedores").html("");
-    $("#ListaProveedores").attr("style","display:none;");
+    $("#listaProveedores").html("");
+    $("#listaProveedores").attr("style","display:none;");
 
     $(".form-line").attr("class","form-line focused");
 }
 
 function buscarPedidos(){
     $.ajax({
-        url:getUrl()+"pedidos/buscar",
+        url:getUrl()+"pedido_comp_cab/buscar",
         method:"POST",
         dataType: "json",
         data: {
@@ -564,25 +569,84 @@ function buscarPedidos(){
     .done(function(resultado){
         var lista = "<ul class=\"list-group\">";
         for(rs of resultado){
-            lista += "<li class=\"list-group-item\" onclick=\"seleccionPedido("+rs.pedido_id+",'"+rs.pedido+"')\">"+rs.pedido+"</li>";
+            lista += "<li class=\"list-group-item\" onclick=\"seleccionPedido("+rs.pedido_comp_id+",'"+rs.pedido+"')\">"+rs.pedido+"</li>";
         }
         lista += "</ul>";
-        $("#ListaPedidos").html(lista);
-        $("#ListaPedidos").attr("style","display:block; position:absolute; z-index:2000;");
+        $("#listaPedidos").html(lista);
+        $("#listaPedidos").attr("style","display:block; position:absolute; z-index:2000;");
     })
     .fail(function(xhr, status, error) {
         alert("Error: " + error);
         console.error(xhr.responseText);
     });
 }
-
-function seleccionPedido(pedido_id, pedido){
-    $("#pedido_id").val(pedido_id);
+function seleccionPedido(pedido_comp_id, pedido){
+    $("#pedido_comp_id").val(pedido_comp_id);
     $("#pedido").val(pedido);
 
-    $("#ListaPedidos").html("");
-    $("#ListaPedidos").attr("style","display:none;");
+    $("#listaPedidos").html("");
+    $("#listaPedidos").attr("style","display:none;");
 
     $(".form-line").attr("class","form-line focused");
 }
+function buscarEmpresas(){
+    $.ajax({
+        url: getUrl()+"empresa/buscar", 
+        method:"POST",
+        dataType: "json",
+        data: {
+            'empresa_desc': $("#empresa_desc").val()
+        }
+    })
+    .done(function(resultado){
+        var lista = "<ul class=\"list-group\">";
+        for(rs of resultado){
+            lista += "<li class=\"list-group-item\" onclick=\"seleccionEmpresa("+rs.id+",'"+rs.empresa_desc+"');\">"+rs.empresa_desc+"</li>";
+        }
+        lista += "</ul>";
+        $("#listaEmpresas").html(lista);
+        $("#listaEmpresas").attr("style","display:block; position:absolute; z-index:2000;");
+    })
+    .fail(function(a,b,c){
+        alert(c);
+        console.log(a.responseText);
+    })
+}
+function seleccionEmpresa(empresa_id, empresa_desc){
+    $("#empresa_id").val(empresa_id);
+    $("#empresa_desc").val(empresa_desc);
 
+    $("#listaEmpresas").html("");
+    $("#listaEmpresas").attr("style","display:none;");
+}
+function buscarSucursales(){
+    $.ajax({
+        url: getUrl()+"sucursale/buscar", 
+        method:"POST",
+        dataType: "json",
+        data: {
+            'suc_desc': $("#suc_desc").val()
+        }
+    })
+    .done(function(resultado){
+        var lista = "<ul class=\"list-group\">";
+        for(rs of resultado){
+            lista += "<li class=\"list-group-item\" onclick=\"seleccionSucursal("+rs.id+",'"+rs.suc_desc+"');\">"+rs.suc_desc+"</li>";
+        }
+        lista += "</ul>";
+        $("#listaSucursales").html(lista);
+        $("#listaSucursales").attr("style","display:block; position:absolute; z-index:2000;");
+    })
+    .fail(function(a,b,c){
+        alert(c);
+        console.log(a.responseText);
+    })
+}
+
+function seleccionSucursal(sucursal_id, suc_desc){
+    $("#sucursal_id").val(sucursal_id);
+    $("#suc_desc").val(suc_desc);
+
+    $("#listaSucursales").html("");
+    $("#listaSucursales").attr("style","display:none;");
+}
