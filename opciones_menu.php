@@ -273,68 +273,12 @@
                     <li>
                         <a href="javascript:void(0);" class="menu-toggle">
                             <i class="material-icons">star_half</i>
-                            <span>Referenciales</span>
+                            <span>Gestionar Mantenimiento y Seguridad</span>
                         </a>
                         <ul class="ml-menu">
                             <li>
                                 <a href="javascript:void(0);" class="menu-toggle">
-                                    <span>Geograficos</span>
-                                </a>
-                                <ul class="ml-menu">
-                                    <li>
-                                        <a href="referenciales/geograficos/paises">
-                                            <span>Paises</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="referenciales/geograficos/ciudades">
-                                            <span>Ciudades</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" class="menu-toggle">
-                                    <span>Empresas</span>
-                                </a>
-                                <ul class="ml-menu">
-                                    <li>
-                                        <a href="referenciales/empresas/empresa">
-                                            <span>Empresa</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="referenciales/empresas/sucursales">
-                                            <span>Sucursales</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="referenciales/empresas/depositos">
-                                            <span>Depositos</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" class="menu-toggle">
-                                    <span>Personas</span>
-                                </a>
-                                <ul class="ml-menu">
-                                    <li>
-                                        <a href="referenciales/personas/funcionarios">
-                                            <span>Funcionarios</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="referenciales/personas/cargos">
-                                            <span>Cargos</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" class="menu-toggle">
-                                    <span>Compras</span>
+                                    <span>Referenciales Compras</span>
                                 </a>
                                 <ul class="ml-menu">
                                     <li>
@@ -348,13 +292,18 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="referenciales/compras/items">
-                                            <span>Items</span>
+                                        <a href="referenciales/compras/empresa">
+                                            <span>Empresa</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="referenciales/compras/stocks">
-                                            <span>Stocks</span>
+                                        <a href="referenciales/compras/sucursales">
+                                            <span>Sucursales</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="referenciales/compras/depositos">
+                                            <span>Depositos</span>
                                         </a>
                                     </li>
                                     <li>
@@ -368,30 +317,53 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="referenciales/compras/ajustes_motivos">
-                                            <span>Ajustes Motivos</span>
+                                        <a href="referenciales/compras/funcionarios">
+                                            <span>Funcionarios</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="referenciales/compras/tipo_facturas">
-                                            <span>Tipo de Facturas</span>
+                                        <a href="referenciales/compras/items">
+                                            <span>Items</span>
                                         </a>
                                     </li>
                                 </ul>
                             </li>
                             <li>
                                 <a href="javascript:void(0);" class="menu-toggle">
-                                    <span>Ventas</span>
+                                    <span>Referenciales Ventas y Cobros</span>
                                 </a>
-                                <ul class="ml-menu">
+                                <ul class="ml-menu"> 
+                                    <li>
+                                        <a href="referenciales/ventas/clientes">
+                                            <span>Clientes(pend)</span>
+                                        </a>
+                                        <a href="referenciales/ventas/tipo_facturas">
+                                            <span>Tipo de Facturas</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="referenciales/ventas/cajas">
+                                            <span>Cajas</span>
+                                        </a>
+                                    </li>
                                     <li>
                                         <a href="referenciales/ventas/forma_cobro">
                                             <span>Formas de Cobros</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="referenciales/ventas/cajas">
-                                            <span>Cajas</span>
+                                        <a href="referenciales/ventas/entidad_adherida">
+                                            <span>Entidades Adheridas (pend)</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="referenciales/ventas/entidad_emisora">
+                                            <span>Entidades Emisoras (pend)</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="referenciales/ventas/marca_tarjeta">
+                                            <span>Marca Tarjeta (pend)</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -407,98 +379,270 @@
                                         </a>
                                     </li>
                                     <li>
+                                        <a href="referenciales/tesoreria/titular">
+                                            <span>Titular (pend)</span>
+                                        </a>
+                                    </li>
+                                    <li>
                                         <a href="referenciales/tesoreria/documentos">
                                             <span>Documentos</span>
                                         </a>
                                     </li>
+                                    <li>
+                                        <a href="referenciales/tesoreria/bancos">
+                                            <span>Bancos</span>
+                                        </a>
+                                    </li>
                                 </ul>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);" class="menu-toggle">
+                                    <span>Mantener Seguridad</span>
+                                </a>
+                                <ul class="ml-menu">
+                                    <li>
+                                        <a href="referenciales/seguridad/accesos">
+                                            <span>Accesos (pend)</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="referenciales/seguridad/usuarios">
+                                            <span>Usuarios (pend)</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="referenciales/seguridad/permisos">
+                                            <span>Permisos (pend)</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="referenciales/seguridad/roles">
+                                            <span>Roles (pend)</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="referenciales/seguridad/modulos">
+                                            <span>Modulos (pend)</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);" class="menu-toggle">
+                                    <span>Referenciales Varios</span>
+                                </a>
+                                <ul class="ml-menu">
+                                    <li>
+                                        <a href="referenciales/varios/cargos">
+                                            <span>Cargos</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="referenciales/varios/ciudades">
+                                            <span>Ciudades</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="referenciales/varios/paises">
+                                            <span>Paises</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" class="menu-toggle">
+                            <i class="material-icons">shopping_cart</i>
+                            <span>Gestionar Compras</span>
+                        </a>
+                        <ul class="ml-menu">
+                            <li>
+                                <a href="movimientos/compras/pedidos">
+                                    <span>Registrar Pedido</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="movimientos/compras/presupuestos">
+                                    <span>Registrar Presupuesto Prov</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="movimientos/compras/orden_compras">
+                                    <span>Registrar Orden de Compras</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="movimientos/compras/compras">
+                                    <span>Registrar Compras</span>
+                                </a>
+                            <li>
+                            <li>
+                                <a href="movimientos/compras/ajustes">
+                                    <span>Registrar Ajustes de Inventario</span>
+                                </a>
+                            <li>
+                            <li>
+                                <a href="movimientos/compras/notas_cred_deb">
+                                    <span>Registrar Notas Crédito/Débito</span>
+                                </a>
+                            <li>
+                            <li>
+                                <a href="movimientos/compras/nota_remision">
+                                    <span>Registrar Nota de Remision</span>
+                                </a>
+                            <li>
+                        </ul>
+                    </li>  
+                    <li>  
+                        <a href="javascript:void(0);" class="menu-toggle">
+                            <i class="material-icons">business_center</i>
+                            <span>Gestionar Ventas y Cobros</span>
+                        </a>
+                        <ul class="ml-menu">
+                            <li>
+                                <a href="movimientos/ventas/pedido_cliente">
+                                    <span>Registrar Pedidos Clientes</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="movimientos/ventas/ventas">
+                                    <span>Registrar Ventas</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="movimientos/ventas/apertura_cierre">
+                                    <span>Registrar Apertura-Cierre de Caja</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="movimientos/ventas/arqueo_caja">
+                                    <span>Registrar Arqueo de Caja</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="movimientos/ventas/nota_remision">
+                                    <span>Registrar Nota de Remision</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="movimientos/ventas/cobranza">
+                                    <span>Registrar Cobranzas</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="movimientos/ventas/notas_cred_deb">
+                                    <span>Registrar Nota de Crédito-Débito</span>
+                                </a>
                             </li>
                         </ul>
                     </li>
                     <li>
                         <a href="javascript:void(0);" class="menu-toggle">
-                            <i class="material-icons">trending_down</i>
-                            <span>Movimientos</span>
+                            <i class="material-icons">monetization_on</i>
+                            <span>Gestionar Tesorería</span>
                         </a>
                         <ul class="ml-menu">
                             <li>
-                                <a href="javascript:void(0);" class="menu-toggle">
-                                    <i class="material-icons">shopping_cart</i>
-                                    <span>Compras</span>
+                                <a href="movimientos/tesoreria/facturas">
+                                    <span>Registrar Facturas Varias</span>
                                 </a>
-                                <ul class="ml-menu">
-                                    <li>
-                                        <a href="movimientos/compras/pedidos">
-                                            <span>Pedidos Compras</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="movimientos/compras/presupuestos">
-                                            <span>Presupuestos Compras</span>
-                                        </a>
-                                    </li>
-                                </ul>
                             </li>
                             <li>
-                                <a href="javascript:void(0);" class="menu-toggle">
-                                    <i class="material-icons">business_center</i>
-                                    <span>Ventas y Cobros</span>
+                                <a href="movimientos/tesoreria/orden_pago">
+                                    <span>Registrar Ordenes de Pagos</span>
                                 </a>
-                                <ul class="ml-menu">
-                                    <li>
-                                        <a href="javascript:void(0);">
-                                            <span>Pedidos Ventas</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">
-                                            <span>Ventas</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">
-                                            <span>Remisión</span>
-                                        </a>
-                                    </li>
-                                </ul>
                             </li>
                             <li>
-                                <a href="javascript:void(0);" class="menu-toggle">
-                                    <i class="material-icons">monetization_on</i>
-                                    <span>Tesorería</span>
+                                <a href="movimientos/tesoreria/entrega_cheques">
+                                    <span>Registrar Entrega de Cheques</span>
                                 </a>
-                                <ul class="ml-menu">
-                                    <li>
-                                        <a href="javascript:void(0);">
-                                            <span>Facturas Varias</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="referenciales/personas/cargos">
-                                            <span>Ordenes de Pagos</span>
-                                        </a>
-                                    </li>
-                                </ul>
+                            </li>
+                            <li>
+                                <a href="movimientos/tesoreria/procesos_especiales">
+                                    <span>Registrar Procesos Especiales</span>
+                                </a>    
+                            </li>
+                            <li>
+                                <a href="movimientos/tesoreria/asignacion_ff">
+                                    <span>Registrar Asignación Fondo Fijo</span>
+                                </a>    
+                            </li>
+                            <li>
+                                <a href="movimientos/tesoreria/rendicion_ff">
+                                    <span>Registrar Rendición Fondo Fijo</span>
+                                </a>    
+                            </li>
+                            <li>
+                                <a href="movimientos/tesoreria/reposicion_ff">
+                                    <span>Registrar Reposición Fondo Fijo</span>
+                                </a>    
+                            </li>
+                            <li>
+                                <a href="movimientos/tesoreria/conciliacion_bancaria">
+                                    <span>Registrar Conciliación Bancaria</span>
+                                </a>    
+                            </li>
+                            <li>
+                                <a href="movimientos/tesoreria/deposito_bancario">
+                                    <span>Registrar Depositos Bancarios</span>
+                                </a>    
+                            </li>
+                            <li>
+                                <a href="movimientos/tesoreria/otros_creditos_debitos">
+                                    <span>Registrar Otros Créditos Débitos</span>
+                                </a>    
                             </li>
                         </ul>
-                    </li>    
-                    <li class="header">LABELS</li>
+                    </li>   
+                    <li class="header">Elaborar Informes Varios</li>
                     <li>
-                        <a href="javascript:void(0);">
+                        <a href="informes/referenciales_compras">
                             <i class="material-icons col-red">donut_large</i>
-                            <span>Important</span>
+                            <span>Informes Referenciales de Compras</span>
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);">
+                        <a href="informes/referenciales_ventas">
                             <i class="material-icons col-amber">donut_large</i>
-                            <span>Warning</span>
+                            <span>Informes Referenciales de Ventas y Cobros</span>
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);">
+                        <a href="informes/referenciales_tesoreria">
                             <i class="material-icons col-light-blue">donut_large</i>
-                            <span>Information</span>
+                            <span>Informes Referenciales de Tesoreria</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="informes/seguridad">
+                            <i class="material-icons col-green">donut_large</i>
+                            <span>Informes de Seguridad</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="informes/referenciales_varios">
+                            <i class="material-icons col-purple">donut_large</i>
+                            <span>Informes Referenciales Varios</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="informes/movimientos_compras">
+                            <i class="material-icons col-teal">donut_large</i>
+                            <span>Informes de Compras</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="informes/movimientos_ventas">
+                            <i class="material-icons col-orange">donut_large</i>
+                            <span>Informes de Ventas y Cobros</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="informes/movimientos_tesoreria">
+                            <i class="material-icons col-blue-grey">donut_large</i>
+                            <span>Informes de Tesoreria</span>
                         </a>
                     </li>
                 </ul>

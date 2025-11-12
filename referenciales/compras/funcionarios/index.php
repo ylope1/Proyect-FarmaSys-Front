@@ -15,11 +15,17 @@
     <!-- Bootstrap Core Css -->
     <link href="../../../plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
 
+    <!-- Bootstrap Select Css -->
+    <link href="../../../plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+
     <!-- Waves Effect Css -->
     <link href="../../../plugins/node-waves/waves.css" rel="stylesheet" />
 
     <!-- Animation Css -->
     <link href="../../../plugins/animate-css/animate.css" rel="stylesheet" />
+
+    <!-- Bootstrap DatePicker Css -->
+    <link href="../../../plugins/bootstrap-datepicker/css/bootstrap-datepicker.css" rel="stylesheet" />
 
     <!-- Sweetalert Css -->
     <link href="../../../plugins/sweetalert/sweetalert.css" rel="stylesheet" />
@@ -109,25 +115,62 @@
                                         </div>
                                     </div>
                                 </div>
-                                 <!-- CAMPO PARA FECHA DE NACIMIENTO CON 4 COLUMNAS -->
-                                 <div class="col-sm-4">
-                                    <div class="form-group form-float">
-                                        <div class="form-line">
-                                            <input type="text" id="txtFecNac" class="form-control" disabled>
-                                            <label class="form-label">Fec. Nacimiento</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- CAMPO PARA FECHA DE INGRESO CON 4 COLUMNAS -->
+                                <!-- CAMPO PARA EMAIL CON 4 COLUMNAS -->
                                 <div class="col-sm-4">
                                     <div class="form-group form-float">
                                         <div class="form-line">
-                                            <input type="text" id="txtFecIng" class="form-control" disabled>
-                                            <label class="form-label">Fec. Ingreso</label>
+                                            <input type="text" id="txtEmail" class="form-control" disabled>
+                                            <label class="form-label">Email</label>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA FECHA DE BAJA CON 4 COLUMNAS -->
+                                <!-- CAMPO PARA PAIS CON 4 COLUMNAS -->
+                                <div class="col-sm-4">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="hidden" id="pais_id" value="0"/>
+                                            <input type="text" id="pais_desc" class="form-control" disabled onkeyup="buscarPaises();">
+                                            <label class="form-label">Pais</label>
+                                        </div>
+                                        <div id="listaPaises" style="display:none;"></div>
+                                    </div>
+                                </div>
+                                <!-- CAMPO PARA CIUDAD CON 4 COLUMNAS -->
+                                <div class="col-sm-4">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="hidden" id="ciudad_id" value="0"/>
+                                            <input type="text" id="ciudad_desc" class="form-control" disabled onkeyup="buscarCiudades();">
+                                            <label class="form-label">Ciudad</label>
+                                        </div>
+                                        <div id="listaCiudades" style="display:none;"></div>
+                                    </div>
+                                </div>
+                                <!-- CAMPO PARA FECHA DE NACIMIENTO CON 4 COLUMNAS -->
+                                <div class="col-sm-4">
+                                    <label class="form-label" style="font-weight: normal; font-size: 13px; color: #adababff;">Fec. Nacimiento</label>
+                                    <div class="input-group date" id="datepicker_nacimiento">
+                                        <div class="form-line">
+                                            <input type="text" id="txtFecNac" class="form-control" placeholder="DD/MM/YYYY" disabled>
+                                        </div>
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">date_range</i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <!-- CAMPO PARA FECHA DE BAJA CON 4 COLUMNAS DE MOMENTO DEJO ASI COMO TEXTO-->
+                                <!-- <div class="col-sm-4">
+                                    <label class="form-label" style="font-weight: normal; font-size: 13px; color: #adababff;">Fec. Salida</label>
+                                    <div class="input-group date" id="datepicker_baja">
+                                        <div class="form-line">
+                                            <input type="text" id="txtFecBaj" class="form-control" placeholder="11/11/1111" disabled>
+                                        </div>
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">date_range</i>
+                                        </span>
+                                    </div>
+                                </div>-->
+                                <!-- CAMPO PARA FECHA DE SALIDA CON 4 COLUMNAS SOLO TEXTO PROVISORIO -->
                                 <div class="col-sm-4">
                                     <div class="form-group form-float">
                                         <div class="form-line">
@@ -136,15 +179,29 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA CIUDAD CON 4 COLUMNAS -->
+                                <!-- CAMPO PARA FECHA DE INGRESO CON 4 COLUMNAS -->
                                 <div class="col-sm-4">
+                                    <label class="form-label" style="font-weight: normal; font-size: 13px; color: #adababff;">Fec. Ingreso</label>
+                                    <div class="input-group date" id="datepicker_ingreso">
+                                        <div class="form-line">
+                                            <input type="text" id="txtFecIng" class="form-control" placeholder="DD/MM/YYYY" disabled>
+                                        </div>
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">date_range</i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <!-- CAMPO PARA SELECCIONAR ESTADO CON 4 COLUMNAS -->
+                                <div class="col-sm-4">
+                                    <label class="form-label" style="font-weight: normal; font-size: 13px; color: #adababff;">Estado</label>
                                     <div class="form-group form-float">
                                         <div class="form-line">
-                                            <input type="hidden" id="ciu_id" value="0"/>
-                                            <input type="text" id="ciu_descripcion" class="form-control" disabled onkeyup="buscarCiudades();">
-                                            <label class="form-label">Ciudad</label>
+                                            <select id="txtEstado" class="form-control selectpicker" disabled>
+                                                <option value="">-- Selecciona Estado --</option>
+                                                <option value="Activo">Activo</option>
+                                                <option value="Inactivo">Inactivo</option>
+                                            </select>
                                         </div>
-                                        <div id="listaCiudades" style="display:none;"></div>
                                     </div>
                                 </div>
                                 <!-- CAMPO PARA CARGO CON 4 COLUMNAS -->
@@ -152,7 +209,7 @@
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="hidden" id="cargo_id" value="0"/>
-                                            <input type="text" id="cargo_descripcion" class="form-control" disabled onkeyup="buscarCargos();">
+                                            <input type="text" id="cargo_desc" class="form-control" disabled onkeyup="buscarCargos();">
                                             <label class="form-label">Cargo</label>
                                         </div>
                                         <div id="listaCargos" style="display:none;"></div>
@@ -163,19 +220,10 @@
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="hidden" id="user_id" value="0"/>
-                                            <input type="text" id="user_login" class="form-control" disabled onkeyup="buscarUsers();">
+                                            <input type="text" id="login" class="form-control" disabled onkeyup="buscarUsers();">
                                             <label class="form-label">Usuario</label>
                                         </div>
                                         <div id="listaUsuarios" style="display:none;"></div>
-                                    </div>
-                                </div>
-                                <!-- CAMPO PARA ESTADO CON 4 COLUMNAS -->
-                                <div class="col-sm-4">
-                                    <div class="form-group form-float">
-                                        <div class="form-line">
-                                            <input type="text" id="txtEstado" class="form-control" disabled>
-                                            <label class="form-label">Estado</label>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -198,49 +246,51 @@
                             <div class="table-responsive">
                                 <table class="table table-bordered table-striped table-hover dataTable js-exportable">
                                     <thead>
-                                        <tr>
+                                        <tr style="background-color: #e6e6e6;">
                                             <th>Código</th>
                                             <th>Nombre</th>
                                             <th>Apellido</th>
                                             <th>Nro. Cedula</th>
                                             <th>Dirección</th>
                                             <th>Telefono</th>
-                                            <th>Fec. Nacimiento</th>
-                                            <th>Fec. Ingreso</th>
-                                            <th>Fec. Salida</th>
+                                            <th>Email</th>
+                                            <th>Pais</th>
                                             <th>Ciudad</th>
+                                            <th>Fec. Nacimiento</th>
+                                            <th>Fec. Salida</th>
+                                            <th>Fec. Ingreso</th>
+                                            <th>Estado</th>
                                             <th>Cargo</th>
                                             <th>Usuario</th>
-                                            <th>Estado</th>
                                         </tr>
                                     </thead>
                                     <tbody id="tableBody">
                                         
                                     </tbody>
                                     <tfoot>
-                                        <tr>
+                                        <tr style="background-color: #e6e6e6;">
                                             <th>Código</th>
                                             <th>Nombre</th>
                                             <th>Apellido</th>
                                             <th>Nro. Cedula</th>
                                             <th>Dirección</th>
                                             <th>Telefono</th>
-                                            <th>Fec. Nacimiento</th>
-                                            <th>Fec. Ingreso</th>
-                                            <th>Fec. Salida</th>
+                                            <th>Email</th>
+                                            <th>Pais</th>
                                             <th>Ciudad</th>
+                                            <th>Fec. Nacimiento</th>
+                                            <th>Fec. Salida</th>
+                                            <th>Fec. Ingreso</th>
+                                            <th>Estado</th>
                                             <th>Cargo</th>
                                             <th>Usuario</th>
-                                            <th>Estado</th>
                                         </tr>
                                     </tfoot>    
                                 </table>
                             </div>
                         </div>
                     </div>
-
                 </div>
-                
             </div>
         </div>
     </section>
@@ -254,6 +304,9 @@
     <!-- Select Plugin Js -->
     <script src="../../../plugins/bootstrap-select/js/bootstrap-select.js"></script>
 
+    <!-- Select Plugin Js -->
+    <script src="../../../plugins/bootstrap-select/js/bootstrap-select.js"></script>
+
     <!-- Slimscroll Plugin Js -->
     <script src="../../../plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
 
@@ -262,6 +315,9 @@
 
     <!-- SweetAlert Plugin Js -->
     <script src="../../../plugins/sweetalert/sweetalert.min.js"></script>
+
+    <!-- Bootstrap Datepicker Plugin Js -->
+    <script src="../../../plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
 
     <!-- Jquery DataTable Plugin Js -->
     <script src="../../../plugins/jquery-datatable/jquery.dataTables.js"></script>

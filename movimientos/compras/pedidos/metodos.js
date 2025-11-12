@@ -54,8 +54,8 @@ function agregar(){
     $("#id").val(0);
     $("#txtFecha").removeAttr("disabled");
     $("#txtFecAprob").removeAttr("disabled");
-    $("#emp_descrip").removeAttr("disabled");
-    $("#suc_descrip").removeAttr("disabled");
+    $("#empresa_desc").removeAttr("disabled");
+    $("#suc_desc").removeAttr("disabled");
 
     $("#btnAgregar").attr("disabled","true");
     $("#btnEditar").attr("disabled","true");
@@ -74,8 +74,8 @@ function editar(){
     console.log("Operación de Editar activada, txtOperacion:", $("#txtOperacion").val());
     $("#txtFecha").removeAttr("disabled");
     $("#txtFecAprob").removeAttr("disabled");
-    $("#emp_descrip").removeAttr("disabled");
-    $("#suc_descrip").removeAttr("disabled");
+    $("#empresa_desc").removeAttr("disabled");
+    $("#suc_desc").removeAttr("disabled");
     
     $("#btnAgregar").attr("disabled","true");
     $("#btnEditar").attr("disabled","true");
@@ -192,15 +192,15 @@ function listar(){
     })
 }
 
-function seleccionPedido(id_pedido, pedido_fecha, pedido_fec_aprob, empresa_id, emp_descrip, sucursal_id, suc_descrip, funcionario_id, func_nombre, pedido_estado) {
+function seleccionPedido(id_pedido, pedido_fecha, pedido_fec_aprob, empresa_id, empresa_desc, sucursal_id, suc_desc, funcionario_id, func_nombre, pedido_estado) {
     
     $("#id").val(id_pedido);
     $("#txtFecha").val(pedido_fecha);
     $("#txtFecAprob").val(pedido_fec_aprob);
     $("#emp_id").val(empresa_id);
-    $("#emp_descrip").val(emp_descrip);
+    $("#empresa_desc").val(empresa_desc);
     $("#suc_id").val(sucursal_id);
-    $("#suc_descrip").val(suc_descrip);
+    $("#suc_desc").val(suc_desc);
     $("#funcionario_id").val(funcionario_id);
     $("#func_nombre").val(func_nombre);
     $("#pedido_estado").val(pedido_estado);
@@ -287,17 +287,17 @@ function grabar(){
 
 function buscarEmpresas(){
     $.ajax({
-        url: getUrl()+"empresa/search", 
+        url: getUrl()+"empresa/buscar", 
         method:"POST",
         dataType: "json",
         data: {
-            'empresa_desc': $("#emp_descripcion").val()
+            'empresa_desc': $("#empresa_desc").val()
         }
     })
     .done(function(resultado){
         var lista = "<ul class=\"list-group\">";
         for(rs of resultado){
-            lista += "<li class=\"list-group-item\" onclick=\"seleccionEmpresa("+rs.id+",'"+rs.empresa_desc+"');\">"+rs.emp_descrip+"</li>";
+            lista += "<li class=\"list-group-item\" onclick=\"seleccionEmpresa("+rs.id+",'"+rs.empresa_desc+"');\">"+rs.empresa_desc+"</li>";
         }
         lista += "</ul>";
         $("#listaEmpresas").html(lista);
@@ -308,26 +308,26 @@ function buscarEmpresas(){
         console.log(a.responseText);
     })
 }
-function seleccionEmpresa(empresa_id, emp_descrip){
+function seleccionEmpresa(empresa_id, empresa_desc){
     $("#emp_id").val(empresa_id);
-    $("#emp_descrip").val(emp_descrip);
+    $("#empresa_desc").val(empresa_desc);
 
     $("#listaEmpresas").html("");
     $("#listaEmpresas").attr("style","display:none;");
 }
 function buscarSucursales(){
     $.ajax({
-        url: getUrl()+"sucursale/search", 
+        url: getUrl()+"sucursale/buscar", 
         method:"POST",
         dataType: "json",
         data: {
-            'suc_desc': $("#suc_descripcion").val()
+            'suc_desc': $("#suc_desc").val()
         }
     })
     .done(function(resultado){
         var lista = "<ul class=\"list-group\">";
         for(rs of resultado){
-            lista += "<li class=\"list-group-item\" onclick=\"seleccionSucursal("+rs.id+",'"+rs.suc_desc+"');\">"+rs.suc_descrip+"</li>";
+            lista += "<li class=\"list-group-item\" onclick=\"seleccionSucursal("+rs.id+",'"+rs.suc_desc+"');\">"+rs.suc_desc+"</li>";
         }
         lista += "</ul>";
         $("#listaSucursales").html(lista);
@@ -339,9 +339,9 @@ function buscarSucursales(){
     })
 }
 
-function seleccionSucursal(suc_id, suc_descrip){
+function seleccionSucursal(suc_id, suc_desc){
     $("#suc_id").val(suc_id);
-    $("#suc_descrip").val(suc_descrip);
+    $("#suc_desc").val(suc_desc);
 
     $("#listaSucursales").html("");
     $("#listaSucursales").attr("style","display:none;");

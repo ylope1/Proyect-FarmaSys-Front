@@ -90,7 +90,7 @@
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="hidden" id="emp_id" value="0"/>
-                                            <input type="text" id="emp_descrip" class="form-control" disabled onkeyup="buscarEmpresas();">
+                                            <input type="text" id="empresa_desc" class="form-control" disabled onkeyup="buscarEmpresas();">
                                             <label class="form-label">Empresa</label>
                                         </div>
                                         <div id="listaEmpresas" style="display:none;"></div>
@@ -101,7 +101,7 @@
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="hidden" id="suc_id" value="0"/>
-                                            <input type="text" id="suc_descrip" class="form-control" disabled onkeyup="buscarSucursales();">
+                                            <input type="text" id="suc_desc" class="form-control" disabled onkeyup="buscarSucursales();">
                                             <label class="form-label">Sucursal</label>
                                         </div>
                                     <div id="listaSucursales" style="display:none;"></div>
