@@ -61,7 +61,8 @@ function agregar() {
     $("#txtNroFact").removeAttr("disabled");
     $("#contado").removeAttr("disabled");
     $("#credito").removeAttr("disabled");
-    $("#nota_comp_tipo").removeAttr("disabled"); 
+    $("#nota_comp_tipo").removeAttr("disabled");
+    cargarTipoNota(null, false);  // habilitado y sin valor seleccionado 
     $("#compra").removeAttr("disabled");
 
     // Habilitar el campo intervalo_fecha_vto según la condición de venta
@@ -90,7 +91,7 @@ function editar() {
     $("#txtNroFact").removeAttr("disabled");
     $("#contado").removeAttr("disabled");
     $("#credito").removeAttr("disabled");
-    $("#nota_comp_tipo").removeAttr("disabled"); 
+    cargarTipoNota($("#nota_comp_tipo").val(), false); 
     $("#compra").removeAttr("disabled");
     toggleCampoCondicionVta();// Habilitar el campo intervalo_fecha_vto según la condición de venta
 
@@ -170,10 +171,10 @@ function listar(){
         method:"GET",
         dataType: "json"
     })
-    .done(function(resultado){ //terminar esta parte luego
+    .done(function(resultado){ 
         var lista = "";
         for(rs of resultado){
-            lista = lista + "<tr class=\"item-list\" onclick=\"seleccionNotasComp("+rs.id+","+rs.empresa_id+",'"+rs.empresa_desc+"',"+rs.sucursal_id+",'"+rs.suc_desc+"',"+rs.deposito_id+",'"+rs.deposito_desc+"','"+rs.compra_fec+"','"+rs.compra_fec_recep+"',"+rs.proveedor_id+",'"+rs.proveedor_desc+"',"+rs.compra_timbrado+",'"+rs.compra_fact+"',"+rs.tipo_fact_id+","+rs.compra_ifv+","+rs.compra_cant_cta+","+rs.orden_comp_id+",'"+rs.orden+"','"+rs.compra_estado+"',"+rs.user_id+",'"+rs.encargado+"');\">";
+            lista = lista + "<tr class=\"item-list\" onclick=\"seleccionNotasComp("+rs.id+","+rs.empresa_id+",'"+rs.empresa_desc+"',"+rs.sucursal_id+",'"+rs.suc_desc+"',"+rs.deposito_id+",'"+rs.deposito_desc+"','"+rs.nota_comp_fec+"',"+rs.proveedor_id+",'"+rs.proveedor_desc+"',"+rs.nota_comp_timbrado+",'"+rs.nota_comp_fact+"',"+rs.tipo_fact_id+",'"+rs.nota_comp_tipo+"',"+rs.compra_id+",'"+rs.compra+"','"+rs.nota_comp_estado+"',"+rs.user_id+",'"+rs.encargado+"');\">";
                 lista = lista + "<td>";
                 lista = lista + rs.id;
                 lista = lista +"</td>";
@@ -187,31 +188,25 @@ function listar(){
                 lista = lista + rs.deposito_desc;
                 lista = lista +"</td>";
                 lista = lista + "<td>";
-                lista = lista + rs.compra_fec;
-                lista = lista +"</td>";
-                lista = lista + "<td>";
-                lista = lista + rs.compra_fec_recep;
+                lista = lista + rs.nota_comp_fec;
                 lista = lista +"</td>";
                 lista = lista + "<td>";
                 lista = lista + rs.proveedor_desc;
                 lista = lista +"</td>";
                 lista = lista + "<td>";
-                lista = lista + rs.compra_fact;
+                lista = lista + rs.nota_comp_fact;
                 lista = lista +"</td>";
                 lista = lista + "<td>";
                 lista = lista + rs.tipo_fact_desc;
                 lista = lista +"</td>";
                 lista = lista + "<td>";
-                lista = lista + rs.compra_ifv;
+                lista = lista + rs.nota_comp_tipo;
+                lista = lista +"</td>";              
+                lista = lista + "<td>";
+                lista = lista + rs.compra;
                 lista = lista +"</td>";
                 lista = lista + "<td>";
-                lista = lista + rs.compra_cant_cta;
-                lista = lista +"</td>";               
-                lista = lista + "<td>";
-                lista = lista + rs.orden;
-                lista = lista +"</td>";
-                lista = lista + "<td>";
-                lista = lista + rs.compra_estado;
+                lista = lista + rs.nota_comp_estado;
                 lista = lista +"</td>";
                 lista = lista + "<td>";
                 lista = lista + rs.encargado;
@@ -226,7 +221,7 @@ function listar(){
         console.log(a.responseText);
     })
 }
-function seleccionCompra(id, empresa_id, empresa_desc, sucursal_id, suc_desc, deposito_id, deposito_desc, compra_fec, compra_fec_recep, proveedor_id, proveedor_desc, compra_timbrado, compra_fact, tipo_fact_id, compra_ifv, compra_cant_cta, orden_comp_id, orden, compra_estado, user_id, encargado){ 
+function seleccionNotasComp(id, empresa_id, empresa_desc, sucursal_id, suc_desc, deposito_id, deposito_desc, nota_comp_fec, proveedor_id, proveedor_desc, nota_comp_timbrado, nota_comp_fact, tipo_fact_id, nota_comp_tipo, compra_id, compra, nota_comp_estado, user_id, encargado){ 
     $("#id").val(id);
     $("#empresa_id").val(empresa_id);
     $("#empresa_desc").val(empresa_desc);   
@@ -234,19 +229,17 @@ function seleccionCompra(id, empresa_id, empresa_desc, sucursal_id, suc_desc, de
     $("#suc_desc").val(suc_desc);
     $("#deposito_id").val(deposito_id);
     $("#deposito_desc").val(deposito_desc);
-    $("#txtFecha").val(compra_fec);
-    $("#txtFecRecep").val(compra_fec_recep);
+    $("#txtFecha").val(nota_comp_fec);
     $("#proveedor_id").val(proveedor_id);
     $("#proveedor_desc").val(proveedor_desc);
-    $("#txtTimbrado").val(compra_timbrado);
-    $("#txtNroFact").val(compra_fact);
-    $("#txtCantCta").val(compra_cant_cta);
-    $("#orden_comp_id").val(orden_comp_id);
-    $("#orden").val(orden);
-    $("#compra_estado").val(compra_estado);
+    $("#txtTimbrado").val(nota_comp_timbrado);
+    $("#txtNroFact").val(nota_comp_fact);
+    cargarTipoNota(nota_comp_tipo, true); // selecciona y deshabilita
+    $("#compra_id").val(compra_id);
+    $("#compra").val(compra);
+    $("#nota_comp_estado").val(nota_comp_estado);
     $("#user_id").val(user_id);
     $("#user_name").val(encargado);
-
     //condicion de compra
     if (tipo_fact_id == 6) {
         document.getElementById("contado").checked = true;
@@ -255,21 +248,6 @@ function seleccionCompra(id, empresa_id, empresa_desc, sucursal_id, suc_desc, de
     }
     // Actualiza el select de intervalo según la condición
     toggleCampoCondicionVta();
-       
-    // --- Manejo del selectpicker ---
-    $("#intervalo_fecha_vto").val(compra_ifv);
-    if (typeof $ !== "undefined" && typeof $('#intervalo_fecha_vto').selectpicker === "function") {
-        $('#intervalo_fecha_vto').selectpicker('refresh');
-    }
-    //manejo de orden de compra
-    if (orden_comp_id && orden_comp_id != 0 && orden != 'SIN ORDEN') {
-    document.getElementById("Con_Orden").checked = true;
-    $("#orden").val(orden);
-    } else {
-        document.getElementById("Sin_Orden").checked = true;
-        $("#orden").val('');
-    }
-    toggleCampoOrden(); // Función para campo orden
     
     $("#detalles").attr("style","display:block;");
     $("#registros").attr("style","display:none;");
@@ -285,9 +263,9 @@ function seleccionCompra(id, empresa_id, empresa_desc, sucursal_id, suc_desc, de
 
     $("#btnCancelar").removeAttr("disabled");
 
-    var compra_estado = $("#compra_estado").val(); // Tomamos el valor actualizado
-    console.log("Estado actual:", compra_estado);
-    if (compra_estado === "PENDIENTE"){   
+    var nota_comp_estado = $("#nota_comp_estado").val(); // Tomamos el valor actualizado
+    console.log("Estado actual:", nota_comp_estado);
+    if (nota_comp_estado === "PENDIENTE"){   
         $("#btnAgregar").attr("disabled","true");
         $("#btnGrabar").attr("disabled","true");
 
@@ -297,7 +275,7 @@ function seleccionCompra(id, empresa_id, empresa_desc, sucursal_id, suc_desc, de
         $("#formDetalles").attr("style","display:block;");
     }
 
-    if (compra_estado === "CONFIRMADO"){   
+    if (nota_comp_estado === "CONFIRMADO"){   
         $("#btnAgregar").attr("disabled","true");
         $("#btnGrabar").attr("disabled","true");
         }
@@ -305,21 +283,21 @@ function seleccionCompra(id, empresa_id, empresa_desc, sucursal_id, suc_desc, de
 }
 
 function grabar(){
-    var endpoint = "compras_cab/create";
+    var endpoint = "notas_comp_cab/create";
     var metodo = "POST";
     var estado = "PENDIENTE";
     
     if($("#txtOperacion").val()==2){
-        endpoint = "compras_cab/update/"+$("#id").val();
+        endpoint = "notas_comp_cab/update/"+$("#id").val();
         metodo = "PUT";
     }
     if($("#txtOperacion").val()==3){
-        endpoint = "compras_cab/anular/"+$("#id").val();
+        endpoint = "notas_comp_cab/anular/"+$("#id").val();
         metodo = "PUT";
         estado = "ANULADO";
     }
     if($("#txtOperacion").val()==4){
-        endpoint = "compras_cab/confirmar/"+$("#id").val();
+        endpoint = "notas_comp_cab/confirmar/"+$("#id").val();
         metodo = "PUT";
         estado = "CONFIRMADO";
     } 
@@ -329,20 +307,18 @@ function grabar(){
         dataType: "json",
         data: { 
             'id': $("#id").val(),
-            'orden_comp_id': ($("#orden_comp_id").val() === "0" || $("#orden_comp_id").val() === "") ? null : $("#orden_comp_id").val(),
+            'compra_id': $("#compra_id").val(),
             'proveedor_id': $("#proveedor_id").val(),
             'user_id': $("#user_id").val(),
+            'deposito_id': $("#deposito_id").val(),
             'sucursal_id': $("#sucursal_id").val(),
             'empresa_id': $("#empresa_id").val(),
             'tipo_fact_id': $("input[name='tipo_fact_id']:checked").val(),
-            'compra_fact': $("#txtNroFact").val(),
-            'compra_timbrado': $("#txtTimbrado").val(),
-            'compra_fec': $("#txtFecha").val(), 
-            'compra_fec_recep': $("#txtFecRecep").val(),
-            'compra_cant_cta': $("#txtCantCta").val(),
-            'compra_ifv': $("#intervalo_fecha_vto").val(),    
-            'compra_estado': estado,
-            'deposito_id': $("#deposito_id").val(),
+            'nota_comp_fact': $("#txtNroFact").val(),
+            'nota_comp_timbrado': $("#txtTimbrado").val(),
+            'nota_comp_fec': $("#txtFecha").val(), 
+            'nota_comp_tipo': $("#nota_comp_tipo").val(),   
+            'nota_comp_estado': estado,
             'operacion': $("#txtOperacion").val()
         }
     })
@@ -358,7 +334,7 @@ function grabar(){
                 $("#id").val(resultado.registro.id);
                 $("#detalles").attr("style","display:block;");
                 listarDetalles();
-                if(resultado.registro.compra_estado!= "PENDIENTE"){
+                if(resultado.registro.nota_comp_estado!= "PENDIENTE"){
                     location.reload(true);
                 }
             }
@@ -383,6 +359,7 @@ function agregarDetalle(){
     $("#prod_desc").removeAttr("disabled");
     $("#det_cantidad").removeAttr("disabled");
     $("#det_costo").removeAttr("disabled");
+    $("#motivo").removeAttr("disabled");
     $("#btnAgregarDetalle").attr("Style","display:none");
     $("#btnEditarDetalle").attr("Style","display:none");
     $("#btnEliminarDetalle").attr("Style","display:none");
@@ -393,6 +370,7 @@ function editarDetalle(){
     $("#txtOperacionDetalle").val(2);
     $("#det_cantidad").removeAttr("disabled");
     $("#det_costo").removeAttr("disabled");
+    $("#motivo").removeAttr("disabled");
     $("#btnAgregarDetalle").attr("Style","display:none");
     $("#btnEditarDetalle").attr("Style","display:none");
     $("#btnEliminarDetalle").attr("Style","display:none");
@@ -408,15 +386,15 @@ function eliminarDetalle(){
 }
 
 function grabarDetalle(){ 
-    var endpoint = "compras_det/create";
+    var endpoint = "notas_comp_det/create";
     var metodo = "POST";
     
     if($("#txtOperacionDetalle").val()==2){
-        endpoint = "compras_det/update/"+$("#id").val()+"/"+$("#producto_id").val();
+        endpoint = "notas_comp_det/update/"+$("#id").val()+"/"+$("#producto_id").val();
         metodo = "PUT";
     }
     if($("#txtOperacionDetalle").val()==3){
-        endpoint = "compras_det/delete/"+$("#id").val()+"/"+$("#producto_id").val();
+        endpoint = "notas_comp_det/delete/"+$("#id").val()+"/"+$("#producto_id").val();
         metodo = "DELETE";
     }
     $.ajax({
@@ -424,10 +402,11 @@ function grabarDetalle(){
         method: metodo,
         dataType: "json",
         data: {
-            "compra_id":$("#id").val(),
+            "nota_compra_id":$("#id").val(),
             "producto_id":$("#producto_id").val(),
             "compra_cant":$("#det_cantidad").val(),
-            "compra_costo":$("#det_costo").val()
+            "compra_costo":$("#det_costo").val(),
+            "nota_comp_motivo":$("#motivo").val()
         }
     })
     .done(function(respuesta) {
@@ -447,6 +426,7 @@ function grabarDetalle(){
     $("#prod_desc").val("");
     $("#det_cantidad").val("");
     $("#det_costo").val("");
+    $("#motivo").val("");
 }
 
 function buscarProductos(){
@@ -489,9 +469,9 @@ function listarDetalles() {
     var totalExentas = 0;
     var totalGrav5 = 0;
     var totalGrav10 = 0;
-    console.log("ID actual:", $("#id").val()); // Verifica el ID de compra
+    console.log("ID actual:", $("#id").val()); // Verifica el ID de nota de compra
     $.ajax({
-        url: getUrl() + "compras_det/read/" + $("#id").val(),
+        url: getUrl() + "notas_comp_det/read/" + $("#id").val(),
         method: "GET",
         dataType: "json"
     })
@@ -544,7 +524,7 @@ function listarDetalles() {
             totalGral += subtotal;
             cantidadDetalle++;
 
-            lista += "<tr class=\"item-list\" onclick=\"seleccionDetalle(" + rs.producto_id + ",'" + (rs.prod_desc||'') + "'," + cantidad + "," + costo + ");\">";
+            lista += "<tr class=\"item-list\" onclick=\"seleccionDetalle(" + rs.producto_id + ",'" + (rs.prod_desc||'') + "'," + rs.compra_cant + "," + rs.compra_costo + ",'" + rs.nota_comp_motivo + "');\">";
             lista += "<td>" + rs.producto_id + "</td>";
             lista += "<td>" + (rs.prod_desc||'') + "</td>";
             lista += "<td>" + cantidad + "</td>";
@@ -571,7 +551,7 @@ function listarDetalles() {
         $(".dataTable tfoot").html(tfoot);
 
         // Activar botón confirmar si corresponde
-        if ($("#compra_estado").val() === "PENDIENTE" && cantidadDetalle > 0) {
+        if ($("#nota_comp_estado").val() === "PENDIENTE" && cantidadDetalle > 0) {
             $("#btnConfirmar").removeAttr("disabled");
         } else {
             $("#btnConfirmar").attr("disabled", "true");
@@ -582,11 +562,12 @@ function listarDetalles() {
         console.log(a.responseText);
     });
 }
-function seleccionDetalle(producto_id, prod_desc, compra_cant, compra_costo){
+function seleccionDetalle(producto_id, prod_desc, compra_cant, compra_costo, nota_comp_motivo){
     $("#producto_id").val(producto_id);
     $("#prod_desc").val(prod_desc);
     $("#det_cantidad").val(compra_cant);
     $("#det_costo").val(compra_costo);
+    $("#motivo").val(nota_comp_motivo);
 }
 
 function buscarProveedores(){
@@ -623,36 +604,36 @@ function seleccionProveedor(proveedor_id, proveedor_desc){
     $(".form-line").attr("class","form-line focused");
 }
 
-function buscarOrdenes(){
+function buscarCompras(){
     $.ajax({
-        url:getUrl()+"orden_comp_cab/buscar",
+        url:getUrl()+"compras_cab/buscar",
         method:"POST",
         dataType: "json",
         data: {
             'user_id': $("#user_id").val(),
-            'name': $("#orden").val()
+            'name': $("#compra").val()
         }
     })
     .done(function(resultado){
         var lista = "<ul class=\"list-group\">";
         for(rs of resultado){
-            lista += "<li class=\"list-group-item\" onclick=\"seleccionOrden("+rs.orden_comp_id+",'"+rs.orden+"')\">"+rs.orden+"</li>";
+            lista += "<li class=\"list-group-item\" onclick=\"seleccionCompra("+rs.compra_id+",'"+rs.compra+"')\">"+rs.compra+"</li>";
         }
         lista += "</ul>";
-        $("#listaOrdenes").html(lista);
-        $("#listaOrdenes").attr("style","display:block; position:absolute; z-index:2000;");
+        $("#listaCompras").html(lista);
+        $("#listaCompras").attr("style","display:block; position:absolute; z-index:2000;");
     })
     .fail(function(a,b,c){
         alert(c);
         console.log(a.responseText);
     })
 }
-function seleccionOrden(orden_comp_id, orden){
-    $("#orden_comp_id").val(orden_comp_id);
-    $("#orden").val(orden);
+function seleccionCompra(compra_id, compra){
+    $("#compra_id").val(compra_id);
+    $("#compra").val(compra);
 
-    $("#listaOrdenes").html("");
-    $("#listaOrdenes").attr("style","display:none;");
+    $("#listaCompras").html("");
+    $("#listaCompras").attr("style","display:none;");
 
     $(".form-line").attr("class","form-line focused");
 }
@@ -749,50 +730,40 @@ function seleccionDeposito(deposito_id, deposito_desc){
     $("#listaDepositos").html("");
     $("#listaDepositos").attr("style","display:none;");
 }
-document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("Con_Orden").addEventListener("change", toggleCampoOrden);
-    document.getElementById("Sin_Orden").addEventListener("change", toggleCampoOrden);
-});
 
-function toggleCampoOrden() {
-    const conOrden = document.getElementById("Con_Orden").checked;
-    const campoOrden = document.getElementById("orden");
+function cargarTipoNota(seleccionado = null, deshabilitar = true) {
+    const opciones = [
+        { valor: "NC", texto: "NOTA DE CRÉDITO" },
+        { valor: "ND", texto: "NOTA DE DÉBITO" }
+    ];
 
-    if (conOrden) {
-        campoOrden.removeAttribute("disabled");
+    let select = $("#nota_comp_tipo");
+    select.empty(); // Limpiar opciones previas
+
+    // Agregar una opción por defecto vacía
+    select.append(`<option value="" disabled ${seleccionado ? "" : "selected"}>-- Seleccione --</option>`);
+
+    opciones.forEach(op => {
+        const selectedAttr = seleccionado === op.valor ? "selected" : "";
+        select.append(`<option value="${op.valor}" ${selectedAttr}>${op.texto}</option>`);
+    });
+
+    select.selectpicker("refresh"); // Refrescar
+
+    // Habilitar o deshabilitar el campo
+    if (deshabilitar) {
+        select.attr("disabled", "disabled");
     } else {
-        campoOrden.setAttribute("disabled", "true");
-        campoOrden.value = "";  // Limpiar el campo si se desactiva
+        select.removeAttr("disabled");
     }
+
+    select.selectpicker("refresh");
 }
+
 
 function toggleCampoCondicionVta() {
     const contado = document.getElementById("contado").checked;
-    const intervaloFechaVto = document.getElementById("intervalo_fecha_vto");
-
-    // Limpiar opciones anteriores
-    intervaloFechaVto.innerHTML = '';
-
-    if (contado) {
-        // Solo opción para contado: 0 días (valor = 1)
-        intervaloFechaVto.innerHTML = '<option value="1">0 días</option>';
-        intervaloFechaVto.value = "1";  // Preseleccionamos
-        intervaloFechaVto.setAttribute('disabled', 'disabled');
-    } else {
-        // Opciones de crédito: 30, 60, 90, 120 días
-        intervaloFechaVto.innerHTML =
-            '<option value="2">30 días</option>' +
-            '<option value="3">60 días</option>' +
-            '<option value="4">90 días</option>' +
-            '<option value="5">120 días</option>';
-        intervaloFechaVto.value = "2"; // Valor por defecto
-        intervaloFechaVto.removeAttribute('disabled');
-    }
-
-    // Refrescar el selectpicker para que se actualice visualmente
-    if (typeof $ !== "undefined" && typeof $('#intervalo_fecha_vto').selectpicker === "function") {
-        $('#intervalo_fecha_vto').selectpicker('refresh');
-    }
+    const credito = document.getElementById("credito").checked;
 }
 
 // Asociar eventos al cargar la página
@@ -800,6 +771,8 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("contado").addEventListener("change", toggleCampoCondicionVta);
     document.getElementById("credito").addEventListener("change", toggleCampoCondicionVta);
     toggleCampoCondicionVta(); // Inicialización
+    // Al inicio: dejarlo vacío y deshabilitado
+    cargarTipoNota(null, true);
 });
 
 

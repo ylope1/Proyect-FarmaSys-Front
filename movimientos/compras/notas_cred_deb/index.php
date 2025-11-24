@@ -162,8 +162,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA BUSCAR COMPRAS CON 3 COLUMNAS -->
-                                <div class="col-sm-4">
+                                <!-- CAMPO PARA BUSCAR COMPRAS CON 5 COLUMNAS -->
+                                <div class="col-sm-5">
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="hidden" id="compra_id" value="0"/>
