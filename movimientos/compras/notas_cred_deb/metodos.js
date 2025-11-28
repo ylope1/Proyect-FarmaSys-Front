@@ -323,6 +323,7 @@ function grabar(){
         }
     })
     .done(function(resultado){
+        console.log("Resultado recibido:", resultado);
         swal({
             title:"Respuesta",
             text: resultado.mensaje,
@@ -331,13 +332,18 @@ function grabar(){
         function(){
             if(resultado.tipo == "success"){
                 //location.reload(true);
-                $("#id").val(resultado.registro.id);
+                if (resultado.registro && resultado.registro.id) {//borrar si no funciona
+                    $("#id").val(resultado.registro.id);
+                }    //borrar si no funciona
                 $("#detalles").attr("style","display:block;");
                 listarDetalles();
                 if(resultado.registro.nota_comp_estado!= "PENDIENTE"){
                     location.reload(true);
                 }
-            }
+            } else {//borrar si no funciona
+                // Si hubo error, cerramos SweetAlert
+                swal.close(); 
+            }//borrar si no funciona
         });
     })
     .fail(function(a,b,c){
