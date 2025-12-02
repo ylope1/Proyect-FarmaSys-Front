@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>GUI REGISTRO DE NOTAS DE COMPRAS</title>
+    <title>GUI REGISTRO DE AJUSTES DE STOCK</title>
     <!-- Favicon-->
     <link rel="icon" href="../../../favicon.ico" type="image/x-icon">
 
@@ -53,16 +53,16 @@
                     
                     <div class="card">
                         <div class="header">
-                            <h2>Registrar Notas de Compras <small>CRUD de Registro de Notas de Compras y sus detalles</small> </h2>
+                            <h2>Registrar Ajustes de Stock <small>CRUD de Registro de Ajustes de Stock y sus detalles</small> </h2>
                         </div>
                         <div class="body">
                             <div class="row clearfix">
                                 <input type="hidden" value="0" id="txtOperacion"/>
                                 <input type="hidden" value="1" id="user_id"/>
                                 <input type="hidden" value="0" id="user_name"/>
-                                <input type="hidden" value="PENDIENTE" id="nota_comp_estado"/>
-                                <!-- CAMPO PARA CODIGO CON 3 COLUMNAS -->
-                                <div class="col-sm-3">
+                                <input type="hidden" value="PENDIENTE" id="ajuste_estado"/>
+                                <!-- CAMPO PARA CODIGO CON 4 COLUMNAS -->
+                                <div class="col-sm-4">
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="text" id="id" class="form-control" disabled>
@@ -70,8 +70,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA EMPRESA CON 3 COLUMNAS -->
-                                <div class="col-sm-3">
+                                <!-- CAMPO PARA EMPRESA CON 4 COLUMNAS -->
+                                <div class="col-sm-4">
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="hidden" id="empresa_id" value="0"/>
@@ -81,8 +81,8 @@
                                         <div id="listaEmpresas" style="display:none;"></div>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA SUCURSAL CON 3 COLUMNAS -->
-                                <div class="col-sm-3">
+                                <!-- CAMPO PARA SUCURSAL CON 4 COLUMNAS -->
+                                <div class="col-sm-4">
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="hidden" id="sucursal_id" value="0"/>
@@ -92,8 +92,8 @@
                                         <div id="listaSucursales" style="display:none;"></div>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA DEPOSITO CON 3 COLUMNAS -->
-                                <div class="col-sm-3">
+                                <!-- CAMPO PARA DEPOSITO CON 4 COLUMNAS -->
+                                <div class="col-sm-4">
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="hidden" id="deposito_id" value="0"/>
@@ -103,8 +103,8 @@
                                         <div id="listaDepositos" style="display:none;"></div>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA FECHA NOTA DE COMPRA CON 3 COLUMNAS -->
-                                <div class="col-sm-3">
+                                <!-- CAMPO PARA FECHA DE AJUSTE CON 4 COLUMNAS -->
+                                <div class="col-sm-4">
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="text" id="txtFecha" class="datetimepicker form-control" disabled>
@@ -112,65 +112,25 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA BUSCAR PROVEEDOR CON 3 COLUMNAS -->
-                                <div class="col-sm-3">
-                                    <div class="form-group form-float">
-                                        <div class="form-line">
-                                            <input type="hidden" id="proveedor_id" value="0"/>
-                                            <input type="text" id="proveedor_desc" class="form-control" disabled onkeyup="buscarProveedores();">
-                                            <label class="form-label">Proveedor</label>
-                                        </div>
-                                        <div id="listaProveedores" style="display:none;"></div>
+                                <!-- CAMPO PARA ELEGIR TIPO DE AJUSTE CON 4 COLUMNAS-->
+                                <div class="col-sm-4">
+                                    <h2 class="card-inside-title" style="font-weight: normal; font-size: 13px; color: #555;">Tipo Ajuste</h2>
+                                    <div class="demo-radio-button">
+                                        <input name="tipo_ajuste" type="radio" id="POSITIVO" value="POSITIVO" disabled checked onchange />
+                                        <label for="POSITIVO">Positivo</label>
+                                        <input name="tipo_ajuste" type="radio" id="NEGATIVO" value="NEGATIVO" disabled onchange />
+                                        <label for="NEGATIVO">Negativo</label>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA NOTA DE COMPRA TIMBRADO CON 3 COLUMNAS -->
-                                <div class="col-sm-3">
-                                    <div class="form-group form-float">
-                                        <div class="form-line">
-                                            <input type="text" id="txtTimbrado" class="form-control" disabled>
-                                            <label class="form-label">Timbrado</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- CAMPO PARA NRO DE FACTURA DE COMPRA CON 3 COLUMNAS -->
+                                <!-- CAMPO PARA BUSCAR MOTIVOS AJUSTES CON 4 COLUMNAS -->
                                 <div class="col-sm-4">
                                     <div class="form-group form-float">
                                         <div class="form-line">
-                                            <input type="text" id="txtNroFact" class="form-control" disabled>
-                                            <label class="form-label">Nro. Factura</label>
+                                            <input type="hidden" id="ajustes_motivos_id" value="0"/>
+                                            <input type="text" id="ajus_mot_desc" class="form-control" disabled onkeyup="buscarMotivos();">
+                                            <label class="form-label">Motivos</label>
                                         </div>
-                                    </div>
-                                </div>
-                                <!-- CAMPO PARA ELEGIR CONDICION DE COMPRA CON 3 COLUMNAS-->
-                                <div class="col-sm-5">
-                                    <h2 class="card-inside-title" style="font-weight: normal; font-size: 13px; color: #555;">Condición Compra</h2>
-                                    <div class="demo-radio-button">
-                                        <input name="tipo_fact_id" type="radio" id="contado" value="6" disabled checked onchange />
-                                        <label for="contado">Contado</label>
-                                        <input name="tipo_fact_id" type="radio" id="credito" value="7" disabled onchange />
-                                        <label for="credito">Crédito</label>
-                                    </div>
-                                </div>
-                                <!-- CAMPO PARA SELECCIONAR NOTA DE COMPRA TIPO CON 3 COLUMNAS-->
-                                <div class="col-sm-3">
-                                    <label class="form-label" style="font-weight: normal; font-size: 13px; color: #555;">TIPO NOTA</label>
-                                    <div class="form-group form-float">
-                                        <div class="form-line">
-                                            <select id="nota_comp_tipo" class="form-control selectpicker">
-                                                <!-- Las opciones se generarán dinámicamente -->
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- CAMPO PARA BUSCAR COMPRAS CON 5 COLUMNAS -->
-                                <div class="col-sm-5">
-                                    <div class="form-group form-float">
-                                        <div class="form-line">
-                                            <input type="hidden" id="compra_id" value="0"/>
-                                            <input type="text" id="compra" class="form-control" disabled onkeyup="buscarCompras();">
-                                            <label class="form-label">Compras</label>
-                                        </div>
-                                        <div id="listaCompras" style="display:none;"></div>
+                                        <div id="listaMotivos" style="display:none;"></div>
                                     </div>
                                 </div> 
                                 <div class="col-sm-12">
@@ -188,13 +148,13 @@
 
                         <div class="card" id="detalles" style="display:none"> 
                             <div class="header">
-                                <h2>Detalles del Registro de Notas de Compras</h2>
+                                <h2>Detalles del Registro de Ajustes de Stock</h2>
                             </div>
                             <div class="body">
                                 <div class="row clearfix" id="formDetalles">
                                     <input type="hidden" value="0" id="txtOperacionDetalle"/>
                                     <!-- CAMPO PARA CODIGO CON 1 COLUMNAS -->
-                                    <div class="col-sm-1">
+                                    <div class="col-sm-2">
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <input type="text" id="producto_id" class="form-control" disabled>
@@ -203,7 +163,7 @@
                                         </div>
                                     </div>
                                     <!-- CAMPO PARA BUSCAR PRODUCTOS CON 3 COLUMNAS -->
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-4">
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <input type="text" id="prod_desc" class="form-control" disabled onkeyup="buscarProductos();">
@@ -212,8 +172,8 @@
                                             <div id="ListaProductos" style="display:none;"></div>
                                         </div>
                                     </div>
-                                    <!-- CAMPO PARA CANTIDAD CON 1 COLUMNAS -->
-                                    <div class="col-sm-1">
+                                    <!-- CAMPO PARA AJUSTE CANTIDAD CON 1 COLUMNAS -->
+                                    <div class="col-sm-2">
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <input type="text" id="det_cantidad" class="form-control" disabled>
@@ -221,21 +181,12 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- CAMPO PARA PRECIO COMPRA CON 2 COLUMNAS -->
+                                    <!-- CAMPO PARA AJUSTE PRECIO COSTO CON 2 COLUMNAS -->
                                     <div class="col-sm-2">
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <input type="text" id="det_costo" class="form-control" disabled>
-                                                <label class="form-label">Precio Compra</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- CAMPO PARA MOTIVO DE NOTA DE COMPRA CON 3 COLUMNAS -->
-                                    <div class="col-sm-3">
-                                        <div class="form-group form-float">
-                                            <div class="form-line">
-                                                <input type="text" id="motivo" class="form-control" disabled>
-                                                <label class="form-label">Motivo Nota</label>
+                                                <label class="form-label">Precio Costo</label>
                                             </div>
                                         </div>
                                     </div>
@@ -288,7 +239,7 @@
                         </div>  
                         <div class="card" id="registros">
                             <div class="header">
-                                <h2>Registros de Notas de Crédito/Débito Compras</h2>
+                                <h2>Registros de Ajustes de Stock</h2>
                             </div>
                             <div class="body">
                                 <div class="table-responsive">
@@ -300,11 +251,8 @@
                                                 <th>Sucursal</th>
                                                 <th>Deposito</th>
                                                 <th>Fecha</th>
-                                                <th>Proveedor</th>
-                                                <th>Nro. Factura</th>
-                                                <th>Condición Compra</th>
-                                                <th>Tipo Nota</th>
-                                                <th>Compra</th>
+                                                <th>Tipo Ajuste</th>
+                                                <th>Motivo</th>
                                                 <th>Estado</th>
                                                 <th>Usuario</th>
                                             </tr>
@@ -319,11 +267,8 @@
                                                 <th>Sucursal</th>
                                                 <th>Deposito</th>
                                                 <th>Fecha</th>
-                                                <th>Proveedor</th>
-                                                <th>Nro. Factura</th>
-                                                <th>Condición Compra</th>
-                                                <th>Tipo Nota</th>
-                                                <th>Compra</th>
+                                                <th>Tipo Ajuste</th>
+                                                <th>Motivo</th>
                                                 <th>Estado</th>
                                                 <th>Usuario</th>
                                             </tr>
