@@ -158,6 +158,7 @@
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <input type="text" id="producto_id" class="form-control" disabled>
+                                                <input type="hidden" id="item_id" value="0">
                                                 <label class="form-label">Código</label>
                                             </div>
                                         </div>
