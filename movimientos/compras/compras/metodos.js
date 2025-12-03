@@ -375,7 +375,17 @@ function grabar(){
     .fail(function(a,b,c){
         alert(c);
         console.log(a.responseText);
-    })
+        let mensaje = "Error desconocido";
+        try {
+            let json = JSON.parse(a.responseText);
+            mensaje = json.message || mensaje;
+        } catch (e) {
+            mensaje = a.responseText;
+        }
+
+        // Usar SweetAlert v1
+        swal("Error", mensaje, "error");
+    });
 }
 
 function campoFecha(){
