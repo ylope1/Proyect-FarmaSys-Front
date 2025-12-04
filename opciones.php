@@ -502,37 +502,37 @@
                         </a>
                         <ul class="ml-menu">
                             <li>
-                                <a href="movimientos/ventas/pedido_cliente">
+                                <a href="movimientos/ventas_cobros/pedidos_ventas">
                                     <span>Registrar Pedidos Clientes</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="movimientos/ventas/ventas">
+                                <a href="movimientos/ventas_cobros/registrar_ventas">
                                     <span>Registrar Ventas</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="movimientos/ventas/apertura_cierre">
+                                <a href="movimientos/ventas_cobros/apertura_cierre">
                                     <span>Registrar Apertura-Cierre de Caja</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="movimientos/ventas/arqueo_caja">
+                                <a href="movimientos/ventas_cobros/arqueo_caja">
                                     <span>Registrar Arqueo de Caja</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="movimientos/ventas/nota_remision">
+                                <a href="movimientos/ventas_cobros/nota_remision">
                                     <span>Registrar Nota de Remision</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="movimientos/ventas/cobranza">
+                                <a href="movimientos/ventas_cobros/cobranza">
                                     <span>Registrar Cobranzas</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="movimientos/ventas/notas_cred_deb">
+                                <a href="movimientos/ventas_cobros/notas_cred_deb">
                                     <span>Registrar Nota de Crédito-Débito</span>
                                 </a>
                             </li>
