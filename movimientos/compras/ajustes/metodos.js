@@ -93,7 +93,7 @@ function editar() {
     $(".form-line").attr("class", "form-line focused");
 }
 
-function eliminar(){
+function anular(){
     $("#txtOperacion").val(3);
 
     $("#btnAgregar").attr("disabled","true");
@@ -257,6 +257,18 @@ function grabar(){
     var endpoint = "ajustes_cab/create";
     var metodo = "POST";
     var estado = "PENDIENTE";
+    const datos = {
+        id: $("#id").val(),
+        empresa_id: $("#empresa_id").val(),
+        sucursal_id: $("#sucursal_id").val(),
+        deposito_id: $("#deposito_id").val(),
+        user_id: $("#user_id").val(),
+        tipo_ajuste: $("input[name='tipo_ajuste']:checked").val(),
+        ajustes_motivos_id: $("#ajustes_motivos_id").val(),
+        ajuste_fec: $("#txtFecha").val(),
+        ajuste_estado: $("#ajuste_estado").val()
+    };
+    console.log("Datos que se envían al backend:", datos);
     
     if($("#txtOperacion").val()==2){
         endpoint = "ajustes_cab/update/"+$("#id").val();
@@ -369,7 +381,7 @@ function eliminarDetalle(){
 function grabarDetalle(){ 
     var endpoint = "ajustes_det/create";
     var metodo = "POST";
-    
+
     if($("#txtOperacionDetalle").val()==2){
         endpoint = "ajustes_det/update/"+$("#id").val()+"/"+$("#producto_id").val();
         metodo = "PUT";
@@ -570,9 +582,10 @@ function buscarMotivos(){
         }
     })
     .done(function(resultado){
+        console.log("Resultado recibido:", resultado);
         var lista = "<ul class=\"list-group\">";
         for(rs of resultado){
-            lista += "<li class=\"list-group-item\" onclick=\"seleccionMotivo("+rs.ajustes_motivos_id+",'"+rs.ajus_mot_desc+"');\">"+rs.ajus_mot_desc+"</li>";
+            lista += "<li class=\"list-group-item\" onclick=\"seleccionMotivo("+rs.id+",'"+rs.ajus_mot_desc+"' );\">"+rs.ajus_mot_desc+"</li>";
         }
         lista += "</ul>";
         $("#listaMotivos").html(lista);
@@ -583,8 +596,8 @@ function buscarMotivos(){
         console.log(a.responseText);
     });
 }
-
-function seleccionProveedor(ajustes_motivos_id, ajus_mot_desc){
+function seleccionMotivo(ajustes_motivos_id, ajus_mot_desc){
+    console.log("Motivo seleccionado:", ajustes_motivos_id, ajus_mot_desc);
     $("#ajustes_motivos_id").val(ajustes_motivos_id);
     $("#ajus_mot_desc").val(ajus_mot_desc);
 

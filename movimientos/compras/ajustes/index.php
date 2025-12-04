@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>GUI REGISTRO DE AJUSTES DE STOCK</title>
+    <title>GUI REGISTRO DE AJUSTES DE INVENTARIO</title>
     <!-- Favicon-->
     <link rel="icon" href="../../../favicon.ico" type="image/x-icon">
 
@@ -53,7 +53,7 @@
                     
                     <div class="card">
                         <div class="header">
-                            <h2>Registrar Ajustes de Stock <small>CRUD de Registro de Ajustes de Stock y sus detalles</small> </h2>
+                            <h2>Registrar Ajustes de Inventario <small>CRUD de Registro de Ajustes de Inventario y sus detalles</small> </h2>
                         </div>
                         <div class="body">
                             <div class="row clearfix">
@@ -133,6 +133,7 @@
                                         <div id="listaMotivos" style="display:none;"></div>
                                     </div>
                                 </div> 
+                                
                                 <div class="col-sm-12">
                                     <div class="button-demo">
                                         <button type="button" id="btnAgregar" class="btn btn-success waves-effect" onclick="agregar();">AGREGAR</button>
@@ -148,7 +149,7 @@
 
                         <div class="card" id="detalles" style="display:none"> 
                             <div class="header">
-                                <h2>Detalles del Registro de Ajustes de Stock</h2>
+                                <h2>Detalles del Registro de Ajustes de Inventario</h2>
                             </div>
                             <div class="body">
                                 <div class="row clearfix" id="formDetalles">
@@ -240,7 +241,7 @@
                         </div>  
                         <div class="card" id="registros">
                             <div class="header">
-                                <h2>Registros de Ajustes de Stock</h2>
+                                <h2>Registros de Ajustes de Inventario</h2>
                             </div>
                             <div class="body">
                                 <div class="table-responsive">
