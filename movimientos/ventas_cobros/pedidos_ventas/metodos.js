@@ -10,25 +10,25 @@ function formatoTabla(){
                 extend:'copy',
                 text:'COPIAR',
                 className:'btn btn-primary waves-effect',
-                title:'Listado de Pedidos Compras'
+                title:'Listado de Pedidos de Clientes'
             },
             {
                 extend:'excel',
                 text:'EXCEL',
                 className:'btn btn-success waves-effect',
-                title:'Listado de Pedidos Compras'
+                title:'Listado de Pedidos de Clientes'
             },
             {
                 extend:'pdf',
                 text:'PDF',
                 className:'btn btn-danger waves-effect',
-                title:'Listado de Pedidos Compras'
+                title:'Listado de Pedidos de Clientes'
             },
             {
                 extend:'print',
                 text:'IMPRIMIR',
                 className:'btn btn-warning waves-effect',
-                title:'Listado de Pedidos Compras'
+                title:'Listado de Pedidos de Clientes'
             }
         ],
         iDisplayLength:5,
