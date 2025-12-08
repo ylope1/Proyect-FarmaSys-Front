@@ -55,11 +55,12 @@
                         <div class="body">
                             <div class="row clearfix">
                                 <input type="hidden" value="0" id="txtOperacion"/>
-                                <input type="hidden" value="1" id="funcionario_id"/><!-- CAMBIAR POR USER_ID -->
-                                <input type="hidden" value="0" id="func_nombre"/> <!-- CAMBIAR POR NAME (USERS) -->
-                                <input type="hidden" value="PENDIENTE" id="pedido_estado"/>
-                                <!-- CAMPO PARA CODIGO CON 4 COLUMNAS -->
-                                <div class="col-sm-4">
+                                <input type="hidden" value="1" id="user_id"/>
+                                <input type="hidden" value="0" id="user_name"/> 
+                                <input type="hidden" value="PENDIENTE" id="pedido_vent_estado"/>
+                                
+                                <!-- PRIMERA FILA: Código, Fecha, Fecha Confirmación, Fecha Envio -->
+                                <div class="col-sm-2">
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="text" id="id" class="form-control" disabled>
@@ -67,8 +68,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA FECHA CON 4 COLUMNAS -->
-                                <div class="col-sm-4">
+                                
+                                <div class="col-sm-3">
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="text" id="txtFecha" class="datetimepicker form-control" disabled>
@@ -76,17 +77,30 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA FECHA APROBACION CON 4 COLUMNAS -->
-                                <div class="col-sm-4">
+                                
+                                <div class="col-sm-3">
                                     <div class="form-group form-float">
                                         <div class="form-line">
-                                            <input type="text" id="txtFecAprob" class="datetimepicker form-control" disabled>
-                                            <label class="form-label">Fecha Aprobacion</label>
+                                            <input type="text" id="txtFecConf" class="datetimepicker form-control" disabled>
+                                            <label class="form-label">Fecha Confirmación</label>
                                         </div>
                                     </div>
                                 </div>
-                                 <!-- CAMPO PARA EMPRESA CON 6 COLUMNAS -->
-                                 <div class="col-sm-6">
+                                
+                                <div class="col-sm-4">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="text" id="txtFecEnv" class="datetimepicker form-control" disabled>
+                                            <label class="form-label">Fecha Envio</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- FIN PRIMERA FILA -->
+
+                            <div class="row clearfix">
+                                <!-- SEGUNDA FILA: Campo para Empresa -->
+                                <div class="col-sm-4">
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="hidden" id="emp_id" value="0"/>
@@ -96,37 +110,78 @@
                                         <div id="listaEmpresas" style="display:none;"></div>
                                     </div>
                                 </div>
-                                 <!-- CAMPO PARA SUCURSAL CON 6 COLUMNAS -->
-                                <div class="col-sm-6">
+                                <!-- Campo para Sucursal -->
+                                <div class="col-sm-4">
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="hidden" id="suc_id" value="0"/>
                                             <input type="text" id="suc_desc" class="form-control" disabled onkeyup="buscarSucursales();">
                                             <label class="form-label">Sucursal</label>
                                         </div>
-                                    <div id="listaSucursales" style="display:none;"></div>
+                                        <div id="listaSucursales" style="display:none;"></div>
+                                    </div>
+                                </div>
+                                <!-- CAMPO PARA BUSCAR CI O  RUC DEL CLIENTE -->
+                                <div class="col-sm-4">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="hidden" id="cliente_id" value="0"/>
+                                            <input type="text" id="cliente_ci" class="form-control" placeholder="Buscar cliente por CI o RUC" disabled onkeyup="buscarClientes();">
+                                            <label class="form-label">CI</label>
+                                        </div>
+                                        <div id="listaClientes" style="display:none;"></div>
+                                    </div>
+                                </div>
+                            </div>   
+                            <!-- FIN SEGUNDA FILA -->
+
+                            <div class="row clearfix">
+                                <div class="col-sm-4">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <!--<input type="hidden" id="cliente_id" value="0"/>-->
+                                            <input type="text" id="nombre_cliente" class="form-control" disabled>
+                                            <label class="form-label">Cliente</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-sm-3">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="text" id="cli_ruc" class="form-control" disabled>
+                                            <label class="form-label">RUC</label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="button-demo">
-                            <button type="button" id="btnAgregar" class="btn btn-success waves-effect" onclick="agregar();">AGREGAR</button>
-                            <button type="button" id="btnEditar" class="btn btn-primary waves-effect" onclick="editar();" disabled>EDITAR</button>
-                            <button type="button" id="btnAnular" class="btn btn-danger waves-effect" onclick="anular();"disabled>ANULAR</button>
-                            <button type="button" id="btnConfirmar" class="btn btn-success waves-effect" onclick="confirmar();"disabled>CONFIRMAR</button>
-                            <button type="button" id="btnGrabar" class="btn btn-default waves-effect" disabled onclick="confirmarOperacion();">GRABAR</button>
-                            <button type="button" id="btnCancelar" class="btn btn-warning waves-effect" onclick="cancelar();">CANCELAR</button> 
-                        </div>
-                    </div>
-                </div>
+                            <!-- FIN TERCERA FILA -->
 
-                <div class="card" id="detalles" style="display:none">
-                    <div class="header">
-                        <h2>Detalles del Pedido de Clientes</h2>
+                            <!-- CUARTA FILA: BOTONES -->
+                            <div class="row clearfix">
+                                <div class="col-sm-12">
+                                    <div class="button-demo">
+                                        <button type="button" id="btnAgregar" class="btn btn-success waves-effect" onclick="agregar();">AGREGAR</button>
+                                        <button type="button" id="btnEditar" class="btn btn-primary waves-effect" onclick="editar();" disabled>EDITAR</button>
+                                        <button type="button" id="btnAnular" class="btn btn-danger waves-effect" onclick="anular();"disabled>ANULAR</button>
+                                        <button type="button" id="btnConfirmar" class="btn btn-success waves-effect" onclick="confirmar();"disabled>CONFIRMAR</button>
+                                        <button type="button" id="btnGrabar" class="btn btn-default waves-effect" disabled onclick="confirmarOperacion();">GRABAR</button>
+                                        <button type="button" id="btnCancelar" class="btn btn-warning waves-effect" onclick="cancelar();">CANCELAR</button> 
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- FIN CUARTA FILA -->
+                        </div>
                     </div>
+
+                    <div class="card" id="detalles" style="display:none">
+                        <div class="header">
+                            <h2>Detalles del Pedido de Clientes</h2>
+                        </div>
                         <div class="body">
                             <div class="row clearfix" id="formDetalles">
                                 <input type="hidden" value="0" id="txtOperacionDetalle"/>
-                                <!-- CAMPO PARA CODIGO CON 2 COLUMNAS -->
+                                
                                 <div class="col-sm-2">
                                     <div class="form-group form-float">
                                         <div class="form-line">
@@ -135,8 +190,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA FECHA DE DESCRIPCION CON 5 COLUMNAS -->
-                                <div class="col-sm-5">
+                                
+                                <div class="col-sm-4">
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="text" id="prod_desc" class="form-control" disabled onkeyup="buscarProductos();">
@@ -145,7 +200,7 @@
                                         <div id="ListaProductos" style="display:none;"></div>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA CANTIDAD CON 2 COLUMNAS -->
+                                
                                 <div class="col-sm-2">
                                     <div class="form-group form-float">
                                         <div class="form-line">
@@ -154,8 +209,17 @@
                                         </div>
                                     </div>
                                 </div>
-                                    
-                                <div class="col-sm-3">
+                                
+                                <div class="col-sm-2">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="text" id="det_precio" class="form-control" disabled>
+                                            <label class="form-label">Precio Venta</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-2">
                                     <div class="icon-button-demo">
                                         <button type="button" id="btnAgregarDetalle" class="btn btn-primary waves-effect" onclick="agregarDetalle();">
                                             <i class="material-icons">add</i>
@@ -179,6 +243,8 @@
                                             <th>Código</th>
                                             <th>Producto</th>
                                             <th>Cantidad</th>
+                                            <th>Precio Venta</th>
+                                            <th>Sub Total</th>
                                         </tr>
                                     </thead>
                                     <tbody id="tableDetalles">
@@ -186,9 +252,8 @@
                                     </tbody>
                                     <tfoot>
                                         <tr style="background-color: #e6e6e6;">
-                                            <th>Código</th>
-                                            <th>Producto</th>
-                                            <th>Cantidad</th>
+                                            <th colspan="4">Total General</th>
+                                            <th class="text-right" id="txtTotalGral">0</th>
                                         </tr>
                                     </tfoot>    
                                 </table>
@@ -207,11 +272,15 @@
                                         <tr style="background-color: #e6e6e6;">
                                             <th>Código</th>
                                             <th>Fecha</th>
-                                            <th>Fecha Aprobacion</th>
+                                            <th>Fecha Confirmación</th>
+                                            <th>Fecha Envio</th>
                                             <th>Empresa</th>
                                             <th>Sucursal</th>
-                                            <th>Usuario</th>
+                                            <th>CI</th>
+                                            <th>Cliente</th>
+                                            <th>RUC</th>
                                             <th>Estado</th>
+                                            <th>Vendedor</th>
                                         </tr>
                                     </thead>
                                     <tbody id="tableBody">
@@ -221,11 +290,15 @@
                                         <tr style="background-color: #e6e6e6;">
                                             <th>Código</th>
                                             <th>Fecha</th>
-                                            <th>Fecha Aprobacion</th>
+                                            <th>Fecha Confirmación</th>
+                                            <th>Fecha Envio</th>
                                             <th>Empresa</th>
                                             <th>Sucursal</th>
-                                            <th>Usuario</th>
+                                            <th>CI</th>
+                                            <th>Cliente</th>
+                                            <th>RUC</th>
                                             <th>Estado</th>
+                                            <th>Vendedor</th>
                                         </tr>
                                     </tfoot>    
                                 </table>

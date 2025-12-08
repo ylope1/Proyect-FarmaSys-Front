@@ -160,7 +160,7 @@ function listar(){
         var lista = "";
         for(rs of resultado){
             console.log("Registro obtenido:", rs);
-            lista = lista + "<tr class=\"item-list\" onclick=\"seleccionPedido(" +rs.id+ ",'" +rs.pedido_comp_fec+ "','"+rs.pedido_comp_fec_aprob+"',"+rs.empresa_id+",'"+rs.empresa_desc+"',"+rs.sucursal_id+",'"+rs.suc_desc+"',"+rs.funcionario_id+",'"+rs.func_nombre+"','"+rs.pedido_comp_estado+"');\">";
+            lista = lista + "<tr class=\"item-list\" onclick=\"seleccionPedido(" +rs.id+ ",'" +rs.pedido_comp_fec+ "','"+rs.pedido_comp_fec_aprob+"',"+rs.empresa_id+",'"+rs.empresa_desc+"',"+rs.sucursal_id+",'"+rs.suc_desc+"',"+rs.user_id+",'"+rs.encargado+"','"+rs.pedido_comp_estado+"');\">";
                 lista = lista + "<td>";
                 lista = lista + rs.id;
                 lista = lista +"</td>";
@@ -177,7 +177,7 @@ function listar(){
                 lista = lista + rs.suc_desc;
                 lista = lista +"</td>";
                 lista = lista + "<td>";
-                lista = lista + rs.func_nombre;
+                lista = lista + rs.encargado;
                 lista = lista +"</td>";
                 lista = lista + "<td>";
                 lista = lista + rs.pedido_comp_estado;
@@ -192,7 +192,7 @@ function listar(){
     })
 }
 
-function seleccionPedido(id_pedido, pedido_fecha, pedido_fec_aprob, empresa_id, empresa_desc, sucursal_id, suc_desc, funcionario_id, func_nombre, pedido_estado) {
+function seleccionPedido(id_pedido, pedido_fecha, pedido_fec_aprob, empresa_id, empresa_desc, sucursal_id, suc_desc, user_id, encargado, pedido_estado) {
     
     $("#id").val(id_pedido);
     $("#txtFecha").val(pedido_fecha);
@@ -201,8 +201,8 @@ function seleccionPedido(id_pedido, pedido_fecha, pedido_fec_aprob, empresa_id, 
     $("#empresa_desc").val(empresa_desc);
     $("#suc_id").val(sucursal_id);
     $("#suc_desc").val(suc_desc);
-    $("#funcionario_id").val(funcionario_id);
-    $("#func_nombre").val(func_nombre);
+    $("#user_id").val(user_id);
+    $("#user_name").val(encargado);
     $("#pedido_estado").val(pedido_estado);
 
     $("#detalles").attr("style","display:block;");
@@ -257,7 +257,7 @@ function grabar(){
             'pedido_comp_estado': estado,
             'empresa_id': $("#emp_id").val(),
             'sucursal_id': $("#suc_id").val(),
-            'funcionario_id': $("#funcionario_id").val(),
+            'user_id': $("#user_id").val(),
             'operacion': $("#txtOperacion").val()
         }
 
@@ -346,7 +346,6 @@ function seleccionSucursal(suc_id, suc_desc){
     $("#listaSucursales").html("");
     $("#listaSucursales").attr("style","display:none;");
 }
-
 
 function campoFecha(){
     $('.datetimepicker').bootstrapMaterialDatePicker({

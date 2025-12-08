@@ -53,9 +53,11 @@ function agregar(){
     $("#txtOperacion").val(1);
     $("#id").val(0);
     $("#txtFecha").removeAttr("disabled");
-    $("#txtFecAprob").removeAttr("disabled");
+    $("#txtFecConf").removeAttr("disabled");
+    $("#txtFecEnv").removeAttr("disabled");
     $("#empresa_desc").removeAttr("disabled");
     $("#suc_desc").removeAttr("disabled");
+    $("#cliente_ci").removeAttr("disabled");
 
     $("#btnAgregar").attr("disabled","true");
     $("#btnEditar").attr("disabled","true");
@@ -73,9 +75,11 @@ function editar(){
     $("#txtOperacion").val(2);
     console.log("Operación de Editar activada, txtOperacion:", $("#txtOperacion").val());
     $("#txtFecha").removeAttr("disabled");
-    $("#txtFecAprob").removeAttr("disabled");
+    $("#txtFecConf").removeAttr("disabled");
+    $("#txtFecEnv").removeAttr("disabled");
     $("#empresa_desc").removeAttr("disabled");
     $("#suc_desc").removeAttr("disabled");
+    $("#cliente_ci").removeAttr("disabled");
     
     $("#btnAgregar").attr("disabled","true");
     $("#btnEditar").attr("disabled","true");
@@ -152,7 +156,7 @@ function mensajeOperacion(titulo,mensaje,tipo) {
 
 function listar(){
     $.ajax({
-        url: getUrl()+"pedido_comp_cab/read",
+        url: getUrl()+"pedidos_vent_cab/read",
         method:"GET",
         dataType: "json"
     })
@@ -160,15 +164,18 @@ function listar(){
         var lista = "";
         for(rs of resultado){
             console.log("Registro obtenido:", rs);
-            lista = lista + "<tr class=\"item-list\" onclick=\"seleccionPedido(" +rs.id+ ",'" +rs.pedido_comp_fec+ "','"+rs.pedido_comp_fec_aprob+"',"+rs.empresa_id+",'"+rs.empresa_desc+"',"+rs.sucursal_id+",'"+rs.suc_desc+"',"+rs.funcionario_id+",'"+rs.func_nombre+"','"+rs.pedido_comp_estado+"');\">";
+            lista = lista + "<tr class=\"item-list\" onclick=\"seleccionPedidoVenta(" +rs.id+ ",'" +rs.pedido_vent_fec+ "','"+rs.pedido_vent_fec_conf+"','"+rs.pedido_vent_fec_env+"',"+rs.empresa_id+",'"+rs.empresa_desc+"',"+rs.sucursal_id+",'"+rs.suc_desc+"',"+rs.cliente_id+","+rs.cliente_ci+",'"+rs.nombre_cliente+"','"+rs.cli_ruc+"','"+rs.pedido_vent_estado+"',"+rs.user_id+",'"+rs.vendedor+"');\">";
                 lista = lista + "<td>";
                 lista = lista + rs.id;
                 lista = lista +"</td>";
                 lista = lista + "<td>";
-                lista = lista + rs.pedido_comp_fec;
+                lista = lista + rs.pedido_vent_fec;
                 lista = lista +"</td>";
                 lista = lista + "<td>";
-                lista = lista + rs.pedido_comp_fec_aprob;
+                lista = lista + rs.pedido_vent_fec_conf;
+                lista = lista +"</td>";
+                lista = lista + "<td>";
+                lista = lista + rs.pedido_vent_fec_env;
                 lista = lista +"</td>";
                 lista = lista + "<td>";
                 lista = lista + rs.empresa_desc;
@@ -177,10 +184,19 @@ function listar(){
                 lista = lista + rs.suc_desc;
                 lista = lista +"</td>";
                 lista = lista + "<td>";
-                lista = lista + rs.func_nombre;
+                lista = lista + rs.cliente_ci;
                 lista = lista +"</td>";
                 lista = lista + "<td>";
-                lista = lista + rs.pedido_comp_estado;
+                lista = lista + rs.nombre_cliente;
+                lista = lista +"</td>";
+                lista = lista + "<td>";
+                lista = lista + rs.cli_ruc;
+                lista = lista +"</td>";
+                lista = lista + "<td>";
+                lista = lista + rs.pedido_vent_estado;
+                lista = lista +"</td>";
+                lista = lista + "<td>";
+                lista = lista + rs.vendedor;
                 lista = lista +"</td>";
             lista = lista + "</tr>";
         }
@@ -192,18 +208,23 @@ function listar(){
     })
 }
 
-function seleccionPedido(id_pedido, pedido_fecha, pedido_fec_aprob, empresa_id, empresa_desc, sucursal_id, suc_desc, funcionario_id, func_nombre, pedido_estado) {
+function seleccionPedidoVenta(id, pedido_vent_fec, pedido_vent_fec_conf, pedido_vent_fec_env, empresa_id, empresa_desc, sucursal_id, suc_desc, cliente_id, cliente_ci, nombre_cliente, cli_ruc, pedido_vent_estado, user_id, vendedor){
     
-    $("#id").val(id_pedido);
-    $("#txtFecha").val(pedido_fecha);
-    $("#txtFecAprob").val(pedido_fec_aprob);
+    $("#id").val(id);
+    $("#txtFecha").val(pedido_vent_fec);
+    $("#txtFecConf").val(pedido_vent_fec_conf ? pedido_vent_fec_conf : '');
+    $("#txtFecEnv").val(pedido_vent_fec_env ? pedido_vent_fec_env : '');
     $("#emp_id").val(empresa_id);
     $("#empresa_desc").val(empresa_desc);
     $("#suc_id").val(sucursal_id);
     $("#suc_desc").val(suc_desc);
-    $("#funcionario_id").val(funcionario_id);
-    $("#func_nombre").val(func_nombre);
-    $("#pedido_estado").val(pedido_estado);
+    $("#cliente_id").val(cliente_id);
+    $("#cliente_ci").val(cliente_ci);
+    $("#nombre_cliente").val(nombre_cliente);
+    $("#cli_ruc").val(cli_ruc);
+    $("#pedido_vent_estado").val(pedido_vent_estado);
+    $("#user_id").val(user_id);
+    $("#vendedor").val(vendedor);
 
     $("#detalles").attr("style","display:block;");
     $("#registros").attr("style","display:none;");
@@ -213,7 +234,7 @@ function seleccionPedido(id_pedido, pedido_fecha, pedido_fec_aprob, empresa_id, 
     $("#btnAgregar, #btnEditar, #btnGrabar, #btnCancelar, #btnAnular, #btnConfirmar").attr("disabled", "true");
     $("#btnCancelar").removeAttr("disabled");
 
-    if(pedido_estado === "PENDIENTE") {
+    if(pedido_vent_estado === "PENDIENTE") {
         
         $("#btnAgregar").attr("disabled","true");
         $("#btnGrabar").attr("disabled","true");
@@ -228,21 +249,21 @@ function seleccionPedido(id_pedido, pedido_fecha, pedido_fec_aprob, empresa_id, 
 }
 
 function grabar(){
-    var endpoint = "pedido_comp_cab/create";
+    var endpoint = "pedidos_vent_cab/create";
     var metodo = "POST";
     var estado = "PENDIENTE";
     
     if($("#txtOperacion").val()==2){
-        endpoint = "pedido_comp_cab/update/"+$("#id").val();
+        endpoint = "pedidos_vent_cab/update/"+$("#id").val();
         metodo = "PUT";
     }
     if($("#txtOperacion").val()==3){
-        endpoint = "pedido_comp_cab/anular/"+$("#id").val();
+        endpoint = "pedidos_vent_cab/anular/"+$("#id").val();
         metodo = "PUT";
         estado = "ANULADO";
     }
     if($("#txtOperacion").val()==4){
-        endpoint = "pedido_comp_cab/confirmar/"+$("#id").val();
+        endpoint = "pedidos_vent_cab/confirmar/"+$("#id").val();
         metodo = "PUT";
         estado = "CONFIRMADO";
     }
@@ -252,12 +273,14 @@ function grabar(){
         dataType: "json",
         data: { 
             'id': $("#id").val(), 
-            'pedido_comp_fec': $("#txtFecha").val(), 
-            'pedido_comp_fec_aprob': $("#txtFecAprob").val(), 
-            'pedido_comp_estado': estado,
             'empresa_id': $("#emp_id").val(),
             'sucursal_id': $("#suc_id").val(),
-            'funcionario_id': $("#funcionario_id").val(),
+            'user_id': $("#user_id").val(),
+            'pedido_vent_fec': $("#txtFecha").val(), 
+            'pedido_vent_fec_conf': $("#txtFecConf").val(), 
+            'pedido_vent_fec_env': $("#txtFecEnv").val(),
+            'cliente_id': $("#cliente_id").val(),
+            'pedido_vent_estado': estado,
             'operacion': $("#txtOperacion").val()
         }
 
@@ -273,7 +296,7 @@ function grabar(){
                 //location.reload(true);
                 $("#id").val(resultado.registro.id);
                 $("#detalles").attr("style","display:block;");
-                if(resultado.registro.pedido_comp_estado != "PENDIENTE"){
+                if(resultado.registro.pedido_vent_estado != "PENDIENTE"){
                     location.reload(true);
                 }
             }
@@ -282,7 +305,17 @@ function grabar(){
     .fail(function(a,b,c){
         alert(c);
         console.log(a.responseText);
-    })
+        let mensaje = "Error desconocido";
+        try {
+            let json = JSON.parse(a.responseText);
+            mensaje = json.message || mensaje;
+        } catch (e) {
+            mensaje = a.responseText;
+        }
+
+        // Usar SweetAlert v1
+        swal("Error", mensaje, "error");
+    });
 }
 
 function buscarEmpresas(){
@@ -347,6 +380,39 @@ function seleccionSucursal(suc_id, suc_desc){
     $("#listaSucursales").attr("style","display:none;");
 }
 
+function buscarClientes(){
+    $.ajax({
+        url: getUrl()+"clientes/buscar", 
+        method:"POST",
+        dataType: "json",
+        data: {
+            'cliente_ci': $("#cliente_ci").val()
+        }
+    })
+    .done(function(resultado){
+        var lista = "<ul class=\"list-group\">";
+        for(rs of resultado){
+            lista += "<li class=\"list-group-item\" onclick=\"seleccionCliente("+rs.cliente_id+",'"+rs.nombre_cliente+"',"+rs.cliente_ci+",'"+rs.cli_ruc+"');\">"+rs.cliente_ci+" - "+rs.nombre_cliente+" - "+rs.cli_ruc+"</li>";
+        }
+        lista += "</ul>";
+        $("#listaClientes").html(lista);
+        $("#listaClientes").attr("style","display:block; position:absolute; z-index:2000;");
+    })
+    .fail(function(a,b,c){
+        alert(c);
+        console.log(a.responseText);
+    });
+}
+
+function seleccionCliente(cliente_id, nombre_cliente, cliente_ci, cli_ruc){
+    $("#cliente_ci").val(cliente_ci);
+    $("#cliente_id").val(cliente_id);
+    $("#nombre_cliente").val(nombre_cliente);
+    $("#cli_ruc").val(cli_ruc);
+
+    $("#listaClientes").html("");
+    $("#listaClientes").attr("style","display:none;");
+}
 
 function campoFecha(){
     $('.datetimepicker').bootstrapMaterialDatePicker({
@@ -360,6 +426,7 @@ function agregarDetalle(){
     $("#txtOperacionDetalle").val(1);
     $("#prod_desc").removeAttr("disabled");
     $("#det_cantidad").removeAttr("disabled");
+    $("#det_precio").removeAttr("disabled");
     $("#btnAgregarDetalle").attr("Style","display:none");
     $("#btnEditarDetalle").attr("Style","display:none");
     $("#btnEliminarDetalle").attr("Style","display:none");
@@ -369,7 +436,8 @@ function agregarDetalle(){
 function editarDetalle(){
     $("#txtOperacionDetalle").val(2);
     console.log("Operación de editarDetalle activada, txtOperacionDetalle:", $("#txtOperacionDetalle").val());
-    $("#det_cantidad").removeAttr("disabled")
+    $("#det_cantidad").removeAttr("disabled");
+    $("#det_precio").removeAttr("disabled");
     $("#btnAgregarDetalle").attr("Style","display:none");
     $("#btnEditarDetalle").attr("Style","display:none");
     $("#btnEliminarDetalle").attr("Style","display:none");
@@ -385,15 +453,15 @@ function eliminarDetalle(){
 }
 
 function grabarDetalle(){
-    var endpoint = "pedido_comp_det/create";
+    var endpoint = "pedidos_vent_det/create";
     var metodo = "POST";
     
     if($("#txtOperacionDetalle").val()==2){
-        endpoint = "pedido_comp_det/update/"+$("#id").val()+"/"+$("#producto_id").val();
+        endpoint = "pedidos_vent_det/update/"+$("#id").val()+"/"+$("#producto_id").val();
         metodo = "PUT";
     }
     if($("#txtOperacionDetalle").val()==3){
-        endpoint = "pedido_comp_det/delete/"+$("#id").val()+"/"+$("#producto_id").val();
+        endpoint = "pedidos_vent_det/delete/"+$("#id").val()+"/"+$("#producto_id").val();
         metodo = "DELETE";
     }
 
@@ -402,9 +470,10 @@ function grabarDetalle(){
         method: metodo,
         dataType: "json",
         data: {
-            "pedido_comp_id":$("#id").val(),
+            "pedido_vent_id":$("#id").val(),
             "producto_id":$("#producto_id").val(),
-            "pedido_comp_cant":$("#det_cantidad").val()
+            "pedido_vent_cant":$("#det_cantidad").val(),
+            "pedido_vent_precio":$("#det_precio").val()
         }
     })
     .done(function(respuesta) {
@@ -413,7 +482,17 @@ function grabarDetalle(){
     .fail(function(a,b,c){
         alert(c);
         console.log(a.responseText);
-    })
+        let mensaje = "Error desconocido";
+        try {
+            let json = JSON.parse(a.responseText);
+            mensaje = json.message || mensaje;
+        } catch (e) {
+            mensaje = a.responseText;
+        }
+
+        // Usar SweetAlert v1
+        swal("Error", mensaje, "error");
+    });
     
     $("#btnAgregarDetalle").attr("Style","display:inline");
     $("#btnEditarDetalle").attr("Style","display:inline");
@@ -423,6 +502,7 @@ function grabarDetalle(){
     $("#txtOperacionDetalle").val(1);
     $("#prod_desc").val("");
     $("#det_cantidad").val("");
+    $("#det_precio").val("");
 }
 
 function buscarProductos(){
@@ -461,15 +541,16 @@ function seleccionProducto(producto_id,prod_desc){
 
 function listarDetalles() {
     var cantidadDetalle = 0;
+    var totalGral = 0;
     $.ajax({
-        url:getUrl()+"pedido_comp_det/read/"+$("#id").val(),
+        url:getUrl()+"pedidos_vent_det/read/"+$("#id").val(),
         method:"GET",
         dataType: "json"
     })
     .done(function(resultado){
         var lista = "";
         for(rs of resultado){
-            lista = lista + "<tr class=\"item-list\" onclick=\"seleccionDetalle("+rs.producto_id+",'"+rs.prod_desc+"',"+rs.pedido_comp_cant+");\">";
+            lista = lista + "<tr class=\"item-list\" onclick=\"seleccionDetalle("+rs.producto_id+",'"+rs.prod_desc+"',"+rs.pedido_vent_cant+","+rs.pedido_vent_precio+");\">";
                 lista = lista + "<td>";
                 lista = lista + rs.producto_id;
                 lista = lista +"</td>";
@@ -477,13 +558,21 @@ function listarDetalles() {
                 lista = lista + rs.prod_desc;
                 lista = lista +"</td>";
                 lista = lista + "<td>";
-                lista = lista + rs.pedido_comp_cant;
+                lista = lista + rs.pedido_vent_cant;
+                lista = lista +"</td>";
+                lista = lista + "<td class='text-right'>";
+                lista = lista + rs.pedido_vent_precio;
+                lista = lista +"</td>";
+                lista = lista + "<td class='text-right'>";
+                lista = lista + (rs.pedido_vent_cant*rs.pedido_vent_precio);
                 lista = lista +"</td>";
             lista = lista + "</tr>";
             cantidadDetalle++;
+            totalGral += (rs.pedido_vent_precio * rs.pedido_vent_cant); 
         }
         $("#tableDetalles").html(lista);
-        if($("#pedido_estado").val() === "PENDIENTE" && cantidadDetalle > 0) {
+        $("#txtTotalGral").text(totalGral);
+        if($("#pedido_vent_estado").val() === "PENDIENTE" && cantidadDetalle > 0) {
             $("#btnConfirmar").removeAttr("disabled");
         }else{
             $("#btnConfirmar").attr("disabled","true");
@@ -494,8 +583,9 @@ function listarDetalles() {
         console.error(xhr.responseText);
     })
 }
-function seleccionDetalle(producto_id, prod_desc, det_cantidad){
+function seleccionDetalle(producto_id, prod_desc, det_cantidad, det_precio){
     $("#producto_id").val(producto_id);
     $("#prod_desc").val(prod_desc);
     $("#det_cantidad").val(det_cantidad);
+    $("#det_precio").val(det_precio);
 }

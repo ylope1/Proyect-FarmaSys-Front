@@ -55,8 +55,8 @@
                         <div class="body">
                             <div class="row clearfix">
                                 <input type="hidden" value="0" id="txtOperacion"/>
-                                <input type="hidden" value="1" id="funcionario_id"/>
-                                <input type="hidden" value="0" id="func_nombre"/>
+                                <input type="hidden" value="1" id="user_id"/>
+                                <input type="hidden" value="0" id="user_name"/>
                                 <input type="hidden" value="PENDIENTE" id="pedido_estado"/>
                                 <!-- CAMPO PARA CODIGO CON 4 COLUMNAS -->
                                 <div class="col-sm-4">
