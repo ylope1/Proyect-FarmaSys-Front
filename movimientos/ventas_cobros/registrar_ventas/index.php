@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>GUI REGISTRO DE COMPRA</title>
+    <title>GUI REGISTRO DE VENTAS</title>
     <!-- Favicon-->
     <link rel="icon" href="../../../favicon.ico" type="image/x-icon">
 
@@ -53,14 +53,14 @@
                     
                     <div class="card">
                         <div class="header">
-                            <h2>Registrar Compras <small>CRUD de Registro de Compras y sus detalles</small> </h2>
+                            <h2>Registrar Ventas <small>CRUD de Registro de Ventas y sus detalles</small> </h2>
                         </div>
                         <div class="body">
                             <div class="row clearfix">
                                 <input type="hidden" value="0" id="txtOperacion"/>
                                 <input type="hidden" value="1" id="user_id"/>
                                 <input type="hidden" value="0" id="user_name"/>
-                                <input type="hidden" value="PENDIENTE" id="compra_estado"/>
+                                <input type="hidden" value="PENDIENTE" id="venta_estado"/>
                                 <!-- CAMPO PARA CODIGO CON 3 COLUMNAS -->
                                 <div class="col-sm-3">
                                     <div class="form-group form-float">
@@ -103,33 +103,13 @@
                                         <div id="listaDepositos" style="display:none;"></div>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA FECHA COMPRA CON 3 COLUMNAS -->
+                                <!-- CAMPO PARA FECHA VENTA CON 3 COLUMNAS -->
                                 <div class="col-sm-3">
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="text" id="txtFecha" class="datetimepicker form-control" disabled>
                                             <label class="form-label">Fecha</label>
                                         </div>
-                                    </div>
-                                </div>
-                                <!-- CAMPO PARA FECHA RECEPCION CON 3 COLUMNAS -->
-                                <div class="col-sm-3">
-                                    <div class="form-group form-float">
-                                        <div class="form-line">
-                                            <input type="text" id="txtFecRecep" class="datetimepicker form-control" disabled>
-                                            <label class="form-label">Fecha Recepción</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- CAMPO PARA BUSCAR PROVEEDOR CON 3 COLUMNAS -->
-                                <div class="col-sm-3">
-                                    <div class="form-group form-float">
-                                        <div class="form-line">
-                                            <input type="hidden" id="proveedor_id" value="0"/>
-                                            <input type="text" id="proveedor_desc" class="form-control" disabled onkeyup="buscarProveedores();">
-                                            <label class="form-label">Proveedor</label>
-                                        </div>
-                                        <div id="listaProveedores" style="display:none;"></div>
                                     </div>
                                 </div>
                                 <!-- CAMPO PARA TIMBRADO CON 3 COLUMNAS -->
@@ -142,7 +122,7 @@
                                     </div>
                                 </div>
                                 <!-- CAMPO PARA NRO DE FACTURA CON 3 COLUMNAS -->
-                                <div class="col-sm-4">
+                                <div class="col-sm-3">
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="text" id="txtNroFact" class="form-control" disabled>
@@ -150,9 +130,39 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA ELEGIR CONDICION DE COMPRA CON 3 COLUMNAS-->
-                                <div class="col-sm-5">
-                                    <h2 class="card-inside-title" style="font-weight: normal; font-size: 13px; color: #555;">Condición Compra</h2>
+                                <!-- CAMPO PARA BUSCAR CI O  RUC DEL CLIENTE CON 3 COLUMNAS -->
+                                <div class="col-sm-3">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="hidden" id="cliente_id" value="0"/>
+                                            <input type="text" id="cliente_ci" class="form-control" placeholder="Buscar cliente por CI o RUC" disabled onkeyup="buscarClientes();">
+                                            <!--<label class="form-label">CI</label> probar asi a ver como sale-->
+                                        </div>
+                                        <div id="listaClientes" style="display:none;"></div>
+                                    </div>
+                                </div>
+                                <!-- CAMPO PARA NOMBRE DEL CLIENTE CON 3 COLUMNAS -->
+                                <div class="col-sm-3">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <!--<input type="hidden" id="cliente_id" value="0"/>-->
+                                            <input type="text" id="nombre_cliente" class="form-control" disabled>
+                                            <label class="form-label">Cliente</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- CAMPO PARA RUC DEL CLIENTE CON 3 COLUMNAS -->
+                                <div class="col-sm-3">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="text" id="cli_ruc" class="form-control" disabled>
+                                            <label class="form-label">RUC</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- CAMPO PARA ELEGIR CONDICION DE VENTA CON 3 COLUMNAS-->
+                                <div class="col-sm-3">
+                                    <h2 class="card-inside-title" style="font-weight: normal; font-size: 13px; color: #555;">Condición Venta</h2>
                                     <div class="demo-radio-button">
                                         <input name="tipo_fact_id" type="radio" id="contado" value="6" disabled checked onchange />
                                         <label for="contado">Contado</label>
@@ -160,19 +170,19 @@
                                         <label for="credito">Crédito</label>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA SELECCIONAR INTERVALO DE FECHA DE VTO CON 3 COLUMNAS ADAPTAR A LOS DATOS DE COMPRAS-->
+                                <!-- CAMPO PARA SELECCIONAR INTERVALO DE FECHA DE VTO CON 3 COLUMNAS -->
                                 <div class="col-sm-3">
                                     <label class="form-label" style="font-weight: normal; font-size: 13px; color: #555;">Intervalo Fecha Vto</label>
                                     <div class="form-group form-float">
                                         <div class="form-line">
-                                            <select id="intervalo_fecha_vto" class="form-control selectpicker">
+                                            <select id="venta_ifv" class="form-control selectpicker">
                                                 <!-- Las opciones se generarán dinámicamente -->
                                             </select>
                                         </div>
                                     </div>
                                 </div>
                                 <!-- CAMPO PARA CANTIDAD DE CUOTAS CON 3 COLUMNAS -->
-                                <div class="col-sm-2">
+                                <div class="col-sm-3">
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="text" id="txtCantCta" class="form-control" disabled>
@@ -180,33 +190,32 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row clearfix">
-                                    <!-- CAMPO PARA ELEGIR ORDEN DE COMPRA  -->
-                                    <div class="col-sm-4">
-                                        <label class="card-inside-title" style="font-weight: normal; font-size: 13px; color: #555;">¿Tiene Orden de Compra?</label>
-                                        <div class="demo-radio-button">
-                                            <div>
-                                                <input type="radio" id="Con_Orden" name="orden_option" value="1" disabled>
-                                                <label for="Con_Orden">Sí</label>
+                                <!-- CAMPO PARA ELEGIR PEDIDO DE VENTA  -->
+                                <div class="col-sm-4">
+                                    <label class="card-inside-title" style="font-weight: normal; font-size: 13px; color: #555;">¿Tiene Pedido de Venta?</label>
+                                    <div class="demo-radio-button">
+                                        <div>
+                                            <input type="radio" id="Con_Pedido" name="pedido_option" value="1" disabled>
+                                            <label for="Con_Pedido">Sí</label>
 
-                                                <input type="radio" id="Sin_Orden" name="orden_option" value="0" disabled>
-                                                <label for="Sin_Orden">No</label>
-                                            </div>
+                                            <input type="radio" id="Sin_Pedido" name="pedido_option" value="0" disabled>
+                                            <label for="Sin_Pedido">No</label>
                                         </div>
                                     </div>
-                                
-                                    <!-- CAMPO PARA BUSCAR ORDEN DE COMPRAS CON 3 COLUMNAS -->
-                                    <div class="col-sm-4">
-                                        <div class="form-group form-float">
-                                            <div class="form-line">
-                                                <input type="hidden" id="orden_comp_id" value="0"/>
-                                                <input type="text" id="orden" class="form-control" disabled onkeyup="buscarOrdenes();">
-                                                <label class="form-label">Orden Compra</label>
-                                            </div>
-                                            <div id="listaOrdenes" style="display:none;"></div>
+                                </div>
+                                <!-- CAMPO PARA BUSCAR PEDIDO DE VENTAS CON 3 COLUMNAS -->
+                                <div class="col-sm-4">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="hidden" id="pedido_vent_id" value="0"/>
+                                            <input type="text" id="pedido" class="form-control" disabled onkeyup="buscarPedidos();">
+                                            <label class="form-label">Pedido Venta</label>
                                         </div>
-                                    </div>  
-                                </div> 
+                                        <div id="listaPedidos" style="display:none;"></div>
+                                    </div>
+                                </div>  
+                            </div> 
+                            <div class="row clearfix">
                                 <div class="col-sm-12">
                                     <div class="button-demo">
                                         <button type="button" id="btnAgregar" class="btn btn-success waves-effect" onclick="agregar();">AGREGAR</button>
@@ -222,7 +231,7 @@
 
                         <div class="card" id="detalles" style="display:none"> 
                             <div class="header">
-                                <h2>Detalles del Registro de Compra</h2>
+                                <h2>Detalles del Registro de Ventas</h2>
                             </div>
                             <div class="body">
                                 <div class="row clearfix" id="formDetalles">
@@ -255,12 +264,12 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- CAMPO PARA PRECIO COMPRA CON 2 COLUMNAS -->
+                                    <!-- CAMPO PARA PRECIO VENTA CON 2 COLUMNAS -->
                                     <div class="col-sm-2">
                                         <div class="form-group form-float">
                                             <div class="form-line">
-                                                <input type="text" id="det_costo" class="form-control" disabled>
-                                                <label class="form-label">Precio Compra</label>
+                                                <input type="text" id="det_precio" class="form-control" disabled>
+                                                <label class="form-label">Precio Venta</label>
                                             </div>
                                         </div>
                                     </div>
@@ -314,7 +323,7 @@
                         </div>  
                         <div class="card" id="registros">
                             <div class="header">
-                                <h2>Registros de Compras</h2>
+                                <h2>Registros de Ventas</h2>
                             </div>
                             <div class="body">
                                 <div class="table-responsive">
@@ -326,15 +335,16 @@
                                                 <th>Sucursal</th>
                                                 <th>Deposito</th>
                                                 <th>Fecha</th>
-                                                <th>Fecha Recepción</th>
-                                                <th>Proveedor</th>
                                                 <th>Nro. Factura</th>
-                                                <th>Condición Compra</th>
+                                                <th>CI</th>
+                                                <th>Cliente</th>
+                                                <th>RUC</th>
+                                                <th>Condición Venta</th>
                                                 <th>Intervalo Fecha Vto</th>
                                                 <th>Cant. Cuotas</th>
-                                                <th>Orden</th>
+                                                <th>Pedido</th>
                                                 <th>Estado</th>
-                                                <th>Usuario</th>
+                                                <th>Vendedor</th>
                                             </tr>
                                         </thead>
                                         <tbody id="tableBody">
@@ -347,15 +357,16 @@
                                                 <th>Sucursal</th>
                                                 <th>Deposito</th>
                                                 <th>Fecha</th>
-                                                <th>Fecha Recepción</th>
-                                                <th>Proveedor</th>
                                                 <th>Nro. Factura</th>
-                                                <th>Condición Compra</th>
+                                                <th>CI</th>
+                                                <th>Cliente</th>
+                                                <th>RUC</th>
+                                                <th>Condición Venta</th>
                                                 <th>Intervalo Fecha Vto</th>
                                                 <th>Cant. Cuotas</th>
-                                                <th>Orden</th>
+                                                <th>Pedido</th>
                                                 <th>Estado</th>
-                                                <th>Usuario</th>
+                                                <th>Vendedor</th>
                                             </tr>
                                         </tfoot>    
                                     </table>
