@@ -198,6 +198,15 @@ function listar(){
                 lista = lista + rs.venta_fact;
                 lista = lista +"</td>";
                 lista = lista + "<td>";
+                lista = lista + rs.cliente_ci;
+                lista = lista +"</td>";
+                lista = lista + "<td>";
+                lista = lista + rs.nombre_cliente;
+                lista = lista +"</td>";
+                lista = lista + "<td>";
+                lista = lista + rs.cli_ruc;
+                lista = lista +"</td>";
+                lista = lista + "<td>";
                 lista = lista + rs.tipo_fact_desc;
                 lista = lista +"</td>";
                 lista = lista + "<td>";
