@@ -306,7 +306,7 @@
                         </div>  
                         <div class="card" id="registros">
                             <div class="header">
-                                <h2>Registros de Notas de Crédito/Débito Ventas</h2>
+                                <h2>Registros de Notas de Ventas</h2>
                             </div>
                             <div class="body">
                                 <div class="table-responsive">

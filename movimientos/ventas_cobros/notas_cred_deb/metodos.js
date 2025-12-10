@@ -191,7 +191,7 @@ function listar(){
                 lista = lista + rs.nota_vent_fec;
                 lista = lista +"</td>";
                 lista = lista + "<td>";
-                lista = lista + rs.nota_comp_fact;
+                lista = lista + rs.nota_vent_fact;
                 lista = lista +"</td>";
                 lista = lista + "<td>";
                 lista = lista + rs.cliente_ci;
@@ -227,7 +227,7 @@ function listar(){
         console.log(a.responseText);
     })
 }
-function seleccionNotasVent(id, empresa_id, empresa_desc, sucursal_id, suc_desc, deposito_id, deposito_desc, nota_vent_fec, nota_comp_timbrado, nota_comp_fact, cliente_id, cliente_ci, nombre_cliente, cli_ruc, tipo_fact_id, nota_vent_tipo, venta_id, venta, nota_vent_estado, user_id, vendedor){ 
+function seleccionNotasVent(id, empresa_id, empresa_desc, sucursal_id, suc_desc, deposito_id, deposito_desc, nota_vent_fec, nota_vent_timbrado, nota_vent_fact, cliente_id, cliente_ci, nombre_cliente, cli_ruc, tipo_fact_id, nota_vent_tipo, venta_id, venta, nota_vent_estado, user_id, vendedor){ 
     $("#id").val(id);
     $("#empresa_id").val(empresa_id);
     $("#empresa_desc").val(empresa_desc);   
@@ -400,6 +400,14 @@ function eliminarDetalle(){
 }
 
 function grabarDetalle(){ 
+    if ($("#producto_id").val() == "0" || $("#producto_id").val() == "") {
+        swal("Error", "Debe seleccionar un producto válido", "error");
+        return;
+    }
+    if ($("#nota_vent_tipo").val() == "") {
+        swal("Error", "Debe seleccionar el tipo de nota (crédito o débito)", "error");
+        return;
+    }
     var endpoint = "notas_venta_det/create";
     var metodo = "POST";
     
@@ -580,7 +588,7 @@ function seleccionDetalle(producto_id, prod_desc, nota_venta_cant, nota_venta_pr
     $("#producto_id").val(producto_id);
     $("#prod_desc").val(prod_desc);
     $("#det_cantidad").val(nota_venta_cant);
-    $("#det_costo").val(nota_venta_precio);
+    $("#det_precio").val(nota_venta_precio);
     $("#motivo").val(nota_venta_motivo);
 }
 
