@@ -626,7 +626,7 @@ function seleccionCliente(cliente_id, nombre_cliente, cliente_ci, cli_ruc){
     $("#listaClientes").attr("style","display:none;");
 }
 
-function buscarVentas(){//corregir por venta
+function buscarVentas(){
     $.ajax({
         url:getUrl()+"ventas_cab/buscar",
         method:"POST",

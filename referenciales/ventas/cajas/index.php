@@ -56,7 +56,7 @@
                             <div class="row clearfix">
                                 <input type="hidden" value="0" id="txtOperacion"/>
                                 <!--CAMPO PARA CODIGO CON 4 COLUMNAS-->
-                                <div class="col-sm-4">
+                                <div class="col-sm-2">
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="text" id="txtCodigo" class="form-control" disabled>
@@ -65,22 +65,57 @@
                                     </div>
                                 </div>
                                 <!--CAMPO PARA DESCRIPCION CON 8 COLUMNAS-->
-                                <div class="col-sm-8">
-                                <div class="form-group form-float">
+                                <div class="col-sm-5">
+                                    <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="text" id="txtDescripcion" class="form-control" disabled>
                                             <label class="form-label ">Descripción</label>
                                         </div>
                                     </div>
                                 </div>
-                                
+                                <!-- CAMPO PARA EMPRESA CON 4 COLUMNAS -->
+                                 <div class="col-sm-5">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="hidden" id="emp_id" value="0"/>
+                                            <input type="text" id="empresa_desc" class="form-control" disabled onkeyup="buscarEmpresas();">
+                                            <label class="form-label">Empresa</label>
+                                        </div>
+                                        <div id="listaEmpresas" style="display:none;"></div>
+                                    </div>
+                                </div>
+                                 <!-- CAMPO PARA SUCURSAL CON 4 COLUMNAS -->
+                                <div class="col-sm-6">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="hidden" id="suc_id" value="0"/>
+                                            <input type="text" id="suc_desc" class="form-control" disabled onkeyup="buscarSucursales();">
+                                            <label class="form-label">Sucursal</label>
+                                        </div>
+                                        <div id="listaSucursales" style="display:none;"></div>
+                                    </div>
+                                </div>
+                                <!-- CAMPO PARA USERS CON 4 COLUMNAS -->
+                                <div class="col-sm-6">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="hidden" id="user_id" value="0"/>
+                                            <input type="text" id="login" class="form-control" disabled onkeyup="buscarUsers();">
+                                            <label class="form-label">Usuario</label>
+                                        </div>
+                                        <div id="listaUsuarios" style="display:none;"></div>
+                                    </div>
+                                </div>
                             </div> 
-                            <div class="button-demo">
-                                <button type="button" id="btnAgregar" class="btn btn-success waves-effect" onclick="agregar();">AGREGAR</button>
-                                <button type="button" id="btnEditar" class="btn btn-primary waves-effect" onclick="editar();">EDITAR</button>
-                                <button type="button" id="btnEliminar" class="btn btn-danger waves-effect" onclick="eliminar();">ELIMINAR</button>
-                                <button type="button" id="btnGrabar" class="btn btn-default waves-effect" disabled onclick="confirmarOperacion();">GRABAR</button>
-                                <button type="button" id="btnCancelar" class="btn btn-warning waves-effect" onclick="cancelar();" disabled>CANCELAR</button>
+
+                            <div class="row clearfix">
+                                <div class="button-demo">
+                                    <button type="button" id="btnAgregar" class="btn btn-success waves-effect" onclick="agregar();">AGREGAR</button>
+                                    <button type="button" id="btnEditar" class="btn btn-primary waves-effect" onclick="editar();">EDITAR</button>
+                                    <button type="button" id="btnEliminar" class="btn btn-danger waves-effect" onclick="eliminar();">ELIMINAR</button>
+                                    <button type="button" id="btnGrabar" class="btn btn-default waves-effect" disabled onclick="confirmarOperacion();">GRABAR</button>
+                                    <button type="button" id="btnCancelar" class="btn btn-warning waves-effect" onclick="cancelar();" disabled>CANCELAR</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -96,6 +131,9 @@
                                         <tr>
                                             <th>Código</th>
                                             <th>Descripción</th>
+                                            <th>Empresa</th>
+                                            <th>Sucursal</th>
+                                            <th>Usuario</th>
                                         </tr>
                                     </thead>
                                     <tbody id="tableBody">
@@ -105,6 +143,9 @@
                                         <tr>
                                             <th>Código</th>
                                             <th>Descripción</th>
+                                            <th>Empresa</th>
+                                            <th>Sucursal</th>
+                                            <th>Usuario</th>
                                         </tr>
                                     </tfoot>
                                 </table>

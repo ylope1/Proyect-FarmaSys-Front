@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>GUI REMISIÓN COMPRA</title>
+    <title>GUI REMISIÓN VENTA</title>
     <!-- Favicon-->
     <link rel="icon" href="../../../favicon.ico" type="image/x-icon">
 
@@ -53,14 +53,14 @@
                     
                     <div class="card">
                         <div class="header">
-                            <h2>Registrar Notas de Remisión de Compras <small>CRUD de Notas de Remisión de Compras y sus detalles</small> </h2>
+                            <h2>Registrar Notas de Remisión de Ventas <small>CRUD de Notas de Remisión de Ventas y sus detalles</small> </h2>
                         </div>
                         <div class="body">
                             <div class="row clearfix">
                                 <input type="hidden" value="0" id="txtOperacion"/>
                                 <input type="hidden" value="1" id="user_id"/>
                                 <input type="hidden" value="0" id="user_name"/>
-                                <input type="hidden" value="PENDIENTE" id="rem_comp_estado"/>
+                                <input type="hidden" value="PENDIENTE" id="remision_vent_estado"/>
                                 <!-- CAMPO PARA CODIGO CON 4 COLUMNAS -->
                                 <div class="col-sm-4">
                                     <div class="form-group form-float">
@@ -79,21 +79,21 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA FECHA DE SALIDA CON 4 COLUMNAS -->
+                                <!-- CAMPO PARA FECHA DE ENVIO CON 4 COLUMNAS -->
                                 <div class="col-sm-4">
                                     <div class="form-group form-float">
                                         <div class="form-line">
-                                            <input type="text" id="txtFecSal" class="datetimepicker form-control" disabled>
-                                            <label class="form-label">Fecha Salida</label>
+                                            <input type="text" id="txtFecEnv" class="datetimepicker form-control" disabled>
+                                            <label class="form-label">Fecha Envio</label>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA FECHA DE RECEPCIÓN CON 4 COLUMNAS -->
+                                <!-- CAMPO PARA FECHA DE ENTREGA CON 4 COLUMNAS -->
                                 <div class="col-sm-4">
                                     <div class="form-group form-float">
                                         <div class="form-line">
-                                            <input type="text" id="txtFecRecep" class="datetimepicker form-control" disabled>
-                                            <label class="form-label">Fecha Recepción</label>
+                                            <input type="text" id="txtFecEnt" class="datetimepicker form-control" disabled>
+                                            <label class="form-label">Fecha Entrega</label>
                                         </div>
                                     </div>
                                 </div>
@@ -108,48 +108,73 @@
                                         <div id="listaEmpresas" style="display:none;"></div>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA SUCURSAL ORIGEN CON 4 COLUMNAS -->
+                                <!-- CAMPO PARA SUCURSAL CON 4 COLUMNAS -->
                                 <div class="col-sm-4">
                                     <div class="form-group form-float">
                                         <div class="form-line">
-                                            <input type="hidden" id="sucursal_origen_id" value="0"/>
-                                            <input type="text" id="suc_origen_desc" class="form-control" disabled onkeyup="buscarSucursalOrigen();">
-                                            <label class="form-label">Sucursal Origen</label>
+                                            <input type="hidden" id="sucursal_id" value="0"/>
+                                            <input type="text" id="suc_desc" class="form-control" disabled onkeyup="buscarSucursal();">
+                                            <label class="form-label">Sucursal</label>
                                         </div>
-                                        <div id="listaSucursalOrigen" style="display:none;"></div>
+                                        <div id="listaSucursal" style="display:none;"></div>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA DEPOSITO ORIGEN CON 4 COLUMNAS -->
+                                <!-- CAMPO PARA DEPOSITO CON 4 COLUMNAS -->
                                 <div class="col-sm-4">
                                     <div class="form-group form-float">
                                         <div class="form-line">
-                                            <input type="hidden" id="deposito_origen_id" value="0"/>
-                                            <input type="text" id="deposito_origen_desc" class="form-control" disabled onkeyup="buscarDepositoOrigen();">
-                                            <label class="form-label">Deposito Origen</label>
+                                            <input type="hidden" id="deposito_id" value="0"/>
+                                            <input type="text" id="deposito_desc" class="form-control" disabled onkeyup="buscarDeposito();">
+                                            <label class="form-label">Deposito</label>
                                         </div>
-                                        <div id="listaDepositoOrigen" style="display:none;"></div>
+                                        <div id="listaDeposito" style="display:none;"></div>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA SUCURSAL DESTINO CON 4 COLUMNAS -->
-                                <div class="col-sm-4">
+                                <!-- CAMPO PARA BUSCAR CI O  RUC DEL CLIENTE CON 3 COLUMNAS -->
+                                <div class="col-sm-3">
                                     <div class="form-group form-float">
                                         <div class="form-line">
-                                            <input type="hidden" id="sucursal_destino_id" value="0"/>
-                                            <input type="text" id="suc_destino_desc" class="form-control" disabled onkeyup="buscarSucursalDestino();">
-                                            <label class="form-label">Sucursal Destino</label>
+                                            <input type="hidden" id="cliente_id" value="0"/>
+                                            <input type="text" id="cliente_ci" class="form-control" placeholder="Buscar cliente por CI o RUC" disabled onkeyup="buscarClientes();">
+                                            <!--<label class="form-label">CI</label> probar asi a ver como sale-->
                                         </div>
-                                        <div id="listaSucursalDestino" style="display:none;"></div>
+                                        <div id="listaClientes" style="display:none;"></div>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA DEPOSITO DESTINO CON 4 COLUMNAS -->
-                                <div class="col-sm-4">
+                                <!-- CAMPO PARA NOMBRE DEL CLIENTE CON 3 COLUMNAS -->
+                                <div class="col-sm-3">
                                     <div class="form-group form-float">
                                         <div class="form-line">
-                                            <input type="hidden" id="deposito_destino_id" value="0"/>
-                                            <input type="text" id="deposito_destino_desc" class="form-control" disabled onkeyup="buscarDepositoDestino();">
-                                            <label class="form-label">Deposito Destino</label>
+                                            <input type="text" id="nombre_cliente" class="form-control" disabled>
+                                            <label class="form-label">Cliente</label>
                                         </div>
-                                        <div id="listaDepositoDestino" style="display:none;"></div>
+                                    </div>
+                                </div>
+                                <!-- CAMPO PARA RUC DEL CLIENTE CON 3 COLUMNAS -->
+                                <div class="col-sm-3">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="text" id="cli_ruc" class="form-control" disabled>
+                                            <label class="form-label">RUC</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- CAMPO PARA DIRECCION DEL CLIENTE CON 3 COLUMNAS -->
+                                <div class="col-sm-3">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="text" id="cli_direc" class="form-control" disabled>
+                                            <label class="form-label">Direccion</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- CAMPO PARA TELEFONO DEL CLIENTE CON 3 COLUMNAS -->
+                                <div class="col-sm-3">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="text" id="cli_telef" class="form-control" disabled>
+                                            <label class="form-label">Telefono</label>
+                                        </div>
                                     </div>
                                 </div>
                                 <!-- CAMPO PARA NRO DE FACTURA CON 4 COLUMNAS -->
@@ -172,15 +197,15 @@
                                         <div id="listaMotivos" style="display:none;"></div>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA BUSCAR NOMBRE CHOFER CON 4 COLUMNAS -->
+                                <!-- CAMPO PARA BUSCAR NOMBRE DE REPARTIDOR CON 4 COLUMNAS -->
                                 <div class="col-sm-4">
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="hidden" id="persona_id" value="0"/>
-                                            <input type="text" id="chofer_nombre" class="form-control" disabled onkeyup="buscarChofer();">
-                                            <label class="form-label">Chofer</label>
+                                            <input type="text" id="repartidor_nombre" class="form-control" disabled onkeyup="buscarRepartidor();">
+                                            <label class="form-label">Repartidor</label>
                                         </div>
-                                        <div id="listaChoferes" style="display:none;"></div>
+                                        <div id="listaRepartidores" style="display:none;"></div>
                                     </div>
                                 </div>
                                 <!-- CAMPO PARA BUSCAR VEHICULOS CON 4 COLUMNAS -->
@@ -194,28 +219,15 @@
                                         <div id="listaVehiculos" style="display:none;"></div>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA ELEGIR PEDIDO  -->
-                                <div class="col-sm-4">
-                                    <label class="card-inside-title" style="font-weight: normal; font-size: 13px; color: #555;">¿Tiene Pedido?</label>
-                                    <div class="demo-radio-button">
-                                        <div>
-                                            <input type="radio" id="Con_Pedido" name="pedido_option" value="1" disabled>
-                                            <label for="Con_Pedido">Sí</label>
-
-                                            <input type="radio" id="Sin_Pedido" name="pedido_option" value="0" disabled>
-                                            <label for="Sin_Pedido">No</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- CAMPO PARA BUSCAR PEDIDOS CON 4 COLUMNAS -->
+                                <!-- CAMPO PARA BUSCAR VENTA CON 4 COLUMNAS -->
                                 <div class="col-sm-4">
                                     <div class="form-group form-float">
                                         <div class="form-line">
-                                            <input type="hidden" id="pedido_comp_id" value="0"/>
-                                            <input type="text" id="pedido" class="form-control" disabled onkeyup="buscarPedidos();">
-                                            <label class="form-label">Pedidos</label>
+                                            <input type="hidden" id="venta_id" value="0"/>
+                                            <input type="text" id="venta" class="form-control" disabled onkeyup="buscarVentas();">
+                                            <label class="form-label">Venta</label>
                                         </div>
-                                        <div id="listaPedidos" style="display:none;"></div>
+                                        <div id="listaVentas" style="display:none;"></div>
                                     </div>
                                 </div>
                             </div>    
@@ -224,6 +236,7 @@
                                 <button type="button" id="btnAgregar" class="btn btn-success waves-effect" onclick="agregar();">AGREGAR</button>
                                 <button type="button" id="btnEditar" class="btn btn-primary waves-effect" onclick="editar();" disabled>EDITAR</button>
                                 <button type="button" id="btnAnular" class="btn btn-danger waves-effect" onclick="anular();"disabled>ANULAR</button>
+                                <button type="button" id="btnEnviar" class="btn btn-primary waves-effect" onclick="enviar();"disabled>ENVIAR</button>
                                 <button type="button" id="btnConfirmar" class="btn btn-success waves-effect" onclick="confirmar();"disabled>CONFIRMAR</button>
                                 <button type="button" id="btnGrabar" class="btn btn-default waves-effect" disabled onclick="confirmarOperacion();">GRABAR</button>
                                 <button type="button" id="btnCancelar" class="btn btn-warning waves-effect" onclick="cancelar();" disabled>CANCELAR</button> 
@@ -233,7 +246,7 @@
 
                     <div class="card" id="detalles" style="display:none"> 
                         <div class="header">
-                            <h2>Detalles de la Nota de Remisión de Compra</h2>
+                            <h2>Detalles de la Nota de Remisión de Venta</h2>
                         </div>
                         <div class="body">
                             <div class="row clearfix" id="formDetalles">
@@ -254,7 +267,7 @@
                                                 <input type="text" id="prod_desc" class="form-control" disabled onkeyup="buscarProductos();">
                                                 <label class="form-label">Productos</label>
                                             </div>
-                                            <div id="ListaProductos" style="display:none;"></div>
+                                            <div id="listaProductos" style="display:none;"></div>
                                         </div>
                                     </div>
                                     <!-- CAMPO PARA CANTIDAD CON 1 COLUMNAS -->
@@ -266,12 +279,12 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- CAMPO PARA PRECIO COMPRA CON 2 COLUMNAS -->
+                                    <!-- CAMPO PARA PRECIO VENTA CON 2 COLUMNAS -->
                                     <div class="col-sm-2">
                                         <div class="form-group form-float">
                                             <div class="form-line">
-                                                <input type="text" id="det_costo" class="form-control" disabled>
-                                                <label class="form-label">Precio Compra</label>
+                                                <input type="text" id="det_precio" class="form-control" disabled>
+                                                <label class="form-label">Precio Venta</label>
                                             </div>
                                         </div>
                                     </div>
@@ -279,7 +292,7 @@
                                     <div class="col-sm-3">
                                         <div class="form-group form-float">
                                             <div class="form-line">
-                                                <input type="text" id="rem_comp_obs" class="form-control" disabled>
+                                                <input type="text" id="remision_vent_obs" class="form-control" disabled>
                                                 <label class="form-label">Observación</label>
                                             </div>
                                         </div>
@@ -319,7 +332,7 @@
                                         
                                     </tbody>
                                     <tfoot>
-                                        <tr>
+                                        <tr style="background-color: #e6e6e6;">
                                             <th colspan="4">Total General</th>
                                             <th class="text-right" id="txtTotalGral">0</th>
                                             <th class="text-right">0</th> <!-- total exentas -->
@@ -333,7 +346,7 @@
                     </div>  
                         <div class="card" id="registros">
                             <div class="header">
-                                <h2>Registros de Notas de Remisión Compras</h2>
+                                <h2>Registros de Notas de Remisión Ventas</h2>
                             </div>
                             <div class="body">
                                 <div class="table-responsive">
@@ -342,19 +355,22 @@
                                             <tr style="background-color: #e6e6e6;">
                                                 <th>Código</th>
                                                 <th>Fecha</th>
-                                                <th>Fecha Salida</th>
-                                                <th>Fecha Recepción</th>
+                                                <th>Fecha Envio</th>
+                                                <th>Fecha Entrega</th>
                                                 <th>Empresa</th>
-                                                <th>Sucursal Origen</th>
-                                                <th>Deposito Origen</th>
-                                                <th>Sucursal Destino</th>
-                                                <th>Deposito Destino</th>
+                                                <th>Sucursal</th>
+                                                <th>Deposito</th>
+                                                <th>CI</th>
+                                                <th>Cliente</th>
+                                                <th>RUC</th>
+                                                <th>Direccion</th>
+                                                <th>Telefono</th>
                                                 <th>Nro. Factura</th>
                                                 <th>Motivo</th>
-                                                <th>Chofer</th>
+                                                <th>Repartidor</th>
                                                 <th>Vehículo</th>
-                                                <th>Pedido</th>
-                                                <th>Encargado</th>
+                                                <th>Venta</th>
+                                                <th>Vendedor</th>
                                                 <th>Estado</th> 
                                             </tr>
                                         </thead>
@@ -365,20 +381,23 @@
                                             <tr style="background-color: #e6e6e6;">
                                                 <th>Código</th>
                                                 <th>Fecha</th>
-                                                <th>Fecha Salida</th>
-                                                <th>Fecha Recepción</th>
+                                                <th>Fecha Envio</th>
+                                                <th>Fecha Entrega</th>
                                                 <th>Empresa</th>
-                                                <th>Sucursal Origen</th>
-                                                <th>Deposito Origen</th>
-                                                <th>Sucursal Destino</th>
-                                                <th>Deposito Destino</th>
+                                                <th>Sucursal</th>
+                                                <th>Deposito</th>
+                                                <th>CI</th>
+                                                <th>Cliente</th>
+                                                <th>RUC</th>
+                                                <th>Direccion</th>
+                                                <th>Telefono</th>
                                                 <th>Nro. Factura</th>
                                                 <th>Motivo</th>
-                                                <th>Chofer</th>
+                                                <th>Repartidor</th>
                                                 <th>Vehículo</th>
-                                                <th>Pedido</th>
-                                                <th>Encargado</th>
-                                                <th>Estado</th> 
+                                                <th>Venta</th>
+                                                <th>Vendedor</th>
+                                                <th>Estado</th>  
                                             </tr>
                                         </tfoot>    
                                     </table>
