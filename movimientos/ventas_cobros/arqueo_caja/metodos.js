@@ -1,6 +1,7 @@
 // INICIALIZACIÓN
-listar();
-buscarCajaAbierta();
+$(document).ready(function () {
+    calcularTotales();
+});
 
 // FORMATO DATATABLE 
 function formatoTabla(){
@@ -48,229 +49,210 @@ function formatoTabla(){
     });
 }
 
-// LISTAR APERTURAS / CIERRES 
-function listar(){
+// LISTAR ARQUEOS
+function listarArqueos(){
+
     // destruir DataTable si ya existe
     if ($.fn.DataTable.isDataTable('.js-exportable')) {
         $('.js-exportable').DataTable().clear().destroy();
     }
+
     $.ajax({
-        url: getUrl() + "aperturas_cierres/read",
+        url: getUrl() + "arqueo_caja/read",
         method: "GET",
         dataType: "json",
         data: {
-            user_id: $("#user_id").val()
+            apertura_cierre_id: $("#apertura_cierre_id").val()
         }
     })
     .done(function(resultado){
-        var lista = "";
 
-        for (rs of resultado) {
-            lista += "<tr onclick=\"seleccionApertura(" +"'" + rs.id + "'," +"'" + rs.caja_desc + "'," +"'" + rs.apertura_fec + "'," +"'" + rs.apertura_monto + "'," +"'" + (rs.cierre_fec ?? '') + "'," +"'" + (rs.cierre_monto_sistema ?? 0) + "'," +"'" + (rs.cierre_monto_arqueo ?? 0) + "'," +"'" + (rs.cierre_diferencia ?? 0) + "'," +"'" + rs.estado + "'" +")\">";
+        let lista = "";
+
+        for (let rs of resultado) {
+
+            lista += "<tr onclick=\"seleccionArqueo(" +
+                "'" + rs.id + "'," +
+                "'" + rs.arqueo_fec + "'," +
+                "'" + rs.arqueo_tipo + "'," +
+                "'" + rs.arqueo_monto_sistema + "'," +
+                "'" + rs.arqueo_monto + "'," +
+                "'" + rs.arqueo_diferencia + "'," +
+                "'" + rs.arqueo_estado + "'" +
+            ")\">";
 
             lista += "<td>" + rs.id + "</td>";
-            lista += "<td>" + rs.caja_desc + "</td>";
-            lista += "<td>" + rs.apertura_fec + "</td>";
-            lista += "<td class='text-right'>" + rs.apertura_monto + "</td>";
-            lista += "<td>" + (rs.cierre_fec ?? '') + "</td>";
-            lista += "<td class='text-right'>" + (rs.cierre_monto_sistema ?? '') + "</td>";
-            lista += "<td class='text-right'>" + (rs.cierre_monto_arqueo ?? '') + "</td>";
-            lista += "<td class='text-right'>" + (rs.cierre_diferencia ?? '') + "</td>";
-            lista += "<td>" + rs.estado + "</td>";
+            lista += "<td>" + rs.arqueo_fec + "</td>";
+            lista += "<td>" + rs.arqueo_tipo + "</td>";
+            lista += "<td class='text-right'>" + rs.arqueo_monto_sistema + "</td>";
+            lista += "<td class='text-right'>" + rs.arqueo_monto + "</td>";
+            lista += "<td class='text-right'>" + rs.arqueo_diferencia + "</td>";
+            lista += "<td>" + rs.arqueo_estado + "</td>";
             lista += "</tr>";
         }
 
-        $("#tableBody").html(lista);
+        $("#tableBodyArqueos").html(lista);
         formatoTabla();
+
     })
     .fail(function(a,b,c){
         console.log(a.responseText);
-        alert(c);
+        swal("Error", "No se pudo listar los arqueos", "error");
     });
 }
-function seleccionApertura(
+//seleccionar arqueo
+function seleccionArqueo(
     id,
-    caja_desc,
-    apertura_fec,
-    apertura_monto,
-    cierre_fec,
-    cierre_monto_sistema,
-    cierre_monto_arqueo,
-    cierre_diferencia,
-    estado
+    arqueo_fec,
+    arqueo_tipo,
+    arqueo_monto_sistema,
+    arqueo_monto,
+    arqueo_diferencia,
+    arqueo_estado
 ){
-    $("#apertura_cierre_id").val(id);
-    $("#caja_desc").val(caja_desc);
-    $("#apertura_fec").val(apertura_fec);
-    $("#apertura_monto").val(apertura_monto);
-    $("#estado_caja").val(estado);
+    $("#arqueo_id").val(id);
+    $("#arqueo_fec").val(arqueo_fec);
+    $("#monto_sistema").val(arqueo_monto_sistema);
+    $("#monto_arqueo").val(arqueo_monto);
+    $("#diferencia").val(arqueo_diferencia);
+    $("#arqueo_estado").val(arqueo_estado);
 
-    // Cargar montos si ya existen
-    $("#cierre_fec").val(cierre_fec);
-    $("#monto_sistema").val(cierre_monto_sistema);
-    $("#monto_arqueo").val(cierre_monto_arqueo);
-    $("#diferencia").val(cierre_diferencia);
-
-    if (estado === "ABIERTA") {
-        $("#cardApertura").hide();
-        $("#cardCierre").show();
+    // Habilitar confirmar solo si corresponde
+    if (arqueo_tipo === "FINAL" && arqueo_estado === "REGISTRADO") {
+        $("#btnConfirmarArqueo").removeAttr("disabled");
     } else {
-        $("#cardApertura").hide();
-        $("#cardCierre").hide();
+        $("#btnConfirmarArqueo").attr("disabled","true");
     }
 
     $(".form-line").addClass("focused");
 }
 
-// BUSCAR CAJA ABIERTA 
-function buscarCajaAbierta(){
-    $.ajax({
-        url: getUrl() + "aperturas_cierres/buscar_caja_abierta",
-        method: "GET",
-        dataType: "json"
-    })
-    .done(function(resp){
+// CALCULAR TOTALES
+$(document).on("keyup change", ".cantidad", function () {
+    calcularTotales();
+});
 
-        if (!resp.abierta) {
-            // NO hay caja abierta
-            $("#estado_caja").val("CERRADA");
-            $("#cardApertura").show();
-            $("#cardCierre").hide();
-            limpiarEstadoCaja();
+function calcularTotales() {
+    let totalGeneral = 0;
 
-        } else {
-            // HAY caja abierta
-            $("#apertura_cierre_id").val(resp.id);
-            $("#caja_desc").val(resp.apertura.caja_desc);
-            $("#estado_caja").val(resp.apertura.estado);
-            $("#apertura_fec").val(resp.apertura.apertura_fec);
+    $("#tablaDenominaciones tr").each(function () {
+        let cantidad = parseFloat($(this).find(".cantidad").val()) || 0;
+        let denominacion = parseFloat($(this).find(".denominacion").data("valor")) || 0;
 
-            // monto sistema calculado en backend
-            $("#monto_sistema").val(resp.cierre.monto_sistema);
+        let totalFila = cantidad * denominacion;
+        $(this).find(".total").text(totalFila.toLocaleString("es-ES"));
 
-            $("#cardApertura").hide();
-            $("#cardCierre").show();
-        }
-
-        $(".form-line").addClass("focused");
-    })
-    .fail(function(a,b,c){
-        console.log(a.responseText);
+        totalGeneral += totalFila;
     });
+
+    $("#totalGeneral").text(totalGeneral.toLocaleString("es-ES"));
 }
 
-// ABRIR CAJA 
-function abrirCaja(){
+//oBTENER TIPO DE ARQUEO
+function obtenerTipoArqueo() {
+    return $("input[name='arqueo_tipo']:checked").val();
+}
 
-    if ($("#apertura_monto").val() === "") {
-        swal("Atención", "Debe ingresar el monto de apertura", "warning");
+// =======================
+// REGISTRAR ARQUEO
+// =======================
+function registrarArqueo() {
+
+    let montoArqueo = 0;
+    $("#tablaDenominaciones .total").each(function () {
+        let valor = parseFloat($(this).text().replace(/\./g, "").replace(",", ".")) || 0;
+        montoArqueo += valor;
+    });
+
+    if (montoArqueo <= 0) {
+        swal("Atención", "Debe ingresar al menos una denominación", "warning");
         return;
     }
 
+    let tipoArqueo = obtenerTipoArqueo();
+
     swal({
-        title: "APERTURA DE CAJA",
-        text: "¿Desea abrir la caja?",
+        title: "REGISTRAR ARQUEO",
+        text: "¿Desea registrar el arqueo de caja?",
         type: "warning",
         showCancelButton: true,
-        confirmButtonColor: "#458E49",
+        confirmButtonColor: "#4CAF50",
         confirmButtonText: "SI",
         cancelButtonText: "NO",
         closeOnConfirm: false
-    }, function(){
+    }, function () {
 
         $.ajax({
-            url: getUrl() + "aperturas_cierres/abrir",
-            method: "POST",
-            dataType: "json",
-            data: {
-                user_id: $("#user_id").val(),
-                apertura_monto: $("#apertura_monto").val()
-            }
-        })
-        .done(function(resp){
-            swal({
-                title: "Correcto",
-                text: resp.mensaje,
-                type: "success"
-            }, function () {
-
-                $("#apertura_monto").val("");
-
-                console.log("Registro obtenido:", resp);
-                location.reload(true);
-            })
-        })
-        .fail(function(a,b,c){
-            console.log(a.responseText);
-            swal("Error", "No se pudo abrir la caja", "error");
-        });
-
-    });
-}
-
-// CERRAR CAJA 
-function cerrarCaja(){
-
-    if ($("#monto_arqueo").val() === "") {
-        swal("Atención", "Debe ingresar el monto del arqueo", "warning");
-        return;
-    }
-
-    swal({
-        title: "CIERRE DE CAJA",
-        text: "¿Desea cerrar la caja?",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#D32F2F",
-        confirmButtonText: "SI",
-        cancelButtonText: "NO",
-        closeOnConfirm: false
-    }, function(){
-
-        $.ajax({
-            url: getUrl() + "aperturas_cierres/cerrar",
+            url: getUrl() + "arqueo_caja/create",
             method: "POST",
             dataType: "json",
             data: {
                 apertura_cierre_id: $("#apertura_cierre_id").val(),
-                monto_arqueo: $("#monto_arqueo").val() //ver luego 
+                user_id: $("#user_id").val(),
+                arqueo_fec: $("#arqueo_fec").val(),
+                arqueo_tipo: tipoArqueo,
+                arqueo_monto: montoArqueo
             }
         })
-        .done(function(resp){
-            swal({
-                title: "Correcto",
-                text: resp.mensaje,
-                type: "success"
-            }, function () {
-
-                console.log("Cierre realizado:", resp);
-
+        .done(function (resp) {
+            swal("Correcto", resp.mensaje, "success", function () {
                 location.reload(true);
-
             });
         })
-        .fail(function(a,b,c){
+        .fail(function (a, b, c) {
             console.log(a.responseText);
-            swal("Error", "No se pudo cerrar la caja", "error");
+            swal("Error", "No se pudo registrar el arqueo", "error");
         });
 
     });
 }
 
-// CANCELAR CIERRE
-function cancelarCierre(){
-    $("#monto_arqueo").val("");
-    $("#diferencia").val("");
-    buscarCajaAbierta();
+// =======================
+// CONFIRMAR ARQUEO FINAL
+// =======================
+function confirmarArqueo(){
+
+    if ($("#arqueo_id").val() === "" || $("#arqueo_id").val() == 0) {
+        swal("Atención", "Debe seleccionar un arqueo", "warning");
+        return;
+    }
+
+    swal({
+        title: "CONFIRMAR ARQUEO",
+        text: "¿Desea confirmar el arqueo FINAL?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#4CAF50",
+        confirmButtonText: "SI",
+        cancelButtonText: "NO",
+        closeOnConfirm: false
+    }, function(){
+
+        $.ajax({
+            url: getUrl() + "arqueo_caja/confirmar/" + $("#arqueo_id").val(),
+            method: "PUT",
+            dataType: "json"
+        })
+        .done(function(resp){
+            swal("Correcto", resp.mensaje, "success", function(){
+                listarArqueos();
+            });
+        })
+        .fail(function(a,b,c){
+            console.log(a.responseText);
+            swal("Error", "No se pudo confirmar el arqueo", "error");
+        });
+
+    });
 }
 
-// LIMPIAR ESTADO DE CAJA
-function limpiarEstadoCaja(){
-    $("#apertura_cierre_id").val(0);
-    $("#caja_desc").val("");
-    $("#apertura_fec").val("");
-    $("#cierre_fec").val("");
-    $("#monto_sistema").val("");
-    $("#monto_arqueo").val("");
-    $("#diferencia").val("");
+// LIMPIAR ARQUEO
+function limpiarArqueo() {
+    $(".cantidad").val(0);
+    $(".total").text("0");
+    $("#totalGeneral").text("0");
 }
+
+
+
+

@@ -53,172 +53,138 @@
                     
                     <div class="card">
                         <div class="header">
-                            <h2>Estado de Caja <small>CRUD de Arqueo de cajas</small> </h2>
+                            <h2>Arqueo de Caja <small>Registro y verificación de arqueo</small></h2>
                         </div>
                         <div class="body">
+                            <input type="hidden" id="user_id" value="1">
+                            <input type="hidden" id="apertura_cierre_id" value="0">
+
                             <div class="row clearfix">
-                                <input type="hidden" value="0" id="txtOperacion"/>
-                                <input type="hidden" id="apertura_cierre_id" value="0">
-                                <input type="hidden" id="user_id" value="1">
-                                <input type="hidden" id="login" value="ylopez">
-                                <!-- CAMPO PARA CODIGO CON 3 COLUMNAS -->
+
                                 <div class="col-sm-3">
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input type="text" id="caja_desc" class="form-control" disabled>
-                                        <label class="form-label">Caja</label>
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="text" id="caja_desc" class="form-control" disabled>
+                                            <label class="form-label">Caja</label>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+
                                 <div class="col-sm-3">
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input type="text" id="estado_caja" class="form-control" disabled>
-                                        <label class="form-label">Estado</label>
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="text" id="arqueo_fec" class="form-control datetimepicker">
+                                            <label class="form-label">Fecha Arqueo</label>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="col-sm-3">
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input type="text" id="apertura_fec" class="form-control" disabled>
-                                        <label class="form-label">Fecha Apertura</label>
+                                <div class="col-sm-6">
+                                    <label class="card-inside-title">Tipo de Arqueo</label>
+                                    <div class="demo-radio-button">
+                                        <input name="arqueo_tipo" type="radio" id="verificacion" value="VERIFICACION" checked />
+                                        <label for="verificacion">Verificación</label>
+
+                                        <input name="arqueo_tipo" type="radio" id="final" value="FINAL" />
+                                        <label for="final">Final</label>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="col-sm-3">
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input type="text" id="cierre_fec" class="form-control" disabled>
-                                        <label class="form-label">Fecha Cierre</label>
+                                <div class="card">
+                                    <div class="header">
+                                        <h2>Detalle de Denominaciones</h2>
+                                    </div>
+                                    <div class="body">
+
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-striped">
+                                                <thead>
+                                                    <tr style="background-color:#e6e6e6;">
+                                                        <th>Cantidad</th>
+                                                        <th>Denominación</th>
+                                                        <th>Total</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tablaDenominaciones">
+
+                                                    <!-- Repetimos filas -->
+                                                    <tr>
+                                                        <td><input type="number" class="form-control cantidad" value="0"></td>
+                                                        <td class="denominacion" data-valor="100000">100.000</td>
+                                                        <td class="total text-right">0</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><input type="number" class="form-control cantidad" value="0"></td>
+                                                        <td class="denominacion" data-valor="50000">50.000</td>
+                                                        <td class="total text-right">0</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><input type="number" class="form-control cantidad" value="0"></td>
+                                                        <td class="denominacion" data-valor="20000">20.000</td>
+                                                        <td class="total text-right">0</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><input type="number" class="form-control cantidad" value="0"></td>
+                                                        <td class="denominacion" data-valor="10000">10.000</td>
+                                                        <td class="total text-right">0</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><input type="number" class="form-control cantidad" value="0"></td>
+                                                        <td class="denominacion" data-valor="5000">5.000</td>
+                                                        <td class="total text-right">0</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><input type="number" class="form-control cantidad" value="0"></td>
+                                                        <td class="denominacion" data-valor="2000">2.000</td>
+                                                        <td class="total text-right">0</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><input type="number" class="form-control cantidad" value="0"></td>
+                                                        <td class="denominacion" data-valor="1000">1.000</td>
+                                                        <td class="total text-right">0</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><input type="number" class="form-control cantidad" value="0"></td>
+                                                        <td class="denominacion" data-valor="500">500</td>
+                                                        <td class="total text-right">0</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><input type="number" class="form-control cantidad" value="0"></td>
+                                                        <td class="denominacion" data-valor="100">100</td>
+                                                        <td class="total text-right">0</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><input type="number" class="form-control cantidad" value="0"></td>
+                                                        <td class="denominacion" data-valor="50">50</td>
+                                                        <td class="total text-right">0</td>
+                                                    </tr>
+
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr style="background-color:#f5f5f5;">
+                                                        <th colspan="2" class="text-right">TOTAL GENERAL</th>
+                                                        <th class="text-right" id="totalGeneral">0</th>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="body">
+                                        <button type="button" class="btn btn-success waves-effect" onclick="registrarArqueo();">
+                                            <i class="material-icons">save</i> REGISTRAR
+                                        </button>
+
+                                        <button type="button" class="btn btn-warning waves-effect" onclick="location.reload(true);">
+                                            <i class="material-icons">refresh</i> CANCELAR
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ================== APERTURA DE CAJA ================== -->
-        <div class="row clearfix" id="cardApertura">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="header">
-                        <h2>Apertura de Caja</h2>
-                    </div>
-                    <div class="body">
-                        <div class="row clearfix">
-                            <div class="col-sm-3">
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input type="text" id="apertura_monto" class="form-control">
-                                        <label class="form-label">Monto de Apertura</label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-3">
-                                <button type="button"
-                                        class="btn btn-success waves-effect"
-                                        onclick="abrirCaja();">
-                                    <i class="material-icons">lock_open</i>
-                                    ABRIR CAJA
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ================== CIERRE DE CAJA ================== -->
-        <div class="row clearfix" id="cardCierre" style="display:none;">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="header">
-                        <h2>Cierre de Caja</h2>
-                    </div>
-                    <div class="body">
-                        <div class="row clearfix">
-
-                            <div class="col-sm-3">
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input type="text" id="monto_sistema" class="form-control" disabled>
-                                        <label class="form-label">Monto Sistema</label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-3">
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input type="text" id="monto_arqueo" class="form-control">
-                                        <label class="form-label">Monto Arqueo</label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-3">
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input type="text" id="diferencia" class="form-control" disabled>
-                                        <label class="form-label">Diferencia</label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-3">
-                                <button type="button"
-                                        class="btn btn-danger waves-effect"
-                                        onclick="cerrarCaja();">
-                                    <i class="material-icons">lock</i>
-                                    CERRAR CAJA
-                                </button>
-                            </div>
-
-                            <button type="button"
-                                    class="btn btn-warning waves-effect"
-                                    onclick="cancelarCierre();">
-                                <i class="material-icons">undo</i>
-                                CANCELAR
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ================== LISTADO ================== -->
-        <div class="row clearfix">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="header">
-                        <h2>Registro de Aperturas y Cierres</h2>
-                    </div>
-                    <div class="body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-striped table-hover dataTable js-exportable">
-                                <thead>
-                                    <tr style="background-color:#e6e6e6;">
-                                        <th>ID</th>
-                                        <th>Caja</th>
-                                        <th>Apertura</th>
-                                        <th>Monto Apertura</th>
-                                        <th>Cierre</th>
-                                        <th>Monto Sistema</th>
-                                        <th>Monto Arqueo</th>
-                                        <th>Diferencia</th>
-                                        <th>Estado</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tableBody">
-                                </tbody>
-                            </table>
-                        </div>
                     </div>
                 </div>
             </div>
