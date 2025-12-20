@@ -1,6 +1,9 @@
 // INICIALIZACIÓN
 $(document).ready(function () {
+    buscarCajaAbiertaArqueo();
+    campoFecha();
     calcularTotales();
+    listarArqueos();
 });
 
 // FORMATO DATATABLE 
@@ -52,8 +55,7 @@ function formatoTabla(){
 // LISTAR ARQUEOS
 function listarArqueos(){
 
-    // destruir DataTable si ya existe
-    if ($.fn.DataTable.isDataTable('.js-exportable')) {
+    if ($.fn.DataTable && $.fn.DataTable.isDataTable('.js-exportable')) {
         $('.js-exportable').DataTable().clear().destroy();
     }
 
@@ -62,7 +64,7 @@ function listarArqueos(){
         method: "GET",
         dataType: "json",
         data: {
-            apertura_cierre_id: $("#apertura_cierre_id").val()
+            user_id: $("#user_id").val()
         }
     })
     .done(function(resultado){
@@ -70,34 +72,28 @@ function listarArqueos(){
         let lista = "";
 
         for (let rs of resultado) {
-
-            lista += "<tr onclick=\"seleccionArqueo(" +
-                "'" + rs.id + "'," +
-                "'" + rs.arqueo_fec + "'," +
-                "'" + rs.arqueo_tipo + "'," +
-                "'" + rs.arqueo_monto_sistema + "'," +
-                "'" + rs.arqueo_monto + "'," +
-                "'" + rs.arqueo_diferencia + "'," +
-                "'" + rs.arqueo_estado + "'" +
-            ")\">";
-
-            lista += "<td>" + rs.id + "</td>";
-            lista += "<td>" + rs.arqueo_fec + "</td>";
-            lista += "<td>" + rs.arqueo_tipo + "</td>";
-            lista += "<td class='text-right'>" + rs.arqueo_monto_sistema + "</td>";
-            lista += "<td class='text-right'>" + rs.arqueo_monto + "</td>";
-            lista += "<td class='text-right'>" + rs.arqueo_diferencia + "</td>";
-            lista += "<td>" + rs.arqueo_estado + "</td>";
-            lista += "</tr>";
+            lista += `<tr onclick="seleccionArqueo(
+                '${rs.id}',
+                '${rs.arqueo_fec}',
+                '${rs.arqueo_tipo}',
+                '${rs.arqueo_monto_sistema}',
+                '${rs.arqueo_monto}',
+                '${rs.arqueo_diferencia}',
+                '${rs.arqueo_estado}'
+            )">
+                <td>${rs.id}</td>
+                <td>${rs.caja_desc}</td>
+                <td>${rs.arqueo_fec}</td>
+                <td>${rs.arqueo_tipo}</td>
+                <td class="text-right">${rs.arqueo_monto_sistema}</td>
+                <td class="text-right">${rs.arqueo_monto}</td>
+                <td class="text-right">${rs.arqueo_diferencia}</td>
+                <td>${rs.arqueo_estado}</td>
+            </tr>`;
         }
 
-        $("#tableBodyArqueos").html(lista);
+        $("#tableBody").html(lista);
         formatoTabla();
-
-    })
-    .fail(function(a,b,c){
-        console.log(a.responseText);
-        swal("Error", "No se pudo listar los arqueos", "error");
     });
 }
 //seleccionar arqueo
@@ -111,20 +107,60 @@ function seleccionArqueo(
     arqueo_estado
 ){
     $("#arqueo_id").val(id);
+
+    // Solo informativo
     $("#arqueo_fec").val(arqueo_fec);
+    $("input[name='arqueo_tipo'][value='" + arqueo_tipo + "']").prop("checked", true);
     $("#monto_sistema").val(arqueo_monto_sistema);
     $("#monto_arqueo").val(arqueo_monto);
     $("#diferencia").val(arqueo_diferencia);
-    $("#arqueo_estado").val(arqueo_estado);
 
-    // Habilitar confirmar solo si corresponde
-    if (arqueo_tipo === "FINAL" && arqueo_estado === "REGISTRADO") {
-        $("#btnConfirmarArqueo").removeAttr("disabled");
-    } else {
-        $("#btnConfirmarArqueo").attr("disabled","true");
+    $("#btnConfirmarArqueo").attr("disabled", true);
+    $("#btnAnularArqueo").attr("disabled", true);
+
+    if (arqueo_estado === "REGISTRADO") {
+
+        // Anular siempre que esté REGISTRADO
+        $("#btnAnularArqueo").removeAttr("disabled");
+
+        // Confirmar solo si es FINAL
+        if (arqueo_tipo === "FINAL") {
+            $("#btnConfirmarArqueo").removeAttr("disabled");
+        }
     }
 
     $(".form-line").addClass("focused");
+}
+
+// BUSCAR CAJA ABIERTA PARA ARQUEO
+function buscarCajaAbiertaArqueo(){
+
+    $.ajax({
+        url: getUrl() + "aperturas_cierres/buscar_caja_abierta",
+        method: "GET",
+        dataType: "json",
+        data: {
+            user_id: $("#user_id").val()
+        }
+    })
+    .done(function(resp){
+
+        if(!resp.abierta){
+            swal("Atención",
+                 "No existe una caja abierta para realizar el arqueo",
+                 "warning");
+            return;
+        }
+
+        // Cargar datos de la caja abierta
+        $("#apertura_cierre_id").val(resp.apertura.id);
+        $("#caja_desc").val("Caja ID: " + resp.apertura.caja_id);
+
+        $(".form-line").addClass("focused");
+    })
+    .fail(function(e){
+        console.log(e.responseText);
+    });
 }
 
 // CALCULAR TOTALES
@@ -153,9 +189,7 @@ function obtenerTipoArqueo() {
     return $("input[name='arqueo_tipo']:checked").val();
 }
 
-// =======================
 // REGISTRAR ARQUEO
-// =======================
 function registrarArqueo() {
 
     let montoArqueo = 0;
@@ -195,9 +229,14 @@ function registrarArqueo() {
             }
         })
         .done(function (resp) {
-            swal("Correcto", resp.mensaje, "success", function () {
+             swal({
+                title: "Correcto",
+                text: resp.mensaje,
+                type: "success"
+            }, function () {
+                console.log("Registro realizado:", resp);
                 location.reload(true);
-            });
+            })
         })
         .fail(function (a, b, c) {
             console.log(a.responseText);
@@ -207,9 +246,7 @@ function registrarArqueo() {
     });
 }
 
-// =======================
 // CONFIRMAR ARQUEO FINAL
-// =======================
 function confirmarArqueo(){
 
     if ($("#arqueo_id").val() === "" || $("#arqueo_id").val() == 0) {
@@ -234,8 +271,14 @@ function confirmarArqueo(){
             dataType: "json"
         })
         .done(function(resp){
-            swal("Correcto", resp.mensaje, "success", function(){
-                listarArqueos();
+            swal({
+                title: "Correcto",
+                text: resp.mensaje,
+                type: "success"
+            }, function () {
+                console.log("confirmacion realizado:", resp);
+                $("#arqueo_id").val(0);
+                location.reload(true);
             });
         })
         .fail(function(a,b,c){
@@ -246,11 +289,65 @@ function confirmarArqueo(){
     });
 }
 
+// ANULAR ARQUEO
+function anularArqueo(){
+
+    if ($("#arqueo_id").val() == 0 || $("#arqueo_id").val() === "") {
+        swal("Atención", "Debe seleccionar un arqueo", "warning");
+        return;
+    }
+
+    swal({
+        title: "ANULAR ARQUEO",
+        text: "¿Desea anular este arqueo?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#D32F2F",
+        confirmButtonText: "SI",
+        cancelButtonText: "NO",
+        closeOnConfirm: false
+    }, function(){
+
+        $.ajax({
+            url: getUrl() + "arqueo_caja/anular/" + $("#arqueo_id").val(),
+            method: "PUT",
+            dataType: "json"
+        })
+        .done(function(resp){
+            swal({
+                title: "Correcto",
+                text: resp.mensaje,
+                type: "success"
+            }, function () {
+                console.log("Anulacion realizada:", resp);
+                $("#arqueo_id").val(0);
+                location.reload(true);
+            });
+        })
+        .fail(function(a){
+            console.log(a.responseText);
+            swal("Error", "No se pudo anular el arqueo", "error");
+        });
+
+    });
+}
+
+function campoFecha(){
+    $('.datetimepicker').bootstrapMaterialDatePicker({
+        format: 'DD/MM/YYYY HH:mm:ss',
+        clearButton: true,
+        weekStart: 1
+    });
+}
+
 // LIMPIAR ARQUEO
 function limpiarArqueo() {
+    $("#arqueo_id").val(0);
+    $("#totalGeneral").text("0");
+    $("#diferencia").val("");
     $(".cantidad").val(0);
     $(".total").text("0");
-    $("#totalGeneral").text("0");
+    $(".form-line").removeClass("focused");
 }
 
 

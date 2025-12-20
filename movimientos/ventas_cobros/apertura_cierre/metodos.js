@@ -107,9 +107,10 @@ function seleccionApertura(
 
     // Cargar montos si ya existen
     $("#cierre_fec").val(cierre_fec);
-    $("#monto_sistema").val(cierre_monto_sistema);
-    $("#monto_arqueo").val(cierre_monto_arqueo);
-    $("#diferencia").val(cierre_diferencia);
+    //$("#monto_sistema").val(cierre_monto_sistema);
+    //$("#monto_arqueo").val(cierre_monto_arqueo);
+    //$("#diferencia").val(cierre_diferencia);
+    buscarArqueoFinal();
 
     if (estado === "ABIERTA") {
         $("#cardApertura").hide();
@@ -256,6 +257,51 @@ function cerrarCaja(){
 
     });
 }
+
+//funcion buscar arqueo final
+function buscarArqueoFinal(){
+
+    let aperturaId = $("#apertura_cierre_id").val();
+
+    if (!aperturaId || aperturaId == 0) {
+        return;
+    }
+
+    $.ajax({
+        url: getUrl() + "arqueo_caja/buscarArqueo",
+        method: "POST",
+        dataType: "json",
+        data: {
+            apertura_cierre_id: aperturaId
+        }
+    })
+    .done(function(resp){
+
+        if (!resp.existe) {
+            swal({
+                title: "Atención",
+                text: "No existe arqueo FINAL confirmado",
+                type: "warning"
+            });
+            return;
+        }
+
+        $("#monto_sistema").val(resp.monto_sistema);
+        $("#monto_arqueo").val(resp.monto_arqueo);
+        $("#diferencia").val(resp.diferencia);
+
+        $(".form-line").addClass("focused");
+    })
+    .fail(function(a){
+        console.log(a.responseText);
+        swal({
+            title: "Error",
+            text: "No se pudo obtener el arqueo final",
+            type: "error"
+        });
+    });
+}
+
 
 // CANCELAR CIERRE
 function cancelarCierre(){

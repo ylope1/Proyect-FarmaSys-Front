@@ -353,17 +353,17 @@
                                     </li>
                                     <li>
                                         <a href="referenciales/ventas/entidad_adherida">
-                                            <span>Entidades Adheridas (pend)</span>
+                                            <span>Entidades Adheridas</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="referenciales/ventas/entidad_emisora">
-                                            <span>Entidades Emisoras (pend)</span>
+                                            <span>Entidades Emisoras</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="referenciales/ventas/marca_tarjeta">
-                                            <span>Marca Tarjeta (pend)</span>
+                                            <span>Marca Tarjeta</span>
                                         </a>
                                     </li>
                                 </ul>
