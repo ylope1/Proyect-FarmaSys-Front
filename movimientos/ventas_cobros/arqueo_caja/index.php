@@ -174,6 +174,44 @@
                     </div>
                 </div>
             </div>
+            <!-- ================= MEDIOS NO EFECTIVO ================= -->
+            <div class="row clearfix">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>Resumen de Medios No Efectivo</h2>
+                        </div>
+                        <div class="body">
+                            <div class="row clearfix">
+                                <!-- CHEQUES -->
+                                <div class="col-sm-6">
+                                    <div class="info-box bg-light-blue">
+                                        <div class="icon">
+                                            <i class="material-icons">description</i>
+                                        </div>
+                                        <div class="content">
+                                            <div class="text">TOTAL CHEQUES</div>
+                                            <div class="number" id="totalCheques">0</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- TARJETAS -->
+                                <div class="col-sm-6">
+                                    <div class="info-box bg-light-green">
+                                        <div class="icon">
+                                            <i class="material-icons">credit_card</i>
+                                        </div>
+                                        <div class="content">
+                                            <div class="text">TOTAL TARJETAS</div>
+                                            <div class="number" id="totalTarjetas">0</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- ================= BOTONES ================= -->
             <div class="row clearfix">
                 <div class="col-md-12">

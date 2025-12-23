@@ -4,6 +4,9 @@ $(document).ready(function () {
     campoFecha();
     calcularTotales();
     listarArqueos();
+    setTimeout(() => {
+        cargarTotalesNoEfectivo();
+    }, 500);
 });
 
 // FORMATO DATATABLE 
@@ -329,6 +332,38 @@ function anularArqueo(){
             swal("Error", "No se pudo anular el arqueo", "error");
         });
 
+    });
+}
+
+function cargarTotalesNoEfectivo() {
+
+    let aperturaId = $("#apertura_cierre_id").val();
+    if (!aperturaId || aperturaId == 0) return;
+
+    // CHEQUES
+    $.ajax({
+        url: getUrl() + "cobros_cab/total_cheques_apertura",
+        method: "GET",
+        dataType: "json",
+        data: { apertura_cierre_id: aperturaId }
+    })
+    .done(function(resp){
+        $("#totalCheques").text(
+            Number(resp.total || 0).toLocaleString("es-ES")
+        );
+    });
+
+    // TARJETAS
+    $.ajax({
+        url: getUrl() + "cobros_cab/total_tarjetas_apertura",
+        method: "GET",
+        dataType: "json",
+        data: { apertura_cierre_id: aperturaId }
+    })
+    .done(function(resp){
+        $("#totalTarjetas").text(
+            Number(resp.total || 0).toLocaleString("es-ES")
+        );
     });
 }
 
