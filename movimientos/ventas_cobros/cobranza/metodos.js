@@ -341,9 +341,8 @@ function grabar(){
 }
 
 
-/* =======================
-   DETALLES DE COBRO
-======================= */
+
+  // DETALLES DE COBRO
 function listarDetalles(){
     $.ajax({
         url: getUrl()+"cobros_det/read/"+$("#id").val(),
@@ -356,7 +355,7 @@ function listarDetalles(){
 
         for(rs of res){
             lista += `<tr>
-                <td>${rs.documento}</td>
+                <td>${rs.documento} - ${rs.cliente}</td>
                 <td>${rs.forma_cobro_desc}</td>
                 <td class="text-right">${rs.monto}</td>
             </tr>`;
@@ -366,6 +365,7 @@ function listarDetalles(){
         $("#totalCobrado").text(total.toFixed(0));
     });
 }
+
 
 function agregarDetalle(){
     $("#txtOperacionDetalle").val(1);

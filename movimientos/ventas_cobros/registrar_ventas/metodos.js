@@ -788,26 +788,28 @@ function toggleCampoCondicionVta() {
     const contado = document.getElementById("contado").checked;
     const intervaloFechaVto = document.getElementById("venta_ifv");
 
-    // Limpiar opciones anteriores
     intervaloFechaVto.innerHTML = '';
 
     if (contado) {
-        // Solo opción para contado: 0 días (valor = 1)
-        intervaloFechaVto.innerHTML = '<option value="1">0 días</option>';
-        intervaloFechaVto.value = "1";  // Preseleccionamos
+        intervaloFechaVto.innerHTML = '<option value="0">0 días</option>';
+        intervaloFechaVto.value = "0";
         intervaloFechaVto.setAttribute('disabled', 'disabled');
+
+        // Cantidad de cuotas = 0
+        $("#txtCantCta").val(0).attr("disabled", "disabled");
     } else {
-        // Opciones de crédito: 30, 60, 90, 120 días
         intervaloFechaVto.innerHTML =
-            '<option value="2">30 días</option>' +
-            '<option value="3">60 días</option>' +
-            '<option value="4">90 días</option>' +
-            '<option value="5">120 días</option>';
-        intervaloFechaVto.value = "2"; // Valor por defecto
+            '<option value="30">30 días</option>' +
+            '<option value="60">60 días</option>' +
+            '<option value="90">90 días</option>' +
+            '<option value="120">120 días</option>';
+        intervaloFechaVto.value = "30";
         intervaloFechaVto.removeAttribute('disabled');
+
+        // Cantidad de cuotas mínimo 1
+        $("#txtCantCta").val(1).removeAttr("disabled");
     }
 
-    // Refrescar el selectpicker para que se actualice visualmente
     if (typeof $ !== "undefined" && typeof $('#venta_ifv').selectpicker === "function") {
         $('#venta_ifv').selectpicker('refresh');
     }

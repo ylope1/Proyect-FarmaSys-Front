@@ -123,7 +123,7 @@
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="hidden" id="pais_id" value="0"/>
-                                            <input type="text" id="pais_descripcion" class="form-control" disabled onkeyup="buscarPaises();">
+                                            <input type="text" id="pais_desc" class="form-control" disabled onkeyup="buscarPaises();">
                                             <label class="form-label">País</label>
                                         </div>
                                         <div id="listaPaises" style="display:none;"></div>

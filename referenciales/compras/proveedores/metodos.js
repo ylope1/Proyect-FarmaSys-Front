@@ -60,7 +60,7 @@ function agregar(){
     $("#txtDireccion").removeAttr("disabled");
     $("#txtTelefono").removeAttr("disabled");
     $("#txtEmail").removeAttr("disabled");
-    $("#pais_descripcion").removeAttr("disabled");
+    $("#pais_desc").removeAttr("disabled");
     $("#ciu_descripcion").removeAttr("disabled");
 
 
@@ -82,7 +82,7 @@ function editar(){
     $("#txtDireccion").removeAttr("disabled");
     $("#txtTelefono").removeAttr("disabled");
     $("#txtEmail").removeAttr("disabled");
-    $("#pais_descripcion").removeAttr("disabled");
+    $("#pais_desc").removeAttr("disabled");
     $("#ciu_descripcion").removeAttr("disabled");
 
     $("#btnAgregar").attr("disabled","true");
@@ -184,7 +184,7 @@ function listar(){
     }) 
 }
 
-function seleccionProveedor(codigo, descripcion, ruc, tipo, direccion, telefono, email, pais_id, pais_descripcion, ciu_id, ciu_descripcion){
+function seleccionProveedor(codigo, descripcion, ruc, tipo, direccion, telefono, email, pais_id, pais_desc, ciu_id, ciu_descripcion){
     $("#txtCodigo").val(codigo);
     $("#txtDescripcion").val(descripcion);
     $("#txtRuc").val(ruc);
@@ -193,7 +193,7 @@ function seleccionProveedor(codigo, descripcion, ruc, tipo, direccion, telefono,
     $("#txtTelefono").val(telefono);
     $("#txtEmail").val(email);
     $("#pais_id").val(pais_id);
-    $("#pais_descripcion").val(pais_descripcion);
+    $("#pais_desc").val(pais_desc);
     $("#ciu_id").val(ciu_id);
     $("#ciu_descripcion").val(ciu_descripcion);
     
@@ -248,17 +248,17 @@ function grabar(){
 }
 function buscarPaises(){
     $.ajax({
-        url:"http://127.0.0.1:8000/api_taller/paises/search", 
+        url:"http://127.0.0.1:8000/api_taller/paises/buscar", 
         method:"POST",
         dataType: "json",
         data: {
-            'pais_desc': $("#pais_descripcion").val()
+            'pais_desc': $("#pais_desc").val()
         }
     })
     .done(function(resultado){
         var lista = "<ul class=\"list-group\">";
         for(rs of resultado){
-            lista += "<li class=\"list-group-item\" onclick=\"seleccionPais("+rs.id+",'"+rs.pais_desc+"');\">"+rs.pais_descripcion+"</li>";
+            lista += "<li class=\"list-group-item\" onclick=\"seleccionPais("+rs.id+",'"+rs.pais_desc+"');\">"+rs.pais_desc+"</li>";
         }
         lista += "</ul>";
         $("#listaPaises").html(lista);
@@ -270,9 +270,9 @@ function buscarPaises(){
     })
 }
 
-function seleccionPais(pais_id, pais_descripcion){
+function seleccionPais(pais_id, pais_desc){
     $("#pais_id").val(pais_id);
-    $("#pais_descripcion").val(pais_descripcion);
+    $("#pais_desc").val(pais_desc);
 
     $("#listaPaises").html("");
     $("#listaPaises").attr("style","display:none;");

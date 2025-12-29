@@ -335,7 +335,7 @@
                                 <ul class="ml-menu"> 
                                     <li>
                                         <a href="referenciales/ventas/clientes">
-                                            <span>Clientes(pend)</span>
+                                            <span>Clientes</span>
                                         </a>
                                         <a href="referenciales/ventas/tipo_facturas">
                                             <span>Tipo de Facturas</span>

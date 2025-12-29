@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>GUI ORDEN DE PAGO</title>
+    <title>GUI ENTREGA DE CHEQUES</title>
     <!-- Favicon-->
     <link rel="icon" href="../../../favicon.ico" type="image/x-icon">
 
@@ -53,16 +53,17 @@
                     
                     <div class="card">
                         <div class="header">
-                            <h2>Gestionar Ordenes de Pagos <small>CRUD de Ordenes de Pagos y sus detalles</small> </h2>
+                            <h2>Registrar Entrega de Cheques <small>CRUD de Entrega de Cheques y sus detalles</small> </h2>
                         </div>
                         <div class="body">
                             <div class="row clearfix">
                                 <input type="hidden" value="0" id="txtOperacion"/>
+                                <input type="hidden" id="orden_pago_id" value="0">
                                 <input type="hidden" value="1" id="user_id"/>
                                 <input type="hidden" value="0" id="user_name"/>
-                                <input type="hidden" id="orden_pago_estado" value="PENDIENTE"/>
-                                <!-- CAMPO PARA CODIGO CON 4 COLUMNAS -->
-                                <div class="col-sm-4">
+                                <input type="hidden" id="pag_cheq_estado" value="ENTREGADO">
+                                <!-- CAMPO PARA CODIGO CON 3 COLUMNAS -->
+                                <div class="col-sm-3">
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="text" id="id" class="form-control" disabled>
@@ -70,8 +71,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA EMPRESA CON 4 COLUMNAS -->
-                                <div class="col-sm-4">
+                                <!-- CAMPO PARA EMPRESA CON 3 COLUMNAS -->
+                                <div class="col-sm-3">
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="hidden" id="empresa_id" value="0"/>
@@ -81,8 +82,8 @@
                                         <div id="listaEmpresas" style="display:none;"></div>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA SUCURSAL CON 4 COLUMNAS -->
-                                <div class="col-sm-4">
+                                <!-- CAMPO PARA SUCURSAL CON 3 COLUMNAS -->
+                                <div class="col-sm-3">
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="hidden" id="sucursal_id" value="0"/>
@@ -92,8 +93,8 @@
                                         <div id="listaSucursales" style="display:none;"></div>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA BUSCAR PROVEEDOR CON 4 COLUMNAS -->
-                                <div class="col-sm-4">
+                                <!-- CAMPO PARA BUSCAR PROVEEDOR CON 3 COLUMNAS -->
+                                <div class="col-sm-3">
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="hidden" id="proveedor_id" value="0"/>
@@ -103,130 +104,152 @@
                                         <div id="listaProveedores" style="display:none;"></div>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA FECHA CON 4 COLUMNAS -->
-                                <div class="col-sm-4">
+                                <!-- CAMPO PARA CARGAR OBSERVACION CON 6 COLUMNAS -->
+                                <div class="col-sm-6">
                                     <div class="form-group form-float">
                                         <div class="form-line">
-                                            <input type="text" id="txtFecha" class="datetimepicker form-control" disabled>
-                                            <label class="form-label">Fecha</label>
+                                            <input type="text" id="observacion" class="form-control" disabled>
+                                            <label class="form-label">Observación</label>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA FECHA APROBACION CON 4 COLUMNAS -->
-                                <div class="col-sm-4">
+                                <!-- CAMPO PARA FECHA CON 3 COLUMNAS -->
+                                <div class="col-sm-3">
                                     <div class="form-group form-float">
                                         <div class="form-line">
-                                            <input type="text" id="txtFecAprob" class="datetimepicker form-control" disabled>
-                                            <label class="form-label">Fecha Aprobación</label>
+                                            <input type="text" id="fecha_entrega" class="datetimepicker form-control" disabled>
+                                            <label class="form-label">Fecha Entrega</label> 
                                         </div>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA FORMA DE PAGO CON 4 COLUMNAS LISTA DESPLEGABLE -->
-                                <div class="col-sm-4">
-                                    <label class="form-label" style="font-weight: normal; font-size: 13px; color: #555;">
-                                        Forma de Pago
-                                    </label>
+                                <!-- CAMPO PARA MOSTRAR ESTADO CON 3 COLUMNAS -->
+                                <div class="col-sm-3">
                                     <div class="form-group form-float">
                                         <div class="form-line">
-                                            <select id="forma_cobro_id" class="form-control selectpicker" disabled>
-                                                <option value="">-- Selecciona Forma de Pago --</option>
-                                            </select>
+                                            <input type="text" id="estado" class="form-control" disabled>
+                                            <label class="form-label">Estado</label>
                                         </div>
                                     </div>
                                 </div>
                             </div>    
+                            <hr>
+                            <h4>Datos del Cheque</h4>
+                            <div class="row clearfix">
 
+                                <div class="col-sm-3">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="hidden" id="cta_bancaria_id">
+                                            <input type="text" id="cta_banc_desc" class="form-control" disabled>
+                                            <label class="form-label">Cuenta Bancaria</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="hidden" id="titular_id">
+                                            <input type="text" id="titular_desc" class="form-control" disabled>
+                                            <label class="form-label">Titular</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="text" id="mov_banc_nro_ref" class="form-control" disabled>
+                                            <label class="form-label">Nro. Cheque</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="text" id="mov_banc_fec_emision" class="datetimepicker form-control" disabled>
+                                            <label class="form-label">Fec. Emisión</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="text" id="mov_banc_fec_valor" class="datetimepicker form-control" disabled>
+                                            <label class="form-label">Fec. Pago</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="text" id="mov_banc_monto" class="form-control" disabled>
+                                            <label class="form-label">Monto</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <h4>Registro de Entrega</h4>
+                            <div class="row clearfix">
+                                <div class="col-sm-4">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="text" id="retira_nombre" class="form-control" disabled>
+                                            <label class="form-label">Recibido por</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="text" id="retira_ci" class="form-control" disabled>
+                                            <label class="form-label">CI</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="text" id="retira_telefono" class="form-control" disabled>
+                                            <label class="form-label">Teléfono</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="button-demo">
                                 <button type="button" id="btnAgregar" class="btn btn-success waves-effect" onclick="agregar();">AGREGAR</button>
-                                <button type="button" id="btnEditar" class="btn btn-primary waves-effect" onclick="editar();" disabled>EDITAR</button>
                                 <button type="button" id="btnAnular" class="btn btn-danger waves-effect" onclick="anular();"disabled>ANULAR</button>
-                                <button type="button" id="btnRechazar" class="btn btn-danger waves-effect" onclick="rechazar();"disabled>RECHAZAR</button>
-                                <button type="button" id="btnAprobar" class="btn btn-success waves-effect" onclick="aprobar();"disabled>APROBAR</button>
                                 <button type="button" id="btnConfirmar" class="btn btn-success waves-effect" onclick="confirmar();"disabled>CONFIRMAR</button>
                                 <button type="button" id="btnGrabar" class="btn btn-default waves-effect" disabled onclick="confirmarOperacion();">GRABAR</button>
                                 <button type="button" id="btnCancelar" class="btn btn-warning waves-effect" onclick="cancelar();" disabled>CANCELAR</button> 
                             </div>
                         </div>
-                        <!-- CARD PARA CUOTAS PENDIENTES DEL PROVEEDOR -->
-                        <div class="card" id="detalles" style="display:none"> <!-- ver luego esta parte-->
-                            <div class="header">
-                                <h2>Detalles de la Orden de Pago</h2>
-                                <small>Cuotas pendientes del proveedor</small>
-                            </div>
-                            <div class="body">
-                                <!-- Control de operación de detalle -->
-                                <input type="hidden" value="0" id="txtOperacionDetalle" />
-                                <input type="hidden" value="" id="tipoProveedor" /> <!-- COMPRA / GASTO -->
-
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-striped table-hover dataTable">
-                                        <thead>
-                                            <tr style="background-color:#e6e6e6;">
-                                                <th>Documento</th>
-                                                <th>Cuota</th>
-                                                <th>Vencimiento</th>
-                                                <th class="text-right">Monto</th>
-                                                <th class="text-right">Saldo</th>
-                                                <th class="text-center">Acción</th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody id="tableDetalles">
-                                            <!-- 
-                                                Se cargan dinámicamente las cuotas pendientes
-                                                (compras o gastos, nunca ambas)
-                                            -->
-                                        </tbody>
-
-                                        <tfoot>
-                                            <tr style="background-color:#f5f5f5;">
-                                                <th colspan="4" class="text-right">TOTAL A PAGAR</th>
-                                                <th class="text-right" id="totalPagar">0</th>
-                                                <th></th>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            </div> 
-                        </div>
+            
                         <!-- CARD PARA LOS REGISTROS DE ORDENES DE PAGOS -->
                         <div class="card" id="registros">
                             <div class="header">
-                                <h2>Registros de Ordenes de Pagos</h2>
+                                <h2>Registros de Entrega de Cheques</h2>
                             </div>
                             <div class="body">
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-striped table-hover dataTable js-exportable">
                                         <thead>
                                             <tr style="background-color: #e6e6e6;">
-                                                <th>Código</th>
-                                                <th>Empresa</th>
-                                                <th>Sucursal</th>
+                                                <th>Orden Pago</th>
                                                 <th>Proveedor</th>
-                                                <th>Fecha</th>
-                                                <th>Fecha Aprobación</th>
-                                                <th>Forma de Pago</th>
-                                                <th>Usuario</th>
+                                                <th>Nro Cheque</th>
+                                                <th>Monto</th>
+                                                <th>Fecha Entrega</th>
                                                 <th>Estado</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="tableBody">
-                                            
-                                        </tbody>
-                                        <tfoot>
-                                            <tr style="background-color: #e6e6e6;">
-                                                <th>Código</th>
-                                                <th>Empresa</th>
-                                                <th>Sucursal</th>
-                                                <th>Proveedor</th>
-                                                <th>Fecha</th>
-                                                <th>Fecha Aprobación</th>
-                                                <th>Factura</th>
-                                                <th>Forma de Pago</th>
-                                                <th>Usuario</th>
-                                                <th>Estado</th>
-                                            </tr>
-                                        </tfoot>    
+                                        <tbody id="tableBody"> </tbody>  
                                     </table>
                                 </div>
                             </div>
