@@ -53,33 +53,45 @@ function agregar() {
     $("#txtOperacion").val(1);
     $("#id").val(0);
 
-    habilitarCampos();
+    // habilitar SOLO buscadores + campos editables
+    $("#orden_pago_buscar").removeAttr("disabled");
+    $("#cta_buscar").removeAttr("disabled");
 
-    deshabilitarBotones();
+    $("#observacion").removeAttr("disabled");
+    $("#fecha_entrega").removeAttr("disabled");
+
+    $("#mov_banc_nro_ref").removeAttr("disabled");
+    $("#mov_banc_fec_emision").removeAttr("disabled");
+    $("#mov_banc_fec_valor").removeAttr("disabled");
+    $("#mov_banc_monto").removeAttr("disabled");
+
+    $("#retira_nombre").removeAttr("disabled");
+    $("#retira_ci").removeAttr("disabled");
+    $("#retira_telefono").removeAttr("disabled");
+
+    // botones
+    $("#btnAgregar").attr("disabled","true");
+    $("#btnAnular").attr("disabled","true");
+    $("#btnConfirmar").attr("disabled","true");
+
     $("#btnGrabar").removeAttr("disabled");
     $("#btnCancelar").removeAttr("disabled");
 
     $("#registros").attr("style", "display:none;");
     $(".form-line").attr("class", "form-line focused");
-    
-}
 
-function editar() {
-    $("#txtOperacion").val(2);
-    habilitarCampos();
-
-    deshabilitarBotones();
-    $("#btnGrabar").removeAttr("disabled");
-    $("#btnCancelar").removeAttr("disabled");
-
-    $(".form-line").attr("class", "form-line focused");
-    
+    // valores por defecto
+    $("#pag_cheq_estado").val("REGISTRADO");
+    $("#estado").val("REGISTRADO"); // informativo
 }
 
 function anular(){
     $("#txtOperacion").val(3);
 
-    deshabilitarBotones();
+    $("#btnAgregar").attr("disabled","true");
+    $("#btnAnular").attr("disabled","true");
+    $("#btnConfirmar").attr("disabled","true");
+
     $("#btnGrabar").removeAttr("disabled");
     $("#btnCancelar").removeAttr("disabled");
 }
@@ -87,7 +99,10 @@ function anular(){
 function confirmar(){
     $("#txtOperacion").val(4);
 
-    deshabilitarBotones();
+    $("#btnAgregar").attr("disabled","true");
+    $("#btnAnular").attr("disabled","true");
+    $("#btnConfirmar").attr("disabled","true");
+
     $("#btnGrabar").removeAttr("disabled");
     $("#btnCancelar").removeAttr("disabled");
 }
@@ -130,106 +145,212 @@ function mensajeOperacion(titulo,mensaje,tipo) {
 
 function listar(){
     $.ajax({
-        url:getUrl()+"pago_cheques/read",
-        method:"GET",
+        url: getUrl() + "pago_cheques/read",
+        method: "GET",
         dataType: "json"
     })
     .done(function(res){
-        let html="";
-        for(let r of res){
-            html += `<tr onclick="seleccionar(${r.id},
-                '${r.cta_desc}','${r.mov_banc_tipo}','${r.mov_banc_nro}',
-                ${r.monto},'${r.retira_nombre}','${r.retira_ci}',
-                '${r.fecha_entrega}','${r.estado}','${r.observacion||''}')">
-                <td>${r.id}</td>
-                <td>${r.cta_desc}</td>
-                <td>${r.mov_banc_tipo}</td>
-                <td>${r.mov_banc_nro}</td>
-                <td>${r.monto}</td>
-                <td>${r.retira_nombre}</td>
-                <td>${r.estado}</td>
+        let lista = "";
+
+        for (let rs of res){
+
+            lista += `
+            <tr class="item-list"
+                onclick="seleccionPagoCheque(
+                    ${rs.orden_pago_id},
+                    ${rs.empresa_id}, '${rs.empresa_desc}',
+                    ${rs.sucursal_id}, '${rs.suc_desc}',
+                    ${rs.proveedor_id}, '${rs.proveedor_desc}',
+                    ${rs.cta_bancaria_id}, '${rs.cta_banc_desc}',
+                    ${rs.titular_id}, '${rs.titular_desc}',
+                    ${rs.mov_bancario_id},
+                    '${rs.mov_banc_nro_ref}',
+                    '${rs.mov_banc_fec_emision}',
+                    '${rs.mov_banc_fec_valor}',
+                    ${rs.mov_banc_monto},
+                    '${rs.observacion || ''}',
+                    '${rs.fecha_entrega}',
+                    '${rs.pag_cheq_estado}',
+                    '${rs.retira_nombre || ''}',
+                    '${rs.retira_ci || ''}',
+                    '${rs.retira_telefono || ''}'
+                );">
+                <td>${rs.orden_pago_desc}</td>
+                <td>${rs.proveedor_desc}</td>
+                <td>${rs.mov_banc_nro_ref}</td>
+                <td class="text-right">${rs.mov_banc_monto}</td>
+                <td>${rs.fecha_entrega}</td>
+                <td>${rs.pag_cheq_estado}</td>
             </tr>`;
         }
-        $("#tableBody").html(html);
+
+        $("#tableBody").html(lista);
         formatoTabla();
     })
-    .fail(function(a,b,c){
-        alert(c);
+    .fail(function(a){
         console.log(a.responseText);
-    })
+        swal("Error","No se pudo listar los registros","error");
+    });
 }
-function seleccionar(id, cta_desc, tipo, nro, monto, nombre, ci, fecha, estado, obs){
-    $("#id").val(id);
-    $("#cta_desc").val(cta_desc);
-    $("#mov_banc_tipo").val(tipo);
-    $("#mov_banc_nro").val(nro);
-    $("#monto").val(monto);
-    $("#retira_nombre").val(nombre);
-    $("#retira_ci").val(ci);
-    $("#fecha_entrega").val(fecha);
-    $("#observacion").val(obs);
-    $("#pag_cheq_estado").val(estado);
 
-    deshabilitarCampos();
-    deshabilitarBotones();
+function seleccionPagoCheque(
+    orden_pago_id,
+    empresa_id, empresa_desc,
+    sucursal_id, suc_desc,
+    proveedor_id, proveedor_desc,
+    cta_bancaria_id, cta_banc_desc,
+    titular_id, titular_desc,
+    mov_bancario_id,
+    mov_banc_nro_ref, mov_banc_fec_emision, mov_banc_fec_valor, mov_banc_monto,
+    observacion, fecha_entrega, pag_cheq_estado,
+    retira_nombre, retira_ci, retira_telefono
+){
+    // IDs clave
+    $("#orden_pago_id").val(orden_pago_id);
+    $("#mov_bancario_id").val(mov_bancario_id);
 
+    // Orden de pago (informativo)
+    $("#orden_pago_buscar").val(orden_pago_id);
+
+    $("#empresa_id").val(empresa_id);
+    $("#empresa_desc").val(empresa_desc);
+
+    $("#sucursal_id").val(sucursal_id);
+    $("#suc_desc").val(suc_desc);
+
+    $("#proveedor_id").val(proveedor_id);
+    $("#proveedor_desc").val(proveedor_desc);
+
+    // Cuenta / Titular
+    $("#cta_bancaria_id").val(cta_bancaria_id);
+    $("#cta_banc_desc").val(cta_banc_desc);
+
+    $("#titular_id").val(titular_id);
+    $("#titular_desc").val(titular_desc);
+
+    $("#cta_buscar").val(cta_banc_desc + " - " + titular_desc);
+
+    // Cheque
+    $("#mov_banc_nro_ref").val(mov_banc_nro_ref);
+    $("#mov_banc_fec_emision").val(mov_banc_fec_emision);
+    $("#mov_banc_fec_valor").val(mov_banc_fec_valor);
+    $("#mov_banc_monto").val(mov_banc_monto);
+
+    // Observación
+    $("#observacion").val(observacion);
+
+    // Entrega
+    $("#fecha_entrega").val(fecha_entrega);
+    $("#retira_nombre").val(retira_nombre);
+    $("#retira_ci").val(retira_ci);
+    $("#retira_telefono").val(retira_telefono);
+
+    // Estado
+    $("#pag_cheq_estado").val(pag_cheq_estado);
+    $("#estado").val(pag_cheq_estado);
+
+    // UI
+    $("#registros").hide();
     $("#btnCancelar").removeAttr("disabled");
 
-    if(estado === "PENDIENTE"){
-        $("#btnEditar").removeAttr("disabled");
+    $("#btnAgregar").prop("disabled", true);
+    $("#btnGrabar").prop("disabled", true);
+    $("#btnAnular").prop("disabled", true);
+    $("#btnConfirmar").prop("disabled", true);
+
+    if (pag_cheq_estado === "REGISTRADO") {
         $("#btnAnular").removeAttr("disabled");
         $("#btnConfirmar").removeAttr("disabled");
     }
 
-    $("#registros").hide();
+    $(".form-line").addClass("focused");
 }
 
 function grabar(){
+
+    if (Number($("#orden_pago_id").val()) === 0){
+        swal("Atención","Debe seleccionar una Orden de Pago confirmada","warning");
+        return;
+    }
+    if (!$("#cta_bancaria_id").val() || !$("#titular_id").val()){
+        swal("Atención","Debe seleccionar Cuenta Bancaria y Titular","warning");
+        return;
+    }
+    if (!$("#mov_banc_nro_ref").val()){
+        swal("Atención","Debe ingresar el Nro. de Cheque","warning");
+        return;
+    }
+    if (!$("#mov_banc_monto").val() || Number($("#mov_banc_monto").val()) <= 0){
+        swal("Atención","Debe ingresar el Monto","warning");
+        return;
+    }
+
     var endpoint = "pago_cheques/create";
     var metodo = "POST";
-    var estado = "PENDIENTE";
-    
-    if($("#txtOperacion").val()==2){
-        endpoint = "pago_cheques/update/"+$("#id").val();
-        metodo = "PUT";
-    }
+    var pag_estado = $("#pag_cheq_estado").val() || "ENTREGADO";
+    var mov_estado = "REGISTRADO";
+
     if($("#txtOperacion").val()==3){
         endpoint = "pago_cheques/anular/"+$("#id").val();
         metodo = "PUT";
-        estado = "ANULADO";
+        pag_estado = "ANULADO";
+        mov_estado = "ANULADO";
     }
     if($("#txtOperacion").val()==4){
-        endpoint = "pago_cheques/confirmar/"+$("#id").val();
+        endpoint = "pago_cheques/confirmar/" +$("#orden_pago_id").val() + "/" +$("#mov_bancario_id").val();
         metodo = "PUT";
-        estado = "CONFIRMADO";
+        pag_estado = "ENTREGADO";
+        mov_estado = "CONFIRMADO";
     } 
+
+    // Pago con cheque = DEBITO
+    let monto = Number($("#mov_banc_monto").val()) || 0;
+
     $.ajax({
         url:getUrl()+endpoint,
         method:metodo,
         dataType: "json",
         data: { 
-            id: $("#id").val(),
-            cta_id: $("#cta_id").val(),
-            mov_banc_tipo: $("#mov_banc_tipo").val(),
-            mov_banc_nro: $("#mov_banc_nro").val(),
-            monto: $("#monto").val(),
+            //PAGO CHEQUES
+            orden_pago_id: $("#orden_pago_id").val(),
+            pag_cheq_estado: pag_estado,
+            fecha_entrega: $("#fecha_entrega").val(),
             retira_nombre: $("#retira_nombre").val(),
             retira_ci: $("#retira_ci").val(),
-            fecha_entrega: $("#fecha_entrega").val(),
-            observacion: $("#observacion").val(),
-            estado: estado,
-            'operacion': $("#txtOperacion").val()
+            retira_telefono: $("#retira_telefono").val(),
+
+            // mov_bancarios
+            cta_bancaria_id: $("#cta_bancaria_id").val(),
+            titular_id: $("#titular_id").val(),
+            sucursal_id: $("#sucursal_id").val(),
+            user_id: $("#user_id").val(),
+            mov_banc_estado: mov_estado,
+            mov_banc_tipo: "CHEQUE",
+            mov_banc_nro_ref: $("#mov_banc_nro_ref").val(),
+            mov_banc_fecha: $("#fecha_entrega").val(),         // registro del movimiento
+            mov_banc_fec_emision: $("#mov_banc_fec_emision").val(),
+            mov_banc_fec_valor: $("#mov_banc_fec_valor").val(),
+            mov_banc_monto_debito: monto,
+            mov_banc_monto_credito: 0,
+            observacion: $("#observacion").val()
         }
     })
     .done(function(resp){
-        swal("Resultado", resp.mensaje, resp.tipo, function(){
-            location.reload(true);
+        swal({
+            title:"Respuesta",
+            text: resp.mensaje,
+            type: resp.tipo
+        }, function(){
+            if(resp.tipo === "success"){
+                location.reload(true);
+            }
         });
     })
     .fail(function(a,b,c){
         alert(c);
         console.log(a.responseText);
-    })
+        swal("Error","No se pudo completar la operación","error");
+    });
 }
 
 function campoFecha(){
@@ -240,19 +361,104 @@ function campoFecha(){
     });
 }
 
-function habilitarCampos(){
-    $("#cta_desc,#mov_banc_tipo,#mov_banc_nro,#monto,#retira_nombre,#retira_ci,#fecha_entrega,#observacion")
-        .removeAttr("disabled");
+function buscarOrdenesPago(){
+    $.ajax({
+        url: getUrl() + "orden_pago_cab/buscar",
+        method: "POST",
+        dataType: "json",
+        data:{
+            user_id: $("#user_id").val(),
+            proveedor: $("#orden_pago_buscar").val()
+        }
+    })
+    .done(function(res){
+        let lista = "<ul class='list-group'>";
+        for (let r of res){
+            lista += `<li class="list-group-item"
+                onclick="seleccionOrdenPago(
+                    ${r.id},
+                    ${r.empresa_id}, '${r.empresa_desc}',
+                    ${r.sucursal_id}, '${r.suc_desc}',
+                    ${r.proveedor_id}, '${r.proveedor_desc}',
+                    '${r.orden_pago_estado}',
+                    ${r.total_pagar}
+                );">
+                ${r.orden}
+            </li>`;
+        }
+        lista += "</ul>";
+        $("#listaOrdenesPago").html(lista).css({display:'block', position:'absolute', zIndex:2000});
+    })
+    .fail(function(a){
+        console.log(a.responseText);
+    });
 }
 
-function deshabilitarCampos(){
-    $("#cta_desc,#mov_banc_tipo,#mov_banc_nro,#monto,#retira_nombre,#retira_ci,#fecha_entrega,#observacion")
-        .attr("disabled","true");
+function seleccionOrdenPago(id, empresa_id, empresa_desc, sucursal_id, suc_desc, proveedor_id, proveedor_desc, estado, total){
+
+    $("#orden_pago_id").val(id);
+
+    $("#empresa_id").val(empresa_id);
+    $("#empresa_desc").val(empresa_desc);
+
+    $("#sucursal_id").val(sucursal_id);
+    $("#suc_desc").val(suc_desc);
+
+    $("#proveedor_id").val(proveedor_id);
+    $("#proveedor_desc").val(proveedor_desc);
+
+    $("#estado").val("ENTREGADO"); // estado del pago_cheque
+
+    // sugerir monto desde la orden
+    if (!$("#mov_banc_monto").val()){
+        $("#mov_banc_monto").val(total);
+    }
+
+    $("#listaOrdenesPago").hide();
 }
 
-function deshabilitarBotones(){
-    $("#btnAgregar,#btnEditar,#btnAnular,#btnConfirmar,#btnGrabar")
-        .attr("disabled","true");
+function buscarCtasTitulares(){
+    $.ajax({
+        url: getUrl()+"cta_titular/buscar",
+        method:"POST",
+        dataType:"json",
+        data:{ texto: $("#cta_buscar").val() }
+    })
+    .done(function(res){
+        let lista = "<ul class='list-group'>";
+        for (let r of res){
+            // texto mostrado
+            let texto = (r.cta_banc_desc||'') + " - " + (r.titular_desc||'');
+            lista += `<li class="list-group-item"
+                onclick="seleccionCtaTitular(
+                    ${r.cta_bancaria_id},
+                    '${r.cta_banc_desc}',
+                    ${r.titular_id},
+                    '${r.titular_desc}'
+                );">
+                ${texto}
+            </li>`;
+        }
+        lista += "</ul>";
+        $("#listaCtas").html(lista);
+        $("#listaCtas").attr("style","display:block; position:absolute; z-index:2000;");
+    })
+    .fail(function(a,b,c){
+        alert(c);
+        console.log(a.responseText);
+    });
+}
+
+function seleccionCtaTitular(cta_bancaria_id, cta_banc_desc, titular_id, titular_desc){
+    $("#cta_bancaria_id").val(cta_bancaria_id);
+    $("#cta_banc_desc").val(cta_banc_desc);
+
+    $("#titular_id").val(titular_id);
+    $("#titular_desc").val(titular_desc);
+
+    $("#listaCtas").html("");
+    $("#listaCtas").attr("style","display:none;");
+    $(".form-line").attr("class","form-line focused");
 }
 
 function listarDetalles() {

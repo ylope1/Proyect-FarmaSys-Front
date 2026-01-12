@@ -59,9 +59,10 @@
                             <div class="row clearfix">
                                 <input type="hidden" value="0" id="txtOperacion"/>
                                 <input type="hidden" id="orden_pago_id" value="0">
+                                <input type="hidden" id="mov_bancario_id" value="0">
                                 <input type="hidden" value="1" id="user_id"/>
                                 <input type="hidden" value="0" id="user_name"/>
-                                <input type="hidden" id="pag_cheq_estado" value="ENTREGADO">
+                                <input type="hidden" id="pag_cheq_estado" value="REGISTRADO">
                                 <!-- CAMPO PARA CODIGO CON 3 COLUMNAS -->
                                 <div class="col-sm-3">
                                     <div class="form-group form-float">
@@ -69,6 +70,16 @@
                                             <input type="text" id="id" class="form-control" disabled>
                                             <label class="form-label">Código</label>
                                         </div>
+                                    </div>
+                                </div>
+                                <!-- BUSCADOR ORDEN DE PAGO (CONFIRMADA) -->
+                                <div class="col-sm-3">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="text" id="orden_pago_buscar" class="form-control" disabled onkeyup="buscarOrdenesPago();">
+                                            <label class="form-label">Orden de Pago</label>
+                                        </div>
+                                        <div id="listaOrdenesPago" style="display:none;"></div>
                                     </div>
                                 </div>
                                 <!-- CAMPO PARA EMPRESA CON 3 COLUMNAS -->
@@ -135,7 +146,17 @@
                             <hr>
                             <h4>Datos del Cheque</h4>
                             <div class="row clearfix">
-
+                                <!-- BUSCADOR CUENTA BANCARIA / TITULAR -->
+                                <div class="col-sm-4">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="text" id="cta_buscar" class="form-control" disabled onkeyup="buscarCtasTitulares();">
+                                            <label class="form-label">Buscar Cuenta / Titular</label>
+                                        </div>
+                                        <div id="listaCtas" style="display:none;"></div>
+                                    </div>
+                                </div>
+                                <!-- CAMPO PARA CUENTA BANCARIA -->
                                 <div class="col-sm-3">
                                     <div class="form-group form-float">
                                         <div class="form-line">
@@ -145,7 +166,7 @@
                                         </div>
                                     </div>
                                 </div>
-
+                                <!-- CAMPO PARA TITULAR -->
                                 <div class="col-sm-3">
                                     <div class="form-group form-float">
                                         <div class="form-line">
@@ -155,7 +176,7 @@
                                         </div>
                                     </div>
                                 </div>
-
+                                <!-- CAMPO PARA CARGAR DE FORMA MANUAL NRO DE CHEQUE -->
                                 <div class="col-sm-2">
                                     <div class="form-group form-float">
                                         <div class="form-line">
