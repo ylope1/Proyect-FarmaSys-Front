@@ -158,8 +158,9 @@
                                                 <th>Empresa</th>
                                                 <th>Sucursal</th>
                                                 <th>Responsable</th>
-                                                <th>Monto</th>
                                                 <th>Fecha</th>
+                                                <th>Monto</th>
+                                                <th>Observación</th>
                                                 <th>Estado</th>
                                                 <th>Usuario</th>
                                             </tr>
@@ -173,8 +174,9 @@
                                                 <th>Empresa</th>
                                                 <th>Sucursal</th>
                                                 <th>Responsable</th>
-                                                <th>Monto</th>
                                                 <th>Fecha</th>
+                                                <th>Monto</th>
+                                                <th>Observación</th>
                                                 <th>Estado</th>
                                                 <th>Usuario</th>
                                             </tr>

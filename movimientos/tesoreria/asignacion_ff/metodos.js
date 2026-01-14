@@ -169,7 +169,7 @@ function listar(){
     .done(function(resultado){
         var lista = "";
         for(rs of resultado){
-            lista = lista + "<tr class=\"item-list\" onclick=\"seleccionAsignacion("+rs.id+","+rs.empresa_id+",'"+rs.empresa_desc+"',"+rs.sucursal_id+",'"+rs.suc_desc+"',"+rs.proveedor_id+",'"+rs.proveedor_desc+"','"+rs.asignacion_ff_fecha+"',"+rs.asignacion_ff_monto+",'"+rs.asignacion_ff_obs+"','"+rs.asignacion_ff_estado+"',"+rs.user_id+",'"+rs.encargado+"');\">";
+            lista = lista + "<tr class=\"item-list\" onclick=\"seleccionAsignacion("+rs.id+","+rs.empresa_id+",'"+rs.empresa_desc+"',"+rs.sucursal_id+",'"+rs.suc_desc+"',"+rs.proveedor_id+",'"+rs.responsable+"','"+rs.asignacion_ff_fecha+"',"+rs.asignacion_ff_monto+",'"+rs.asignacion_ff_obs+"','"+rs.asignacion_ff_estado+"',"+rs.user_id+",'"+rs.encargado+"');\">";
                 lista = lista + "<td>";
                 lista = lista + rs.id;
                 lista = lista +"</td>";
@@ -180,7 +180,7 @@ function listar(){
                 lista = lista + rs.suc_desc;
                 lista = lista +"</td>";
                 lista = lista + "<td>";
-                lista = lista + rs.proveedor_desc;
+                lista = lista + rs.responsable;
                 lista = lista +"</td>";
                 lista = lista + "<td>";
                 lista = lista + rs.asignacion_ff_fecha;
@@ -207,14 +207,14 @@ function listar(){
         console.log(a.responseText);
     })
 }
-function seleccionCompra(id, empresa_id, empresa_desc, sucursal_id, suc_desc, proveedor_id, proveedor_desc, asignacion_ff_fecha, asignacion_ff_monto, asignacion_ff_obs, asignacion_ff_estado, user_id, encargado){ 
+function seleccionAsignacion(id, empresa_id, empresa_desc, sucursal_id, suc_desc, proveedor_id, responsable, asignacion_ff_fecha, asignacion_ff_monto, asignacion_ff_obs, asignacion_ff_estado, user_id, encargado){ 
     $("#id").val(id);
     $("#empresa_id").val(empresa_id);
     $("#empresa_desc").val(empresa_desc);   
     $("#sucursal_id").val(sucursal_id);
     $("#suc_desc").val(suc_desc);
     $("#proveedor_id").val(proveedor_id);
-    $("#proveedor_desc").val(proveedor_desc);
+    $("#proveedor_desc").val(responsable);
     $("#asignacion_ff_fecha").val(asignacion_ff_fecha);
     $("#asignacion_ff_monto").val(asignacion_ff_monto);
     $("#asignacion_ff_obs").val(asignacion_ff_obs);
@@ -225,14 +225,15 @@ function seleccionCompra(id, empresa_id, empresa_desc, sucursal_id, suc_desc, pr
     $("#btnAgregar").attr("disabled","true");
     $("#btnGrabar").attr("disabled","true");
     $("#btnCancelar").removeAttr("disabled");
+    $(".form-line").attr("class","form-line focused");
 
-    if(estado==="GENERADO"){
+    if(asignacion_ff_estado==="GENERADO"){
         $("#btnConfirmar").removeAttr("disabled");
     }
-    if(estado==="ACTIVO"){
+    if(asignacion_ff_estado==="ACTIVO"){
         $("#btnInactivar,#btnCerrar").removeAttr("disabled");
     }
-    if(estado==="INACTIVO"){
+    if(asignacion_ff_estado==="INACTIVO"){
         $("#btnActivar,#btnCerrar").removeAttr("disabled");
     }
     
@@ -241,25 +242,31 @@ function seleccionCompra(id, empresa_id, empresa_desc, sucursal_id, suc_desc, pr
 
     $(".form-line").attr("class","form-line focused");
 }
-//hasta aca ya hice debo continuar la funcion grabar
+
 function grabar(){
-    var endpoint = "compras_cab/create";
+    var endpoint = "asignacion_fondo_fijo/create";
     var metodo = "POST";
-    var estado = "PENDIENTE";
+    var estado = "GENERADO";
     
-    if($("#txtOperacion").val()==2){
-        endpoint = "compras_cab/update/"+$("#id").val();
+    if($("#txtOperacion").val()==5){
+        endpoint = "asignacion_fondo_fijo/inactivar/"+$("#id").val();
         metodo = "PUT";
+        estado = "INACTIVO";
     }
-    if($("#txtOperacion").val()==3){
-        endpoint = "compras_cab/anular/"+$("#id").val();
+    if($("#txtOperacion").val()==6){
+        endpoint = "asignacion_fondo_fijo/activar/"+$("#id").val();
         metodo = "PUT";
-        estado = "ANULADO";
+        estado = "ACTIVO";
+    }
+    if($("#txtOperacion").val()==7){
+        endpoint = "asignacion_fondo_fijo/cerrar/"+$("#id").val();
+        metodo = "PUT";
+        estado = "CERRADO";
     }
     if($("#txtOperacion").val()==4){
-        endpoint = "compras_cab/confirmar/"+$("#id").val();
+        endpoint = "asignacion_fondo_fijo/confirmar/"+$("#id").val();
         metodo = "PUT";
-        estado = "CONFIRMADO";
+        estado = "ACTIVO";
     } 
     $.ajax({
         url:getUrl()+endpoint,
@@ -267,38 +274,25 @@ function grabar(){
         dataType: "json",
         data: { 
             'id': $("#id").val(),
-            'orden_comp_id': ($("#orden_comp_id").val() === "0" || $("#orden_comp_id").val() === "") ? null : $("#orden_comp_id").val(),
-            'proveedor_id': $("#proveedor_id").val(),
             'user_id': $("#user_id").val(),
-            'sucursal_id': $("#sucursal_id").val(),
+            'proveedor_id': $("#proveedor_id").val(),
             'empresa_id': $("#empresa_id").val(),
-            'tipo_fact_id': $("input[name='tipo_fact_id']:checked").val(),
-            'compra_fact': $("#txtNroFact").val(),
-            'compra_timbrado': $("#txtTimbrado").val(),
-            'compra_fec': $("#txtFecha").val(), 
-            'compra_fec_recep': $("#txtFecRecep").val(),
-            'compra_cant_cta': $("#txtCantCta").val(),
-            'compra_ifv': $("#intervalo_fecha_vto").val(),    
-            'compra_estado': estado,
-            'deposito_id': $("#deposito_id").val(),
+            'sucursal_id': $("#sucursal_id").val(),
+            'asignacion_ff_fecha': $("#asignacion_ff_fecha").val(),
+            'asignacion_ff_monto': $("#asignacion_ff_monto").val(),
+            'asignacion_ff_obs': $("#asignacion_ff_obs").val(),  
+            'asignacion_ff_estado': estado,
             'operacion': $("#txtOperacion").val()
         }
     })
     .done(function(resultado){
         swal({
-            title:"Respuesta",
+            title: "Respuesta",
             text: resultado.mensaje,
             type: resultado.tipo
-        },
-        function(){
-            if(resultado.tipo == "success"){
-                //location.reload(true);
-                $("#id").val(resultado.registro.id);
-                $("#detalles").attr("style","display:block;");
-                listarDetalles();
-                if(resultado.registro.compra_estado!= "PENDIENTE"){
-                    location.reload(true);
-                }
+        }, function () {
+            if (resultado.tipo === "success") {
+                location.reload(true);
             }
         });
     })
