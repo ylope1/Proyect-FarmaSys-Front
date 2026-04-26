@@ -53,16 +53,16 @@
                     
                     <div class="card">
                         <div class="header">
-                            <h2>Registrar Rendición de Fondo Fijo <small>CRUD de Registro de Rendición de FF y sus detalles</small> </h2>
+                            <h2>Registrar Rendición de Fondo Fijo <small>CRUD de Registro de Rendición de Fondo Fijo y sus detalles</small> </h2>
                         </div>
                         <div class="body">
                             <div class="row clearfix">
                                 <input type="hidden" value="0" id="txtOperacion"/>
                                 <input type="hidden" value="1" id="user_id"/>
                                 <input type="hidden" value="0" id="user_name"/>
-                                <input type="hidden" value="PENDIENTE" id="compra_estado"/>
-                                <!-- CAMPO PARA CODIGO CON 3 COLUMNAS -->
-                                <div class="col-sm-3">
+                                <input type="hidden" value="REGISTRADO" id="rendicion_ff_estado"/>
+                                <!-- CAMPO PARA CODIGO CON 2 COLUMNAS -->
+                                <div class="col-sm-2">
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="text" id="id" class="form-control" disabled>
@@ -70,8 +70,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA EMPRESA CON 3 COLUMNAS -->
-                                <div class="col-sm-3">
+                                <!-- CAMPO PARA EMPRESA CON 5 COLUMNAS -->
+                                <div class="col-sm-5">
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="hidden" id="empresa_id" value="0"/>
@@ -81,8 +81,8 @@
                                         <div id="listaEmpresas" style="display:none;"></div>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA SUCURSAL CON 3 COLUMNAS -->
-                                <div class="col-sm-3">
+                                <!-- CAMPO PARA SUCURSAL CON 5 COLUMNAS -->
+                                <div class="col-sm-5">
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="hidden" id="sucursal_id" value="0"/>
@@ -92,18 +92,36 @@
                                         <div id="listaSucursales" style="display:none;"></div>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA DEPOSITO CON 3 COLUMNAS -->
+                                <!-- CAMPO PARA ASIGNACION CON 3 COLUMNAS -->
                                 <div class="col-sm-3">
                                     <div class="form-group form-float">
                                         <div class="form-line">
-                                            <input type="hidden" id="deposito_id" value="0"/>
-                                            <input type="text" id="deposito_desc" class="form-control" disabled onkeyup="buscarDepositos();">
-                                            <label class="form-label">Deposito</label>
+                                            <input type="hidden" id="asignacion_ff_id" value="0"/>
+                                            <input type="text" id="asignacion" class="form-control" disabled onkeyup="buscarAsignaciones();">
+                                            <label class="form-label">Asignación</label>
                                         </div>
-                                        <div id="listaDepositos" style="display:none;"></div>
+                                        <div id="listaAsignaciones" style="display:none;"></div>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA FECHA COMPRA CON 3 COLUMNAS -->
+                                <!-- CAMPO PARA RESPONSABLE CON 3 COLUMNAS -->
+                                <div class="col-sm-3">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="text" id="proveedor_desc" class="form-control" disabled>
+                                            <label class="form-label">Responsable</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- CAMPO PARA MONTO ASIGNADO CON 3 COLUMNAS -->
+                                <div class="col-sm-3">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="text" id="asignacion_ff_monto" class="form-control" disabled>
+                                            <label class="form-label">Monto Asignado</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- CAMPO PARA FECHA RENDICIÓN CON 3 COLUMNAS -->
                                 <div class="col-sm-3">
                                     <div class="form-group form-float">
                                         <div class="form-line">
@@ -112,101 +130,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA FECHA RECEPCION CON 3 COLUMNAS -->
-                                <div class="col-sm-3">
-                                    <div class="form-group form-float">
-                                        <div class="form-line">
-                                            <input type="text" id="txtFecRecep" class="datetimepicker form-control" disabled>
-                                            <label class="form-label">Fecha Recepción</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- CAMPO PARA BUSCAR PROVEEDOR CON 3 COLUMNAS -->
-                                <div class="col-sm-3">
-                                    <div class="form-group form-float">
-                                        <div class="form-line">
-                                            <input type="hidden" id="proveedor_id" value="0"/>
-                                            <input type="text" id="proveedor_desc" class="form-control" disabled onkeyup="buscarProveedores();">
-                                            <label class="form-label">Proveedor</label>
-                                        </div>
-                                        <div id="listaProveedores" style="display:none;"></div>
-                                    </div>
-                                </div>
-                                <!-- CAMPO PARA TIMBRADO CON 3 COLUMNAS -->
-                                <div class="col-sm-3">
-                                    <div class="form-group form-float">
-                                        <div class="form-line">
-                                            <input type="text" id="txtTimbrado" class="form-control" disabled>
-                                            <label class="form-label">Timbrado</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- CAMPO PARA NRO DE FACTURA CON 3 COLUMNAS -->
-                                <div class="col-sm-4">
-                                    <div class="form-group form-float">
-                                        <div class="form-line">
-                                            <input type="text" id="txtNroFact" class="form-control" disabled>
-                                            <label class="form-label">Nro. Factura</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- CAMPO PARA ELEGIR CONDICION DE COMPRA CON 3 COLUMNAS-->
-                                <div class="col-sm-5">
-                                    <h2 class="card-inside-title" style="font-weight: normal; font-size: 13px; color: #555;">Condición Compra</h2>
-                                    <div class="demo-radio-button">
-                                        <input name="tipo_fact_id" type="radio" id="contado" value="6" disabled checked onchange />
-                                        <label for="contado">Contado</label>
-                                        <input name="tipo_fact_id" type="radio" id="credito" value="7" disabled onchange />
-                                        <label for="credito">Crédito</label>
-                                    </div>
-                                </div>
-                                <!-- CAMPO PARA SELECCIONAR INTERVALO DE FECHA DE VTO CON 3 COLUMNAS ADAPTAR A LOS DATOS DE COMPRAS-->
-                                <div class="col-sm-3">
-                                    <label class="form-label" style="font-weight: normal; font-size: 13px; color: #555;">Intervalo Fecha Vto</label>
-                                    <div class="form-group form-float">
-                                        <div class="form-line">
-                                            <select id="intervalo_fecha_vto" class="form-control selectpicker">
-                                                <!-- Las opciones se generarán dinámicamente -->
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- CAMPO PARA CANTIDAD DE CUOTAS CON 3 COLUMNAS -->
-                                <div class="col-sm-2">
-                                    <div class="form-group form-float">
-                                        <div class="form-line">
-                                            <input type="text" id="txtCantCta" class="form-control" disabled>
-                                            <label class="form-label">Cant. Cuotas</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row clearfix">
-                                    <!-- CAMPO PARA ELEGIR ORDEN DE COMPRA  -->
-                                    <div class="col-sm-4">
-                                        <label class="card-inside-title" style="font-weight: normal; font-size: 13px; color: #555;">¿Tiene Orden de Compra?</label>
-                                        <div class="demo-radio-button">
-                                            <div>
-                                                <input type="radio" id="Con_Orden" name="orden_option" value="1" disabled>
-                                                <label for="Con_Orden">Sí</label>
-
-                                                <input type="radio" id="Sin_Orden" name="orden_option" value="0" disabled>
-                                                <label for="Sin_Orden">No</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                
-                                    <!-- CAMPO PARA BUSCAR ORDEN DE COMPRAS CON 3 COLUMNAS -->
-                                    <div class="col-sm-4">
-                                        <div class="form-group form-float">
-                                            <div class="form-line">
-                                                <input type="hidden" id="orden_comp_id" value="0"/>
-                                                <input type="text" id="orden" class="form-control" disabled onkeyup="buscarOrdenes();">
-                                                <label class="form-label">Orden Compra</label>
-                                            </div>
-                                            <div id="listaOrdenes" style="display:none;"></div>
-                                        </div>
-                                    </div>  
-                                </div> 
                                 <div class="col-sm-12">
                                     <div class="button-demo">
                                         <button type="button" id="btnAgregar" class="btn btn-success waves-effect" onclick="agregar();">AGREGAR</button>
@@ -222,7 +145,7 @@
 
                         <div class="card" id="detalles" style="display:none"> 
                             <div class="header">
-                                <h2>Detalles del Registro de Compra</h2>
+                                <h2>Detalles del Registro de Rendición de Fondo Fijo</h2>
                             </div>
                             <div class="body">
                                 <div class="row clearfix" id="formDetalles">
@@ -231,36 +154,27 @@
                                     <div class="col-sm-2">
                                         <div class="form-group form-float">
                                             <div class="form-line">
-                                                <input type="text" id="producto_id" class="form-control" disabled>
+                                                <input type="text" id="documento_id" class="form-control" disabled>
                                                 <label class="form-label">Código</label>
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- CAMPO PARA BUSCAR PRODUCTOS CON 4 COLUMNAS -->
+                                    <!-- CAMPO PARA BUSCAR DOCUMENTOS CON 4 COLUMNAS -->
                                     <div class="col-sm-4">
                                         <div class="form-group form-float">
                                             <div class="form-line">
-                                                <input type="text" id="prod_desc" class="form-control" disabled onkeyup="buscarProductos();">
-                                                <label class="form-label">Productos</label>
+                                                <input type="text" id="documento_desc" class="form-control" disabled onkeyup="buscarDocumentos();">
+                                                <label class="form-label">Documento</label>
                                             </div>
-                                            <div id="ListaProductos" style="display:none;"></div>
+                                            <div id="ListaDocumentos" style="display:none;"></div>
                                         </div>
                                     </div>
-                                    <!-- CAMPO PARA CANTIDAD CON 2 COLUMNAS -->
-                                    <div class="col-sm-2">
+                                    <!-- CAMPO PARA MONTO CON 4 COLUMNAS -->
+                                    <div class="col-sm-4">
                                         <div class="form-group form-float">
                                             <div class="form-line">
-                                                <input type="text" id="det_cantidad" class="form-control" disabled>
-                                                <label class="form-label">Cantidad</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- CAMPO PARA PRECIO COMPRA CON 2 COLUMNAS -->
-                                    <div class="col-sm-2">
-                                        <div class="form-group form-float">
-                                            <div class="form-line">
-                                                <input type="text" id="det_costo" class="form-control" disabled>
-                                                <label class="form-label">Precio Compra</label>
+                                                <input type="text" id="det_monto" class="form-control" disabled>
+                                                <label class="form-label">Monto</label>
                                             </div>
                                         </div>
                                     </div>
@@ -287,13 +201,8 @@
                                         <thead>
                                             <tr style="background-color: #e6e6e6;">
                                                 <th>Código</th>
-                                                <th>Producto</th>
-                                                <th>Cantidad</th>
-                                                <th>Precio Unitario</th>
-                                                <th>Exentas</th>
-                                                <th>5%</th>
-                                                <th>10%</th>
-                                                <th>Sub Total</th>
+                                                <th>Documento</th>
+                                                <th>Monto</th>
                                             </tr>
                                         </thead>
                                         <tbody id="tableDetalles">
@@ -301,11 +210,8 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th colspan="4">Total General</th>
-                                                <th class="text-right" id="txtTotalGral">0</th>
-                                                <th class="text-right">0</th> <!-- total exentas -->
-                                                <th class="text-right">0</th> <!-- total 5% -->
-                                                <th class="text-right">0</th> <!-- total 10% -->
+                                                <th colspan="2">Total a Pagar</th>
+                                                <th id="txtTotalGral">0</th>
                                             </tr>
                                         </tfoot>    
                                     </table>
@@ -314,7 +220,7 @@
                         </div>  
                         <div class="card" id="registros">
                             <div class="header">
-                                <h2>Registros de Compras</h2>
+                                <h2>Registros de Rendición de Fondo Fijo</h2>
                             </div>
                             <div class="body">
                                 <div class="table-responsive">
@@ -324,17 +230,12 @@
                                                 <th>Código</th>
                                                 <th>Empresa</th>
                                                 <th>Sucursal</th>
-                                                <th>Deposito</th>
-                                                <th>Fecha</th>
-                                                <th>Fecha Recepción</th>
-                                                <th>Proveedor</th>
-                                                <th>Nro. Factura</th>
-                                                <th>Condición Compra</th>
-                                                <th>Intervalo Fecha Vto</th>
-                                                <th>Cant. Cuotas</th>
-                                                <th>Orden</th>
+                                                <th>Asignación</th>
+                                                <th>Responsable</th>
+                                                <th>Monto Asignado</th>
+                                                <th>Fecha Rendición</th>
                                                 <th>Estado</th>
-                                                <th>Usuario</th>
+                                                <th>Encargado</th>
                                             </tr>
                                         </thead>
                                         <tbody id="tableBody">
@@ -345,17 +246,12 @@
                                                 <th>Código</th>
                                                 <th>Empresa</th>
                                                 <th>Sucursal</th>
-                                                <th>Deposito</th>
-                                                <th>Fecha</th>
-                                                <th>Fecha Recepción</th>
-                                                <th>Proveedor</th>
-                                                <th>Nro. Factura</th>
-                                                <th>Condición Compra</th>
-                                                <th>Intervalo Fecha Vto</th>
-                                                <th>Cant. Cuotas</th>
-                                                <th>Orden</th>
+                                                <th>Asignación</th>
+                                                <th>Responsable</th>
+                                                <th>Monto Asignado</th>
+                                                <th>Fecha Rendición</th>
                                                 <th>Estado</th>
-                                                <th>Usuario</th>
+                                                <th>Encargado</th>
                                             </tr>
                                         </tfoot>    
                                     </table>
