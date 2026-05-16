@@ -1,4 +1,5 @@
 listar();
+inicializarSelectPickers();
 function formatoTabla(){
     if ($.fn.DataTable.isDataTable('.js-exportable')) {
         $('.js-exportable').DataTable().destroy();
@@ -51,20 +52,37 @@ function cancelar(){
     location.reload(true);
 }
 
+function salir(){
+    swal({
+        title: "Salir",
+        text: "¿Desea salir de la ventana de productos?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonText: "SI",
+        cancelButtonText: "NO",
+        closeOnConfirm: true
+    }, function () {
+        window.location.href = "../../../menu.php";
+    });
+}
+
 function agregar(){
     $("#txtOperacion").val(1);
     $("#txtCodigo").val(0);
     $("#txtDescripcion").removeAttr("disabled");
     $("#txtPrecio_comp").removeAttr("disabled");
     $("#txtPrecio_vent").removeAttr("disabled");
-    $("#prov_descripcion").removeAttr("disabled");
-    $("#item_descripcion").removeAttr("disabled");
-    $("#imp_descripcion").removeAttr("disabled");
-
+    $("#proveedor_desc").removeAttr("disabled");
+    $("#item_desc").removeAttr("disabled");
+    $("#impuesto_desc").removeAttr("disabled");
+    $("#marca_desc").removeAttr("disabled");
+    $("#txtEstado").val("ACTIVO");
+    $('#txtEstado').selectpicker('refresh');
 
     $("#btnAgregar").attr("disabled","true");
     $("#btnEditar").attr("disabled","true");
     $("#btnEliminar").attr("disabled","true");
+    $("#btnSalir").attr("disabled","true");
 
     $("#btnGrabar").removeAttr("disabled");
     $("#btnCancelar").removeAttr("disabled");    
@@ -77,13 +95,20 @@ function editar(){
     $("#txtDescripcion").removeAttr("disabled");
     $("#txtPrecio_comp").removeAttr("disabled");
     $("#txtPrecio_vent").removeAttr("disabled");
-    $("#prov_descripcion").removeAttr("disabled");
-    $("#item_descripcion").removeAttr("disabled");
-    $("#imp_descripcion").removeAttr("disabled");
+    $("#proveedor_desc").removeAttr("disabled");
+    $("#item_desc").removeAttr("disabled");
+    $("#impuesto_desc").removeAttr("disabled");
+    $("#marca_desc").removeAttr("disabled");
+    // --- PARA EL CAMPO ESTADO ---
+    //$("#txtEstado").removeAttr("disabled");
+    //if (typeof $ !== "undefined" && typeof $('#txtEstado').selectpicker === "function") {
+    //    $('#txtEstado').selectpicker('refresh');
+    //}
 
     $("#btnAgregar").attr("disabled","true");
     $("#btnEditar").attr("disabled","true");
     $("#btnEliminar").attr("disabled","true");
+    $("#btnSalir").attr("disabled","true");
 
     $("#btnGrabar").removeAttr("disabled");
     $("#btnCancelar").removeAttr("disabled");    
@@ -97,7 +122,7 @@ function eliminar(){
     $("#btnAgregar").attr("disabled","true");
     $("#btnEditar").attr("disabled","true");
     $("#btnEliminar").attr("disabled","true");
-
+    $("#btnSalir").attr("disabled","true");
     $("#btnGrabar").removeAttr("disabled");
     $("#btnCancelar").removeAttr("disabled");
 }
@@ -113,7 +138,7 @@ function confirmarOperacion() {
     }
     if(oper===3){
         titulo = "ELIMINAR";
-        pregunta = "¿DESEA ELIMINAR EL REGISTRO SELECCIONADO?";
+        pregunta = "¿DESEA CAMBIAR EL ESTADO DEL REGISTRO A INACTIVO?";
     }
     swal({
         title: titulo,
@@ -142,7 +167,7 @@ function listar(){
     .done(function(resultado){
         var lista = "";
         for(rs of resultado){
-            lista = lista + "<tr class=\"item-list\" onclick=\"seleccionProducto("+rs.id+",'"+rs.prod_desc+"',"+rs.prod_precio_comp+","+rs.prod_precio_vent+","+rs.proveedor_id+",'"+rs.proveedor_desc+"',"+rs.item_id+",'"+rs.item_desc+"',"+rs.impuesto_id+",'"+rs.impuesto_desc+"');\">";
+            lista = lista + "<tr class=\"item-list\" onclick=\"seleccionProducto("+rs.id+",'"+rs.prod_desc+"',"+rs.prod_precio_comp+","+rs.prod_precio_vent+","+rs.proveedor_id+",'"+rs.proveedor_desc+"',"+rs.item_id+",'"+rs.item_desc+"',"+rs.impuesto_id+",'"+rs.impuesto_desc+"',"+rs.marca_id+",'"+rs.marca_desc+"','"+rs.prod_estado+"');\">";
                 lista = lista + "<td>";
                 lista = lista + rs.id;
                 lista = lista +"</td>";
@@ -164,6 +189,12 @@ function listar(){
                 lista = lista + "<td>";
                 lista = lista + rs.impuesto_desc;
                 lista = lista +"</td>";
+                lista = lista + "<td>";
+                lista = lista + rs.marca_desc;
+                lista = lista +"</td>";
+                lista = lista + "<td>";
+                lista = lista + rs.prod_estado;
+                lista = lista +"</td>";
             lista = lista + "</tr>";
         }
         $("#tableBody").html(lista);
@@ -174,18 +205,24 @@ function listar(){
     }) 
 }
 
-function seleccionProducto(codigo, descripcion, precio_comp, precio_vent, prov_id, prov_desc, item_id, item_descripcion, imp_id, imp_desc){
+function seleccionProducto(codigo, descripcion, precio_comp, precio_vent, proveedor_id, proveedor_desc, item_id, item_desc, impuesto_id, impuesto_desc, marca_id, marca_desc, prod_estado){
     $("#txtCodigo").val(codigo);
     $("#txtDescripcion").val(descripcion);
     $("#txtPrecio_comp").val(precio_comp);
     $("#txtPrecio_vent").val(precio_vent);
-    $("#prov_id").val(prov_id);
-    $("#prov_descripcion").val(prov_desc);
+    $("#proveedor_id").val(proveedor_id);
+    $("#proveedor_desc").val(proveedor_desc);
     $("#item_id").val(item_id);
-    $("#item_descripcion").val(item_descripcion);
-    $("#imp_id").val(imp_id);
-    $("#imp_descripcion").val(imp_desc);
-    
+    $("#item_desc").val(item_desc);
+    $("#impuesto_id").val(impuesto_id);
+    $("#impuesto_desc").val(impuesto_desc);
+    $("#marca_id").val(marca_id);
+    $("#marca_desc").val(marca_desc);
+    // --- MANEJO DEL SELECTPICKER ---
+    $("#txtEstado").val(prod_estado);
+    if (typeof $ !== "undefined" && typeof $('#txtEstado').selectpicker === "function") {
+        $('#txtEstado').selectpicker('refresh');
+    }
     $(".form-line").attr("class","form-line focused");
 }
 
@@ -209,9 +246,11 @@ function grabar(){
             'prod_desc': $("#txtDescripcion").val(),
             'prod_precio_comp': $("#txtPrecio_comp").val(),
             'prod_precio_vent': $("#txtPrecio_vent").val(),
-            'proveedor_id': $("#prov_id").val(),
+            'proveedor_id': $("#proveedor_id").val(),
             'item_id': $("#item_id").val(),
-            'impuesto_id': $("#imp_id").val(),
+            'impuesto_id': $("#impuesto_id").val(),
+            'marca_id': $("#marca_id").val(),
+            'prod_estado': $("#txtEstado").val(),  
             'operacion': $("#txtOperacion").val()
         }
 
@@ -235,17 +274,17 @@ function grabar(){
 }
 function buscarProveedores(){
     $.ajax({
-        url:"http://127.0.0.1:8000/api_taller/proveedore/search", 
+        url:"http://127.0.0.1:8000/api_taller/proveedore/buscar", 
         method:"POST",
         dataType: "json",
         data: {
-            'proveedor_desc': $("#prov_descripcion").val()
+            'proveedor_desc': $("#proveedor_desc").val()
         }
     })
     .done(function(resultado){
         var lista = "<ul class=\"list-group\">";
         for(rs of resultado){
-            lista += "<li class=\"list-group-item\" onclick=\"seleccionProveedor("+rs.id+",'"+rs.proveedor_desc+"');\">"+rs.prov_desc+"</li>";
+            lista += "<li class=\"list-group-item\" onclick=\"seleccionProveedor("+rs.id+",'"+rs.proveedor_desc+"');\">"+rs.proveedor_desc+"</li>";
         }
         lista += "</ul>";
         $("#listaProveedores").html(lista);
@@ -257,9 +296,9 @@ function buscarProveedores(){
     })
 }
 
-function seleccionProveedor(prov_id, prov_desc){
-    $("#prov_id").val(prov_id);
-    $("#prov_descripcion").val(prov_desc);
+function seleccionProveedor(proveedor_id, proveedor_desc){
+    $("#proveedor_id").val(proveedor_id);
+    $("#proveedor_desc").val(proveedor_desc);
 
     $("#listaProveedores").html("");
     $("#listaProveedores").attr("style","display:none;");
@@ -267,17 +306,17 @@ function seleccionProveedor(prov_id, prov_desc){
 
 function buscarItems(){
     $.ajax({
-        url:"http://127.0.0.1:8000/api_taller/item/search", 
+        url:"http://127.0.0.1:8000/api_taller/item/buscar", 
         method:"POST",
         dataType: "json",
         data: {
-            'item_desc': $("#item_descripcion").val()
+            'item_desc': $("#item_desc").val()
         }
     })
     .done(function(resultado){
         var lista = "<ul class=\"list-group\">";
         for(rs of resultado){
-            lista += "<li class=\"list-group-item\" onclick=\"seleccionItem("+rs.id+",'"+rs.item_desc+"');\">"+rs.item_descripcion+"</li>";
+            lista += "<li class=\"list-group-item\" onclick=\"seleccionItem("+rs.item_id+",'"+rs.item_desc+"');\">"+rs.item_desc+"</li>";
         }
         lista += "</ul>";
         $("#listaItems").html(lista);
@@ -289,9 +328,9 @@ function buscarItems(){
     })
 }
 
-function seleccionItem(item_id, item_descripcion){
+function seleccionItem(item_id, item_desc){
     $("#item_id").val(item_id);
-    $("#item_descripcion").val(item_descripcion);
+    $("#item_desc").val(item_desc);
 
     $("#listaItems").html("");
     $("#listaItems").attr("style","display:none;");
@@ -299,17 +338,17 @@ function seleccionItem(item_id, item_descripcion){
 
 function buscarImpuestos(){
     $.ajax({
-        url:"http://127.0.0.1:8000/api_taller/tipo_imp/search", 
+        url:"http://127.0.0.1:8000/api_taller/tipo_imp/buscar", 
         method:"POST",
         dataType: "json",
         data: {
-            'impuesto_desc': $("#imp_descripcion").val()
+            'impuesto_desc': $("#impuesto_desc").val()
         }
     })
     .done(function(resultado){
         var lista = "<ul class=\"list-group\">";
         for(rs of resultado){
-            lista += "<li class=\"list-group-item\" onclick=\"seleccionImpuesto("+rs.id+",'"+rs.impuesto_desc+"');\">"+rs.imp_desc+"</li>";
+            lista += "<li class=\"list-group-item\" onclick=\"seleccionImpuesto("+rs.impuesto_id+",'"+rs.impuesto_desc+"');\">"+rs.impuesto_desc+"</li>";
         }
         lista += "</ul>";
         $("#listaImpuestos").html(lista);
@@ -321,10 +360,51 @@ function buscarImpuestos(){
     })
 }
 
-function seleccionImpuesto(imp_id, imp_desc){
-    $("#imp_id").val(imp_id);
-    $("#imp_descripcion").val(imp_desc);
+function seleccionImpuesto(impuesto_id, impuesto_desc){
+    $("#impuesto_id").val(impuesto_id);
+    $("#impuesto_desc").val(impuesto_desc);
 
     $("#listaImpuestos").html("");
     $("#listaImpuestos").attr("style","display:none;");
+}
+
+function buscarMarcas(){
+    $.ajax({
+        url:"http://127.0.0.1:8000/api_taller/marca/buscar", 
+        method:"POST",
+        dataType: "json",
+        data: {
+            'marca_desc': $("#marca_desc").val()
+        }
+    })
+    .done(function(resultado){
+        var lista = "<ul class=\"list-group\">";
+        for(rs of resultado){
+            lista += "<li class=\"list-group-item\" onclick=\"seleccionMarca("+rs.id+",'"+rs.marca_desc+"');\">"+rs.marca_desc+"</li>";
+        }
+        lista += "</ul>";
+        $("#listaMarcas").html(lista);
+        $("#listaMarcas").attr("style","display:block; position:absolute; z-index:2000;");
+    })
+    .fail(function(a,b,c){
+        alert(c);
+        console.log(a.responseText);
+    })
+}
+
+function seleccionMarca(marca_id, marca_desc){
+    $("#marca_id").val(marca_id);
+    $("#marca_desc").val(marca_desc);
+
+    $("#listaMarcas").html("");
+    $("#listaMarcas").attr("style","display:none;");
+}
+
+function inicializarSelectPickers() {
+    if (typeof $.fn.selectpicker !== 'undefined') {
+        $('.selectpicker').selectpicker();
+        console.log('SelectPickers inicializados');
+    } else {
+        console.warn('Bootstrap Select no está cargado');
+    }
 }

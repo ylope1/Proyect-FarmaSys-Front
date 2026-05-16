@@ -283,47 +283,27 @@
                                 <ul class="ml-menu">
                                     <li>
                                         <a href="referenciales/compras/proveedores">
-                                            <span>Proveedores</span>
+                                            <span>Mantener Proveedores</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="referenciales/compras/productos">
-                                            <span>Productos</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="referenciales/compras/empresa">
-                                            <span>Empresa</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="referenciales/compras/sucursales">
-                                            <span>Sucursales</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="referenciales/compras/depositos">
-                                            <span>Depositos</span>
+                                            <span>Mantener Productos</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="referenciales/compras/tipo_impuesto">
-                                            <span>Tipos de Impuestos</span>
+                                            <span>Mantener Tipo Impuestos</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="referenciales/compras/marcas">
-                                            <span>Marcas</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="referenciales/compras/funcionarios">
-                                            <span>Funcionarios</span>
+                                            <span>Mantener Marcas</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="referenciales/compras/items">
-                                            <span>Items</span>
+                                            <span>Mantener Items</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -335,62 +315,62 @@
                                 <ul class="ml-menu"> 
                                     <li>
                                         <a href="referenciales/ventas/clientes">
-                                            <span>Clientes</span>
+                                            <span>Mantener Clientes</span>
                                         </a>
                                         <a href="referenciales/ventas/tipo_facturas">
-                                            <span>Tipo de Facturas</span>
+                                            <span>Mantener Tipo de Facturas</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="referenciales/ventas/cajas">
-                                            <span>Cajas</span>
+                                            <span>Mantener Cajas</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="referenciales/ventas/forma_cobro">
-                                            <span>Formas de Cobros</span>
+                                            <span>Mantener Formas de Cobros</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="referenciales/ventas/entidad_adherida">
-                                            <span>Entidades Adheridas</span>
+                                            <span>Mantener Entidades Adheridas</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="referenciales/ventas/entidad_emisora">
-                                            <span>Entidades Emisoras</span>
+                                            <span>Mantener Entidades Emisoras</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="referenciales/ventas/marca_tarjeta">
-                                            <span>Marca Tarjeta</span>
+                                            <span>Mantener Marca Tarjeta</span>
                                         </a>
                                     </li>
                                 </ul>
                             </li>
                             <li>
                                 <a href="javascript:void(0);" class="menu-toggle">
-                                    <span>Tesoreria</span>
+                                    <span>Referenciales Tesoreria</span>
                                 </a>
                                 <ul class="ml-menu">
                                     <li>
                                         <a href="referenciales/tesoreria/rubro">
-                                            <span>Rubros</span>
+                                            <span>MantenerRubros</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="referenciales/tesoreria/titular">
-                                            <span>Titular (pend)</span>
+                                            <span>Mantener Titular</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="referenciales/tesoreria/documentos">
-                                            <span>Documentos</span>
+                                            <span>Mantener Documentos</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="referenciales/tesoreria/bancos">
-                                            <span>Bancos</span>
+                                            <span>Mantener Bancos</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -402,27 +382,27 @@
                                 <ul class="ml-menu">
                                     <li>
                                         <a href="referenciales/seguridad/accesos">
-                                            <span>Accesos (pend)</span>
+                                            <span>Mantener Accesos</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="referenciales/seguridad/usuarios">
-                                            <span>Usuarios (pend)</span>
+                                            <span>Mantener Usuarios</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="referenciales/seguridad/permisos">
-                                            <span>Permisos (pend)</span>
+                                            <span>Mantener Permisos</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="referenciales/seguridad/roles">
-                                            <span>Roles (pend)</span>
+                                            <span>Mantener Roles</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="referenciales/seguridad/modulos">
-                                            <span>Modulos (pend)</span>
+                                            <span>Mantener Módulos</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -433,23 +413,42 @@
                                 </a>
                                 <ul class="ml-menu">
                                     <li>
-                                        <a href="referenciales/varios/cargos">
-                                            <span>Cargos</span>
+                                        <a href="referenciales/compras/funcionarios">
+                                            <span>Mantener Funcionarios</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="referenciales/varios/ciudades">
-                                            <span>Ciudades</span>
+                                        <a href="referenciales/varios/cargos">
+                                            <span>Mantener Cargos</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="referenciales/compras/depositos">
+                                            <span>Mantener Depositos</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="referenciales/compras/empresa">
+                                            <span>Mantener Empresa</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="referenciales/compras/sucursales">
+                                            <span>Mantener Sucursales</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="referenciales/varios/paises">
-                                            <span>Paises</span>
+                                            <span>Mantener Paises</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="referenciales/varios/ciudades">
+                                            <span>Mantener Ciudades</span>
                                         </a>
                                     </li>
                                 </ul>
                             </li>
-                            
                         </ul>
                     </li>
                     <li>

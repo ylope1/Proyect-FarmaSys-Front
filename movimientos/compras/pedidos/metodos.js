@@ -223,6 +223,7 @@ function seleccionPedido(id_pedido, pedido_fecha, pedido_fec_aprob, empresa_id, 
         $("#btnEditar").removeAttr("disabled");
         $("#formDetalles").attr("style","display:block;");
     }
+    
 
     $(".form-line").attr("class","form-line focused");
 }

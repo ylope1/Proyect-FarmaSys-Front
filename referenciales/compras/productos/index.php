@@ -15,6 +15,9 @@
     <!-- Bootstrap Core Css -->
     <link href="../../../plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
 
+    <!-- Bootstrap Select Css -->
+    <link href="../../../plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+
     <!-- Waves Effect Css -->
     <link href="../../../plugins/node-waves/waves.css" rel="stylesheet" />
 
@@ -95,8 +98,8 @@
                                 <div class="col-sm-4">
                                     <div class="form-group form-float">
                                         <div class="form-line">
-                                            <input type="hidden" id="prov_id" value="0"/>
-                                            <input type="text" id="prov_descripcion" class="form-control" disabled onkeyup="buscarProveedores();">
+                                            <input type="hidden" id="proveedor_id" value="0"/>
+                                            <input type="text" id="proveedor_desc" class="form-control" disabled onkeyup="buscarProveedores();">
                                             <label class="form-label">Proveedor</label>
                                         </div>
                                         <div id="listaProveedores" style="display:none;"></div>
@@ -107,7 +110,7 @@
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="hidden" id="item_id" value="0"/>
-                                            <input type="text" id="item_descripcion" class="form-control" disabled onkeyup="buscarItems();">
+                                            <input type="text" id="item_desc" class="form-control" disabled onkeyup="buscarItems();">
                                             <label class="form-label">Item</label>
                                         </div>
                                         <div id="listaItems" style="display:none;"></div>
@@ -117,20 +120,45 @@
                                 <div class="col-sm-4">
                                     <div class="form-group form-float">
                                         <div class="form-line">
-                                            <input type="hidden" id="imp_id" value="0"/>
-                                            <input type="text" id="imp_descripcion" class="form-control" disabled onkeyup="buscarImpuestos();">
+                                            <input type="hidden" id="impuesto_id" value="0"/>
+                                            <input type="text" id="impuesto_desc" class="form-control" disabled onkeyup="buscarImpuestos();">
                                             <label class="form-label">Impuesto</label>
                                         </div>
                                         <div id="listaImpuestos" style="display:none;"></div>
                                     </div>
                                 </div>
+                                <!-- CAMPO PARA MARCA CON 4 COLUMNAS -->
+                                <div class="col-sm-4">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="hidden" id="marca_id" value="0"/>
+                                            <input type="text" id="marca_desc" class="form-control" disabled onkeyup="buscarMarcas();">
+                                            <label class="form-label">Marca</label>
+                                        </div>
+                                        <div id="listaMarcas" style="display:none;"></div>
+                                    </div>
+                                </div>
+                                <!-- CAMPO PARA SELECCIONAR ESTADO CON 4 COLUMNAS -->
+                                <div class="col-sm-4">
+                                    <label class="form-label" style="font-weight: normal; font-size: 13px; color: #adababff;">Estado</label>
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <select id="txtEstado" class="form-control selectpicker" disabled>
+                                                <option value="">-- Selecciona Estado --</option>
+                                                <option value="ACTIVO">ACTIVO</option>
+                                                <option value="INACTIVO">INACTIVO</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="button-demo">
                                 <button type="button" id="btnAgregar" class="btn btn-success waves-effect" onclick="agregar();">AGREGAR</button>
-                                <button type="button" id="btnEditar" class="btn btn-primary waves-effect" onclick="editar();">EDITAR</button>
+                                <button type="button" id="btnEditar" class="btn btn-primary waves-effect" onclick="editar();">MODIFICAR</button>
                                 <button type="button" id="btnEliminar" class="btn btn-danger waves-effect" onclick="eliminar();">ELIMINAR</button>
                                 <button type="button" id="btnGrabar" class="btn btn-default waves-effect" disabled onclick="confirmarOperacion();">GRABAR</button>
                                 <button type="button" id="btnCancelar" class="btn btn-warning waves-effect" onclick="cancelar();" disabled>CANCELAR</button>
+                                <button type="button" id="btnSalir" class="btn btn-default waves-effect" onclick="salir();" enabled>SALIR</button>
                             </div>
                         </div>
                     </div>
@@ -151,6 +179,8 @@
                                             <th>Proveedor</th>
                                             <th>Items</th>
                                             <th>Impuesto</th>
+                                            <th>Marca</th>
+                                            <th>Estado</th>
                                         </tr>
                                     </thead>
                                     <tbody id="tableBody">
@@ -165,6 +195,8 @@
                                             <th>Proveedor</th>
                                             <th>Items</th>
                                             <th>Impuesto</th>
+                                            <th>Marca</th>
+                                            <th>Estado</th>
                                         </tr>
                                     </tfoot>
                                 </table>
