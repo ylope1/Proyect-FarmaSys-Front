@@ -18,6 +18,9 @@
     <!-- Waves Effect Css -->
     <link href="plugins/node-waves/waves.css" rel="stylesheet" />
 
+    <!-- Sweetalert Css -->
+    <link href="plugins/sweetalert/sweetalert.css" rel="stylesheet" />
+
     <!-- Animation Css -->
     <link href="plugins/animate-css/animate.css" rel="stylesheet" />
 
@@ -46,13 +49,17 @@
             max-width: 400px; 
             padding: 20px;
         }
+        .login-box .logo a,
+        .login-box .logo small {
+            color: #000 !important;
+        }
     </style>
 </head>
 
 <body class="login-page">
     <div class="login-box">
         <div class="logo">
-            <a href="javascript:void(0);">BIENVENIDO</b></a>
+            <a href="javascript:void(0);">BIENVENIDO</a>
             <small>Sistema de Gestion - FarmaSys</small>
         </div>
         <div class="card">
@@ -84,10 +91,7 @@
                     </div>
                 </div>
                 <div class="row m-t-15 m-b--20">
-                    <div class="col-xs-6">
-                        <a href="sign-up.html">Regístrate ahora</a>
-                    </div>
-                    <div class="col-xs-6 align-right">
+                    <div class="col-xs-12 align-center">
                         <a href="forgot-password.html">¿Olvidaste tu contraseña?</a>
                     </div>
                 </div>
@@ -106,6 +110,9 @@
 
     <!-- Validation Plugin Js -->
     <script src="plugins/jquery-validation/jquery.validate.js"></script>
+
+    <!-- SweetAlert Plugin Js -->
+    <script src="plugins/sweetalert/sweetalert.min.js"></script>
 
     <!-- Custom Js -->
     <script src="js/admin.js"></script>
@@ -131,7 +138,14 @@
             })
             .fail(function(a,b,c){
                 var error = JSON.parse(a.responseText);
-                alert(error.message);
+
+                swal({
+                    title: "Atención",
+                    text: error.message,
+                    icon: "warning",
+                    button: "Aceptar"
+                });
+
                 console.log(a.responseText);
             })
         }
