@@ -55,8 +55,8 @@
                         <div class="body">
                             <div class="row clearfix">
                                 <input type="hidden" value="0" id="txtOperacion"/>
-                                <input type="hidden" value="1" id="user_id"/>
-                                <input type="hidden" value="0" id="user_name"/>
+                                <input type="hidden" value="0" id="user_id"/>
+                                <input type="hidden" value="" id="user_name"/>
                                 <input type="hidden" value="PENDIENTE" id="pre_estado"/>
                                 <!-- CAMPO PARA CODIGO CON 4 COLUMNAS -->
                                 <div class="col-sm-4">
@@ -71,7 +71,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group form-float">
                                         <div class="form-line">
-                                            <input type="text" id="txtFecha" class="datetimepicker form-control" disabled>
+                                            <input type="text" id="txtFecha" class="form-control" disabled>
                                             <label class="form-label">Fecha</label>
                                         </div>
                                     </div>
@@ -80,7 +80,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group form-float">
                                         <div class="form-line">
-                                            <input type="text" id="txtFecAprob" class="datetimepicker form-control" disabled>
+                                            <input type="text" id="txtFecAprob" class="form-control" disabled>
                                             <label class="form-label">Fecha Aprobación</label>
                                         </div>
                                     </div>
@@ -101,10 +101,9 @@
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="hidden" id="empresa_id" value="0"/>
-                                            <input type="text" id="empresa_desc" class="form-control" disabled onkeyup="buscarEmpresas();">
+                                            <input type="text" id="empresa_desc" class="form-control" disabled>
                                             <label class="form-label">Empresa</label>
                                         </div>
-                                        <div id="listaEmpresas" style="display:none;"></div>
                                     </div>
                                 </div>
                                 <!-- CAMPO PARA SUCURSAL CON 4 COLUMNAS -->
@@ -112,10 +111,9 @@
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="hidden" id="sucursal_id" value="0"/>
-                                            <input type="text" id="suc_desc" class="form-control" disabled onkeyup="buscarSucursales();">
+                                            <input type="text" id="suc_desc" class="form-control" disabled>
                                             <label class="form-label">Sucursal</label>
                                         </div>
-                                        <div id="listaSucursales" style="display:none;"></div>
                                     </div>
                                 </div>
                                 <!-- CAMPO PARA BUSCAR PEDIDOS CON 12 COLUMNAS -->
@@ -133,13 +131,14 @@
 
                             <div class="button-demo">
                                 <button type="button" id="btnAgregar" class="btn btn-success waves-effect" onclick="agregar();">AGREGAR</button>
-                                <button type="button" id="btnEditar" class="btn btn-primary waves-effect" onclick="editar();" disabled>EDITAR</button>
+                                <button type="button" id="btnModificar" class="btn btn-primary waves-effect" onclick="editar();" disabled>MODIFICAR</button>
                                 <button type="button" id="btnAnular" class="btn btn-danger waves-effect" onclick="anular();"disabled>ANULAR</button>
                                 <button type="button" id="btnConfirmar" class="btn btn-success waves-effect" onclick="confirmar();"disabled>CONFIRMAR</button>
                                 <button type="button" id="btnRechazar" class="btn btn-danger waves-effect" onclick="rechazar();"disabled>RECHAZAR</button>
                                 <button type="button" id="btnAprobar" class="btn btn-success waves-effect" onclick="aprobar();"disabled>APROBAR</button>
                                 <button type="button" id="btnGrabar" class="btn btn-default waves-effect" disabled onclick="confirmarOperacion();">GRABAR</button>
                                 <button type="button" id="btnCancelar" class="btn btn-warning waves-effect" onclick="cancelar();" disabled>CANCELAR</button> 
+                                <button type="button" id="btnSalir" class="btn btn-default waves-effect" onclick="salir();" enabled>SALIR</button>
                             </div>
                         </div>
                     </div>
@@ -174,7 +173,7 @@
                                 <div class="col-sm-2">
                                     <div class="form-group form-float">
                                         <div class="form-line">
-                                            <input type="text" id="det_cantidad" class="form-control" disabled>
+                                            <input type="text" id="det_cantidad" class="form-control" min="1" step="0.01" disabled>
                                             <label class="form-label">Cantidad</label>
                                         </div>
                                     </div>
@@ -183,7 +182,7 @@
                                 <div class="col-sm-2">
                                     <div class="form-group form-float">
                                         <div class="form-line">
-                                            <input type="text" id="det_costo" class="form-control" disabled>
+                                            <input type="text" id="det_costo" class="form-control" min="1" step="0.01" disabled>
                                             <label class="form-label">Precio Compra</label>
                                         </div>
                                     </div>

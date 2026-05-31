@@ -1,5 +1,40 @@
-listar();
-campoFecha();
+var datosSesion = JSON.parse(sessionStorage.getItem("datosSesion"));
+var usuarioLogueado = datosSesion ? datosSesion.user : null;
+var token = datosSesion ? datosSesion.accessToken : null;
+var datosFuncionario = null;
+
+if (!datosSesion || !usuarioLogueado || !token) {
+    swal("Sesión expirada", "Debe iniciar sesión nuevamente", "warning");
+    setTimeout(function(){
+        window.location.href = "../../../index.php";
+    }, 1500);
+} else {
+    $("#user_id").val(usuarioLogueado.id);
+    $("#user_name").val(usuarioLogueado.name);
+
+    $.ajaxSetup({
+        headers: {
+            "Authorization": "Bearer " + token
+        }
+    });
+
+    listar();
+    campoFecha();
+    validarCamposNumericos();
+}
+function salir(){
+    swal({
+        title: "Salir",
+        text: "¿Desea salir de la ventana de presupuestos?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonText: "SI",
+        cancelButtonText: "NO",
+        closeOnConfirm: true
+    }, function () {
+        window.location.href = "../../../menu.php";
+    });
+}
 function formatoTabla(){
     //Exportable table
     $('.js-exportable').DataTable({
@@ -52,12 +87,26 @@ function cancelar(){
 function agregar(){
     $("#txtOperacion").val(1);
     $("#id").val(0);
-    $("#txtFecha").removeAttr("disabled");
-    $("#txtFecAprob").removeAttr("disabled");
+
+    $("#txtFecha").val(obtenerFechaActualSistema());
+    $("#txtFecAprob").val("");
+    $("#txtFecAprob").attr("disabled","true");
+
     $("#proveedor_desc").removeAttr("disabled");
-    $("#empresa_desc").removeAttr("disabled");
-    $("#suc_desc").removeAttr("disabled");
     $("#pedido").removeAttr("disabled");
+
+    $("#empresa_desc").attr("disabled","true");
+    $("#suc_desc").attr("disabled","true");
+
+    $("#proveedor_id").val(0);
+    $("#proveedor_desc").val("");
+
+    $("#pedido_comp_id").val(0);
+    $("#pedido").val("");
+
+    $("#pre_estado").val("PENDIENTE");
+
+    cargarDatosFuncionario();
 
     $("#btnAgregar").attr("disabled","true");
     $("#btnEditar").attr("disabled","true");
@@ -75,17 +124,28 @@ function agregar(){
 
 function editar(){
     $("#txtOperacion").val(2);
+
     $("#txtFecha").removeAttr("disabled");
-    $("#txtFecAprob").removeAttr("disabled");
+    $("#txtFecAprob").attr("disabled","true");
+
     $("#proveedor_desc").removeAttr("disabled");
-    $("#empresa_desc").removeAttr("disabled");
-    $("#suc_desc").removeAttr("disabled");
-    $("#pedido").removeAttr("disabled");
+    $("#pedido").attr("disabled","true");
+
+    $("#empresa_desc").attr("disabled","true");
+    $("#suc_desc").attr("disabled","true");
+
+    if ($("#txtFecAprob").val() === "null" || $("#txtFecAprob").val() === null) {
+        $("#txtFecAprob").val("");
+    }
+
+    cargarDatosFuncionario();
 
     $("#btnAgregar").attr("disabled","true");
     $("#btnEditar").attr("disabled","true");
     $("#btnAnular").attr("disabled","true");
     $("#btnConfirmar").attr("disabled","true");
+    $("#btnRechazar").attr("disabled","true");
+    $("#btnAprobar").attr("disabled","true");
 
     $("#btnGrabar").removeAttr("disabled");
     $("#btnCancelar").removeAttr("disabled");
@@ -93,7 +153,7 @@ function editar(){
     $(".form-line").attr("class","form-line focused");
 }
 
-function eliminar(){
+function anular(){
     $("#txtOperacion").val(3);
 
     $("#btnAgregar").attr("disabled","true");
@@ -112,6 +172,8 @@ function confirmar(){
     $("#btnEditar").attr("disabled","true");
     $("#btnAnular").attr("disabled","true");
     $("#btnConfirmar").attr("disabled","true");
+    $("#btnRechazar").attr("disabled","true");
+    $("#btnAprobar").attr("disabled","true");
 
     $("#btnGrabar").removeAttr("disabled");
     $("#btnCancelar").removeAttr("disabled");
@@ -133,6 +195,8 @@ function rechazar(){
 
 function aprobar(){
     $("#txtOperacion").val(6);
+
+    $("#txtFecAprob").val(obtenerFechaActualSistema());
 
     $("#btnAgregar").attr("disabled","true");
     $("#btnEditar").attr("disabled","true");
@@ -188,7 +252,6 @@ function mensajeOperacion(titulo,mensaje,tipo) {
     swal(titulo, mensaje, tipo);
 }
 
-
 function listar(){
     $.ajax({
         url:getUrl()+"presup_comp_cab/read",
@@ -197,64 +260,71 @@ function listar(){
     })
     .done(function(resultado){
         var lista = "";
+
         for(rs of resultado){
-            lista = lista + "<tr class=\"item-list\" onclick=\"seleccionPresupuesto("+rs.id+",'"+rs.presup_comp_fec+"','"+rs.presup_comp_fec_aprob+"',"+rs.proveedor_id+",'"+rs.proveedor_desc+"',"+rs.sucursal_id+",'"+rs.suc_desc+"',"+rs.empresa_id+",'"+rs.empresa_desc+"',"+rs.pedido_comp_id+",'"+rs.pedido+"','"+rs.presup_comp_estado+"',"+rs.user_id+",'"+rs.name+"');\">";
-                lista = lista + "<td>";
-                lista = lista + rs.id;
-                lista = lista +"</td>";
-                lista = lista + "<td>";
-                lista = lista + rs.presup_comp_fec;
-                lista = lista +"</td>";
-                lista = lista + "<td>";
-                lista = lista + rs.presup_comp_fec_aprob;
-                lista = lista +"</td>";
-                lista = lista + "<td>";
-                lista = lista + rs.proveedor_desc;
-                lista = lista +"</td>";
-                lista = lista + "<td>";
-                lista = lista + rs.empresa_desc;
-                lista = lista +"</td>";
-                lista = lista + "<td>";
-                lista = lista + rs.suc_desc;
-                lista = lista +"</td>";
-                lista = lista + "<td>";
-                lista = lista + rs.name;
-                lista = lista +"</td>";
-                lista = lista + "<td>";
-                lista = lista + rs.presup_comp_estado;
-                lista = lista +"</td>";
-                lista = lista + "<td>";
-                lista = lista + rs.pedido;
-                lista = lista +"</td>";
+            var fechaAprob = rs.presup_comp_fec_aprob == null ? "" : rs.presup_comp_fec_aprob;
+
+            lista = lista + "<tr class=\"item-list\" onclick=\"seleccionPresupuesto("
+                + rs.id + ",'"
+                + rs.presup_comp_fec + "','"
+                + fechaAprob + "',"
+                + rs.proveedor_id + ",'"
+                + rs.proveedor_desc + "',"
+                + rs.empresa_id + ",'"
+                + rs.empresa_desc + "',"
+                + rs.sucursal_id + ",'"
+                + rs.suc_desc + "',"
+                + rs.pedido_comp_id + ",'"
+                + rs.pedido + "','"
+                + rs.presup_comp_estado + "',"
+                + rs.user_id + ",'"
+                + rs.name + "');\">";
+
+            lista = lista + "<td>" + rs.id + "</td>";
+            lista = lista + "<td>" + rs.presup_comp_fec + "</td>";
+            lista = lista + "<td>" + fechaAprob + "</td>";
+            lista = lista + "<td>" + rs.proveedor_desc + "</td>";
+            lista = lista + "<td>" + rs.empresa_desc + "</td>";
+            lista = lista + "<td>" + rs.suc_desc + "</td>";
+            lista = lista + "<td>" + rs.name + "</td>";
+            lista = lista + "<td>" + rs.presup_comp_estado + "</td>";
+            lista = lista + "<td>" + rs.pedido + "</td>";
             lista = lista + "</tr>";
         }
+
         $("#tableBody").html(lista);
         formatoTabla();
     })
     .fail(function(a,b,c){
         alert(c);
         console.log(a.responseText);
-    })
+    });
 }
-
-function seleccionPresupuesto(id,presup_comp_fec, presup_comp_fec_aprob, proveedor_id, proveedor_desc, empresa_id, empresa_desc, sucursal_id, suc_desc, pedido_comp_id, pedido, pre_estado){
+function seleccionPresupuesto(id, presup_comp_fec, presup_comp_fec_aprob, proveedor_id, proveedor_desc, empresa_id, empresa_desc, sucursal_id, suc_desc, pedido_comp_id, pedido, pre_estado, user_id, name){
     $("#id").val(id);
     $("#txtFecha").val(presup_comp_fec);
     $("#txtFecAprob").val(presup_comp_fec_aprob);
+
     $("#proveedor_id").val(proveedor_id);
     $("#proveedor_desc").val(proveedor_desc);
+
     $("#empresa_id").val(empresa_id);
-    $("#empresa_desc").val(empresa_desc);   
+    $("#empresa_desc").val(empresa_desc);
+
     $("#sucursal_id").val(sucursal_id);
     $("#suc_desc").val(suc_desc);
+
     $("#pedido_comp_id").val(pedido_comp_id);
     $("#pedido").val(pedido);
+
     $("#pre_estado").val(pre_estado);
+    $("#user_id").val(user_id);
+    $("#user_name").val(name);
 
     $("#detalles").attr("style","display:block;");
     $("#registros").attr("style","display:none;");
     $("#formDetalles").attr("style","display:none;");
-    listarDetalles();   
+    listarDetalles();
 
     $("#btnAgregar").attr("disabled","true");
     $("#btnEditar").attr("disabled","true");
@@ -266,24 +336,19 @@ function seleccionPresupuesto(id,presup_comp_fec, presup_comp_fec_aprob, proveed
     $("#btnAprobar").attr("disabled","true");
 
     $("#btnCancelar").removeAttr("disabled");
-    
-    if (pre_estado === "PENDIENTE"){   
-        $("#btnAgregar").attr("disabled","true");
-        $("#btnGrabar").attr("disabled","true");
 
+    if (pre_estado === "PENDIENTE"){
         $("#btnAnular").removeAttr("disabled");
         $("#btnConfirmar").removeAttr("disabled");
         $("#btnEditar").removeAttr("disabled");
         $("#formDetalles").attr("style","display:block;");
     }
 
-    if (pre_estado === "CONFIRMADO"){   
-        $("#btnAgregar").attr("disabled","true");
-        $("#btnGrabar").attr("disabled","true");
-    
+    if (pre_estado === "CONFIRMADO"){
         $("#btnRechazar").removeAttr("disabled");
         $("#btnAprobar").removeAttr("disabled");
-        }
+    }
+
     $(".form-line").attr("class","form-line focused");
 }
 
@@ -316,13 +381,36 @@ function grabar(){
         metodo = "PUT";
         estado = "APROBADO";
     }
+    if($("#txtOperacion").val()==1 || $("#txtOperacion").val()==2){
+
+        if ($("#proveedor_id").val() === "" || $("#proveedor_id").val() === "0") {
+            swal("Atención", "Debe seleccionar un proveedor válido de la lista", "warning");
+            return;
+        }
+
+        if ($("#txtOperacion").val()==1 && ($("#pedido_comp_id").val() === "" || $("#pedido_comp_id").val() === "0")) {
+            swal("Atención", "Debe seleccionar un pedido válido de la lista", "warning");
+            return;
+        }
+
+        if ($("#txtFecha").val() === "") {
+            swal("Atención", "Debe ingresar la fecha del presupuesto", "warning");
+            return;
+        }
+    }
+    if($("#txtOperacion").val()==6){
+        if ($("#txtFecAprob").val() === "") {
+            swal("Atención", "Debe ingresar la fecha de aprobación del presupuesto", "warning");
+            return;
+        }
+    }
     $.ajax({
         url:getUrl()+endpoint,
         method:metodo,
         dataType: "json",
         data: { 
             'id': $("#id").val(), 
-            'user_id': $("#user_id").val(),
+            'user_id': usuarioLogueado.id,
             'proveedor_id': $("#proveedor_id").val(),
             'sucursal_id': $("#sucursal_id").val(),
             'empresa_id': $("#empresa_id").val(),
@@ -352,9 +440,15 @@ function grabar(){
         });
     })
     .fail(function(a,b,c){
-        alert(c);
+        let mensaje = "Ocurrió un error al procesar el registro";
+
+        if (a.responseJSON && a.responseJSON.mensaje) {
+            mensaje = a.responseJSON.mensaje;
+        }
+
+        swal("Atención", mensaje, "warning");
         console.log(a.responseText);
-    })
+    });
 }
 
 function campoFecha(){
@@ -362,6 +456,22 @@ function campoFecha(){
         format: 'DD/MM/YYYY HH:mm:ss',
         clearButton: true,
         weekStart: 1
+    });
+}
+
+function validarCamposNumericos(){
+    $("#det_cantidad, #det_costo").on("keypress", function(e){
+        var charCode = (e.which) ? e.which : e.keyCode;
+
+        if (charCode >= 48 && charCode <= 57) {
+            return true;
+        }
+
+        if (charCode == 46) {
+            return true;
+        }
+
+        return false;
     });
 }
 
@@ -378,6 +488,7 @@ function agregarDetalle(){
 function editarDetalle(){
     $("#txtOperacionDetalle").val(2);
     //$("#prod_desc").removeAttr("disabled");
+    $("#det_cantidad").removeAttr("disabled");
     $("#det_costo").removeAttr("disabled");
     $("#btnAgregarDetalle").attr("Style","display:none");
     $("#btnEditarDetalle").attr("Style","display:none");
@@ -394,6 +505,48 @@ function eliminarDetalle(){
 }
 
 function grabarDetalle(){ 
+    if ($("#id").val() === "" || $("#id").val() === "0") {
+        swal("Atención", "Debe grabar primero la cabecera del presupuesto", "warning");
+        return;
+    }
+
+    if ($("#txtOperacionDetalle").val() != 3) {
+
+        if ($("#producto_id").val() === "" || $("#producto_id").val() === "0") {
+            swal("Atención", "Debe seleccionar un producto válido de la lista", "warning");
+            return;
+        }
+
+        if ($("#det_cantidad").val() === "") {
+            swal("Atención", "Debe ingresar la cantidad del producto", "warning");
+            return;
+        }
+
+        var cantidad = parseFloat($("#det_cantidad").val());
+
+        if (isNaN(cantidad) || cantidad <= 0) {
+            swal("Atención", "La cantidad debe ser un número mayor a cero", "warning");
+            return;
+        }
+
+        if ($("#det_costo").val() === "") {
+            swal("Atención", "Debe ingresar el costo del producto", "warning");
+            return;
+        }
+
+        var costo = parseFloat($("#det_costo").val());
+
+        if (isNaN(costo) || costo <= 0) {
+            swal("Atención", "El costo debe ser un número mayor o igual a cero", "warning");
+            return;
+        }
+    }
+    if ($("#txtOperacionDetalle").val() == 3) {
+        if ($("#producto_id").val() === "" || $("#producto_id").val() === "0") {
+            swal("Atención", "Debe seleccionar un producto para eliminar", "warning");
+            return;
+        }
+    }
     var endpoint = "presup_comp_det/create";
     var metodo = "POST";
     
@@ -418,21 +571,29 @@ function grabarDetalle(){
     })
     .done(function(respuesta) {
         listarDetalles();
+
+        $("#btnAgregarDetalle").attr("Style","display:inline");
+        $("#btnEditarDetalle").attr("Style","display:inline");
+        $("#btnEliminarDetalle").attr("Style","display:inline");
+        $("#btnGrabarDetalle").attr("Style","display:none");
+
+        $("#txtOperacionDetalle").val(1);
+        $("#producto_id").val("0");
+        $("#prod_desc").val("");
+        $("#det_cantidad").val("");
+        $("#det_costo").val("");
     })
     .fail(function(a,b,c){
-        alert(c);
-        console.log(a.responseText);
-    })
-    
-    $("#btnAgregarDetalle").attr("Style","display:inline");
-    $("#btnEditarDetalle").attr("Style","display:inline");
-    $("#btnEliminarDetalle").attr("Style","display:inline");
-    $("#btnGrabarDetalle").attr("Style","display:none");
+        let mensaje = "Ocurrió un error al guardar el registro";
 
-    $("#txtOperacionDetalle").val(1);
-    $("#prod_desc").val("");
-    $("#det_cantidad").val("");
-    $("#det_costo").val("");
+        if (a.responseJSON && a.responseJSON.mensaje) {
+            mensaje = a.responseJSON.mensaje;
+        }
+
+        swal("Atención", mensaje, "warning");
+        console.log(a.responseText);
+    });
+    
 }
 
 function buscarProductos(){
@@ -647,4 +808,41 @@ function seleccionSucursal(sucursal_id, suc_desc){
 
     $("#listaSucursales").html("");
     $("#listaSucursales").attr("style","display:none;");
+}
+
+function obtenerFechaActualSistema() {
+    var fecha = new Date();
+
+    var dia = ("0" + fecha.getDate()).slice(-2);
+    var mes = ("0" + (fecha.getMonth() + 1)).slice(-2);
+    var anho = fecha.getFullYear();
+
+    var hora = ("0" + fecha.getHours()).slice(-2);
+    var minuto = ("0" + fecha.getMinutes()).slice(-2);
+    var segundo = ("0" + fecha.getSeconds()).slice(-2);
+
+    return dia + "/" + mes + "/" + anho + " " + hora + ":" + minuto + ":" + segundo;
+}
+
+function cargarDatosFuncionario(){
+    $.ajax({
+        url: getUrl()+"funcionario/datosFuncionario",
+        method: "GET",
+        dataType: "json"
+    })
+    .done(function(resultado){
+        datosFuncionario = resultado;
+
+        $("#empresa_id").val(resultado.empresa_id);
+        $("#empresa_desc").val(resultado.empresa_desc);
+
+        $("#sucursal_id").val(resultado.sucursal_id);
+        $("#suc_desc").val(resultado.suc_desc);
+
+        $(".form-line").attr("class","form-line focused");
+    })
+    .fail(function(xhr, status, error){
+        swal("Error", "No se pudieron obtener los datos del funcionario logueado", "error");
+        console.log(xhr.responseText);
+    });
 }

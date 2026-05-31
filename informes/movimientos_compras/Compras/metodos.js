@@ -16,7 +16,8 @@ if (!datosSesion || !usuarioLogueado || !token) {
 
     campoFecha();
     cargarSucursales();
-    validarCamopos();
+    validarCampos();
+    controlarCampoDocumento();
 }
 
 function campoFecha(){
@@ -26,6 +27,16 @@ function campoFecha(){
         weekStart: 1,
         time: false
     });
+}
+
+function convertirFechaBD(fecha){
+    if(fecha === ""){
+        return "";
+    }
+
+    var partes = fecha.split("/");
+
+    return partes[2] + "-" + partes[1] + "-" + partes[0];
 }
 
 function consultarInforme(){
@@ -38,16 +49,46 @@ function consultarInforme(){
 
     if(tipoInforme === "PEDIDOS_GENERAL"){
         consultarPedidosGeneral();
+        return;
     }
 
     if(tipoInforme === "HOJA_PREPARACION"){
+        if($("#documento_id").val() === ""){
+            swal("Atención", "Debe ingresar el número de documento", "warning");
+            return;
+        }
+
         consultarHojaPreparacion();
+        return;
+    }
+
+    if(tipoInforme === "PRESUPUESTOS_GENERAL"){
+        consultarPresupuestosGeneral();
+        return;
+    }
+
+    if(tipoInforme === "HOJA_PRESUPUESTO"){
+        if($("#documento_id").val() === ""){
+            swal("Atención", "Debe ingresar el número de presupuesto", "warning");
+            return;
+        }
+
+        consultarHojaPresupuesto();
+        return;
     }
 }
 
 function consultarPedidosGeneral(){
+    if($("#fecha_desde").val() === "" || $("#fecha_hasta").val() === ""){
+        swal("Atención", "Debe ingresar Fecha Desde y Fecha Hasta para generar el informe", "warning");
+        return;
+    }
     if(($("#fecha_desde").val() !== "" && $("#fecha_hasta").val() === "") ||($("#fecha_desde").val() === "" && $("#fecha_hasta").val() !== "")){
         swal("Atención", "Debe completar Fecha Desde y Fecha Hasta para filtrar por periodo", "warning");
+        return;
+    }
+    if(convertirFechaBD($("#fecha_desde").val()) > convertirFechaBD($("#fecha_hasta").val())){
+        swal("Atención", "La Fecha Desde no puede ser mayor a la Fecha Hasta", "warning");
         return;
     }
     $("#cardHojaPreparacion").attr("style","display:none;");
@@ -59,8 +100,8 @@ function consultarPedidosGeneral(){
         method: "POST",
         dataType: "json",
         data: {
-            fecha_desde: $("#fecha_desde").val(),
-            fecha_hasta: $("#fecha_hasta").val(),
+            fecha_desde: convertirFechaBD($("#fecha_desde").val()),
+            fecha_hasta: convertirFechaBD($("#fecha_hasta").val()),
             estado: $("#estado").val(),
             empresa_id: "",
             sucursal_id: $("#sucursal_id").val()
@@ -97,11 +138,76 @@ function consultarPedidosGeneral(){
     });
 }
 
+function consultarPresupuestosGeneral(){
+    if($("#fecha_desde").val() === "" || $("#fecha_hasta").val() === ""){
+        swal("Atención", "Debe ingresar Fecha Desde y Fecha Hasta para generar el informe", "warning");
+        return;
+    }
+
+    if(convertirFechaBD($("#fecha_desde").val()) > convertirFechaBD($("#fecha_hasta").val())){
+        swal("Atención", "La Fecha Desde no puede ser mayor a la Fecha Hasta", "warning");
+        return;
+    }
+
+    $("#cardInformeGeneral").attr("style","display:none;");
+    $("#cardHojaPreparacion").attr("style","display:none;");
+    $("#cardHojaPresupuesto").attr("style","display:none;");
+    $("#cardInformePresupuestos").attr("style","display:block;");
+
+    var sucursalTexto = $("#sucursal_id option:selected").text();
+
+    $.ajax({
+        url: getUrl()+"informes/compras/presupuestos",
+        method: "POST",
+        dataType: "json",
+        data: {
+            fecha_desde: convertirFechaBD($("#fecha_desde").val()),
+            fecha_hasta: convertirFechaBD($("#fecha_hasta").val()),
+            estado: $("#estado").val(),
+            empresa_id: "",
+            sucursal_id: $("#sucursal_id").val(),
+            proveedor_id: $("#proveedor_id").val()
+        }
+    })
+    .done(function(resultado){
+        var lista = "";
+
+        $("#pre_fecha_desde").html($("#fecha_desde").val());
+        $("#pre_fecha_hasta").html($("#fecha_hasta").val());
+        $("#pre_estado").html($("#estado").val() === "" ? "TODOS" : $("#estado").val());
+        $("#pre_sucursal").html($("#sucursal_id").val() === "" ? "TODAS" : sucursalTexto);
+        $("#pre_usuario").html(usuarioLogueado.name);
+
+        for(rs of resultado){
+            lista += "<tr>";
+            lista += "<td>"+rs.id+"</td>";
+            lista += "<td>"+rs.presup_comp_fec+"</td>";
+            lista += "<td>"+rs.presup_comp_fec_aprob+"</td>";
+            lista += "<td>"+rs.proveedor_desc+"</td>";
+            lista += "<td>"+rs.empresa_desc+"</td>";
+            lista += "<td>"+rs.suc_desc+"</td>";
+            lista += "<td>"+rs.encargado+"</td>";
+            lista += "<td>"+rs.pedido_comp_id+"</td>";
+            lista += "<td>"+rs.presup_comp_estado+"</td>";
+            lista += "<td>"+rs.cantidad_items+"</td>";
+            lista += "<td>"+rs.total_cantidad+"</td>";
+            lista += "<td class='text-right'>"+rs.total_presupuesto+"</td>";
+            lista += "</tr>";
+        }
+
+        $("#tableInformePresupuestos").html(lista);
+    })
+    .fail(function(xhr, status, error){
+        swal("Error", "No se pudo generar el informe general de presupuestos", "error");
+        console.log(xhr.responseText);
+    });
+}
+
 function consultarHojaPreparacion(){
-    var pedidoId = $("#pedido_id").val();
+    var pedidoId = $("#documento_id").val();
 
     if(pedidoId === ""){
-        swal("Atención", "Debe ingresar el número de pedido", "warning");
+        swal("Atención", "Debe ingresar el número de documento", "warning");
         return;
     }
 
@@ -154,6 +260,62 @@ function consultarHojaPreparacion(){
     });
 }
 
+function consultarHojaPresupuesto(){
+    var presupuestoId = $("#documento_id").val();
+
+    if(presupuestoId === ""){
+        swal("Atención", "Debe ingresar el número de presupuesto", "warning");
+        return;
+    }
+
+    $("#cardInformeGeneral").attr("style","display:none;");
+    $("#cardHojaPreparacion").attr("style","display:none;");
+    $("#cardInformePresupuestos").attr("style","display:none;");
+    $("#cardHojaPresupuesto").attr("style","display:block;");
+
+    $.ajax({
+        url: getUrl()+"informes/compras/presupuestos/hoja/"+presupuestoId,
+        method: "GET",
+        dataType: "json"
+    })
+    .done(function(resultado){
+        var cab = resultado.cabecera;
+        var detalles = resultado.detalles;
+        var total = 0;
+
+        $("#hp_id").html(cab.id);
+        $("#hp_fecha").html(cab.presup_comp_fec);
+        $("#hp_fecha_aprob").html(cab.presup_comp_fec_aprob);
+        $("#hp_estado").html(cab.presup_comp_estado);
+        $("#hp_pedido").html(cab.pedido_comp_id);
+        $("#hp_proveedor").html(cab.proveedor_desc);
+        $("#hp_empresa").html(cab.empresa_desc);
+        $("#hp_sucursal").html(cab.suc_desc);
+        $("#hp_funcionario").html(cab.encargado);
+
+        var lista = "";
+
+        for(rs of detalles){
+            total += parseFloat(rs.subtotal);
+
+            lista += "<tr>";
+            lista += "<td>"+rs.producto_id+"</td>";
+            lista += "<td>"+rs.prod_desc+"</td>";
+            lista += "<td>"+rs.presup_comp_cant+"</td>";
+            lista += "<td class='text-right'>"+rs.presup_comp_costo+"</td>";
+            lista += "<td class='text-right'>"+rs.subtotal+"</td>";
+            lista += "</tr>";
+        }
+
+        $("#tableHojaPresupuesto").html(lista);
+        $("#hp_total").html(total);
+    })
+    .fail(function(xhr, status, error){
+        swal("Error", "No se pudo generar la hoja de presupuesto", "error");
+        console.log(xhr.responseText);
+    });
+}
+
 function imprimirInforme(){
     var tipoInforme = $("#tipo_informe").val();
 
@@ -169,6 +331,16 @@ function imprimirInforme(){
 
     if(tipoInforme === "HOJA_PREPARACION"){
         imprimirAreaInforme("areaHojaPreparacion", "Hoja de Preparación de Pedido");
+        return;
+    }
+
+     if(tipoInforme === "PRESUPUESTOS_GENERAL"){
+        imprimirAreaInforme("areaInformePresupuestos", "Informe General de Presupuestos de Compra");
+        return;
+    }
+
+    if(tipoInforme === "HOJA_PRESUPUESTO"){
+        imprimirAreaInforme("areaHojaPresupuesto", "Hoja de Presupuesto de Compra");
         return;
     }
 }
@@ -322,7 +494,7 @@ function cargarSucursales(){
 }
 
 function validarCampos(){
-    $("#pedido_id").on("keypress", function(e){
+    $("#documento_id").on("keypress", function(e){
         var tecla = e.which || e.keyCode;
 
         if(tecla < 48 || tecla > 57){
@@ -330,7 +502,35 @@ function validarCampos(){
         }
     });
 
-    $("#pedido_id").on("paste", function(e){
+    $("#documento_id").on("paste", function(e){
         e.preventDefault();
     });
+}
+
+function controlarCampoDocumento(){
+    var tipoInforme = $("#tipo_informe").val();
+
+    $("#cardInformeGeneral").attr("style","display:none;");
+    $("#cardHojaPreparacion").attr("style","display:none;");
+    $("#cardInformePresupuestos").attr("style","display:none;");
+    $("#cardHojaPresupuesto").attr("style","display:none;");
+
+    if(tipoInforme === "HOJA_PREPARACION" || tipoInforme === "HOJA_PRESUPUESTO"){
+        $("#documento_id").removeAttr("disabled");
+    }else{
+        $("#documento_id").val("");
+        $("#documento_id").attr("disabled","true");
+    }
+
+    if(tipoInforme === "PRESUPUESTOS_GENERAL"){
+        $("#proveedor_desc").removeAttr("disabled");
+    }else{
+        $("#proveedor_id").val("");
+        $("#proveedor_desc").val("");
+        $("#proveedor_desc").attr("disabled","true");
+        $("#listaProveedores").html("");
+        $("#listaProveedores").attr("style","display:none;");
+    }
+
+    $(".form-line").attr("class","form-line focused");
 }

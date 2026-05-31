@@ -425,7 +425,7 @@ function agregarDetalle(){
 function editarDetalle(){
     $("#txtOperacionDetalle").val(2);
     console.log("Operación de editarDetalle activada, txtOperacionDetalle:", $("#txtOperacionDetalle").val());
-    $("#det_cantidad").removeAttr("disabled")
+    $("#det_cantidad").removeAttr("disabled");
     $("#btnAgregarDetalle").attr("Style","display:none");
     $("#btnEditarDetalle").attr("Style","display:none");
     $("#btnEliminarDetalle").attr("Style","display:none");
@@ -487,9 +487,15 @@ function grabarDetalle(){
         listarDetalles();
     })
     .fail(function(a,b,c){
-        alert(c);
+        let mensaje = "Ocurrió un error al guardar el registro";
+
+        if (a.responseJSON && a.responseJSON.mensaje) {
+            mensaje = a.responseJSON.mensaje;
+        }
+
+        swal("Atención", mensaje, "warning");
         console.log(a.responseText);
-    })
+    });
     
     $("#btnAgregarDetalle").attr("Style","display:inline");
     $("#btnEditarDetalle").attr("Style","display:inline");

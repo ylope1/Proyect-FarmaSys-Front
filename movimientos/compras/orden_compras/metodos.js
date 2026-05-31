@@ -666,8 +666,10 @@ function buscarPresupuesto(){
         method:"POST",
         dataType: "json",
         data: {
-            'user_id': $("#user_id").val(),
             'name': $("#presupuesto").val()
+        },
+        headers: {
+            "Authorization": "Bearer " + accessToken
         }
     })
     .done(function(resultado){

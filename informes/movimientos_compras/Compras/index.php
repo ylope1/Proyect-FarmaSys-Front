@@ -54,21 +54,47 @@
                         </div>
                         <div class="body">
                             <div class="row clearfix">
+                                <!-- CAMPO PARA SELECCIONAR TIPO DE INFORME CON 3 COLUMNAS -->
                                 <div class="col-sm-3">
-                                    <label>Tipo de Informe</label>
-                                    <select id="tipo_informe" class="form-control show-tick">
-                                        <option value="">-- Seleccione informe --</option>
-                                        <option value="PEDIDOS_GENERAL">Informe general de pedidos</option>
-                                        <option value="HOJA_PREPARACION">Hoja de preparación por pedido</option>
-                                    </select>
+                                    <label class="form-label" style="font-weight: normal; font-size: 13px; color: #555;">Tipo de Informe</label>
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <select id="tipo_informe" class="form-control selectpicker">
+                                                <option value="">-- Seleccione informe --</option>
+                                                <option value="PEDIDOS_GENERAL">Informe general de pedidos</option>
+                                                <option value="HOJA_PREPARACION">Hoja de preparación por pedido</option>
+                                                <option value="PRESUPUESTOS_GENERAL">Informe general de presupuestos</option>
+                                                <option value="HOJA_PRESUPUESTO">Hoja de presupuesto de compra</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
+
+                                <!-- CAMPO PARA SELECCIONAR SUCURSAL CON 2 COLUMNAS -->
                                 <div class="col-sm-2">
-                                    <label>Sucursal</label>
-                                    <select id="sucursal_id" class="form-control show-tick">
-                                        <option value="">TODAS</option>
-                                    </select>
+                                    <label class="form-label" style="font-weight: normal; font-size: 13px; color: #555;">Estado</label>
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <select id="sucursal_id" class="form-control selectpicker">
+                                                <option value="">TODAS</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
+
+                                <!-- CAMPO PARA PROVEEDOR CON 2 COLUMNAS -->
                                 <div class="col-sm-2">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="hidden" id="proveedor_id" value="0"/>
+                                            <input type="text" id="proveedor_desc" class="form-control" disabled onkeyup="buscarProveedores();">
+                                            <label class="form-label">Proveedor</label>
+                                        </div>
+                                        <div id="listaSucursales" style="display:none;"></div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-1">
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="text" id="fecha_desde" class="datepicker form-control">
@@ -77,7 +103,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-sm-2">
+                                <div class="col-sm-1">
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="text" id="fecha_hasta" class="datepicker form-control">
@@ -86,18 +112,27 @@
                                     </div>
                                 </div>
 
+                                <!-- CAMPO PARA SELECCIONAR ESTADO CON 2 COLUMNAS -->
                                 <div class="col-sm-2">
-                                    <label>Estado</label>
-                                    <select id="estado" class="form-control show-tick">
-                                        <option value="CONFIRMADO">CONFIRMADO</option>
-                                    </select>
+                                    <label class="form-label" style="font-weight: normal; font-size: 13px; color: #555;">Estado</label>
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <select id="estado" class="form-control selectpicker">
+                                                <option value="PENDIENTE">PENDIENTE</option>
+                                                <option value="CONFIRMADO">CONFIRMADO</option>
+                                                <option value="APROBADO">APROBADO</option>
+                                                <option value="RECHAZADO">RECHAZADO</option>
+                                                <option value="ANULADO">ANULADO</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="col-sm-1">
                                     <div class="form-group form-float">
                                         <div class="form-line">
-                                            <input type="text" id="pedido_id" class="form-control">
-                                            <label class="form-label">Nro. Pedido</label>
+                                            <input type="text" id="documento_id" class="form-control">
+                                            <label class="form-label">Nro. Documento</label>
                                         </div>
                                     </div>
                                 </div>
@@ -189,6 +224,53 @@
                         </div>
                     </div>
 
+                    <div class="card" id="cardInformePresupuestos" style="display:none;">
+                        <div class="header">
+                            <h2>Informe General de Presupuestos de Compra</h2>
+                        </div>
+
+                        <div class="body" id="areaInformePresupuestos">
+                            <div class="row clearfix">
+                                <div class="col-sm-12 text-center">
+                                    <h3>FARMASYS</h3>
+                                    <h4>INFORME GENERAL DE PRESUPUESTOS DE COMPRA</h4>
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <div class="row clearfix">
+                                <div class="col-sm-3"><b>Fecha Desde:</b><p id="pre_fecha_desde"></p></div>
+                                <div class="col-sm-3"><b>Fecha Hasta:</b><p id="pre_fecha_hasta"></p></div>
+                                <div class="col-sm-3"><b>Sucursal:</b><p id="pre_sucursal"></p></div>
+                                <div class="col-sm-3"><b>Estado:</b><p id="pre_estado"></p></div>
+                                <div class="col-sm-3"><b>Generado por:</b><p id="pre_usuario"></p></div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped table-hover">
+                                    <thead>
+                                        <tr style="background-color: #e6e6e6;">
+                                            <th>Nro.</th>
+                                            <th>Fecha</th>
+                                            <th>Fecha Aprob.</th>
+                                            <th>Proveedor</th>
+                                            <th>Empresa</th>
+                                            <th>Sucursal</th>
+                                            <th>Funcionario</th>
+                                            <th>Pedido</th>
+                                            <th>Estado</th>
+                                            <th>Ítems</th>
+                                            <th>Total Cant.</th>
+                                            <th>Total Presupuesto</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tableInformePresupuestos"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="card" id="cardHojaPreparacion" style="display:none;">
                         <div class="header">
                             <h2>Hoja de Preparación de Pedido</h2>
@@ -275,6 +357,73 @@
                                 </div>
                             </div>
 
+                        </div>
+                    </div>
+
+                    <div class="card" id="cardHojaPresupuesto" style="display:none;">
+                        <div class="header">
+                            <h2>Hoja de Presupuesto de Compra</h2>
+                        </div>
+
+                        <div class="body" id="areaHojaPresupuesto">
+                            <div class="row clearfix">
+                                <div class="col-sm-12 text-center">
+                                    <h3>FARMASYS</h3>
+                                    <h4>HOJA DE PRESUPUESTO DE COMPRA</h4>
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <div class="row clearfix">
+                                <div class="col-sm-3"><b>Nro. Presupuesto:</b><p id="hp_id"></p></div>
+                                <div class="col-sm-3"><b>Fecha Presupuesto:</b><p id="hp_fecha"></p></div>
+                                <div class="col-sm-3"><b>Fecha Aprobación:</b><p id="hp_fecha_aprob"></p></div>
+                                <div class="col-sm-3"><b>Estado:</b><p id="hp_estado"></p></div>
+                            </div>
+
+                            <div class="row clearfix">
+                                <div class="col-sm-3"><b>Pedido Asociado:</b><p id="hp_pedido"></p></div>
+                                <div class="col-sm-3"><b>Proveedor:</b><p id="hp_proveedor"></p></div>
+                                <div class="col-sm-3"><b>Empresa:</b><p id="hp_empresa"></p></div>
+                                <div class="col-sm-3"><b>Sucursal:</b><p id="hp_sucursal"></p></div>
+                                <div class="col-sm-3"><b>Funcionario:</b><p id="hp_funcionario"></p></div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped table-hover">
+                                    <thead>
+                                        <tr style="background-color: #e6e6e6;">
+                                            <th>Cód. Producto</th>
+                                            <th>Producto</th>
+                                            <th>Cantidad</th>
+                                            <th>Costo</th>
+                                            <th>Subtotal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tableHojaPresupuesto"></tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th colspan="4" class="text-right">TOTAL</th>
+                                            <th id="hp_total" class="text-right"></th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+
+                            <br><br>
+
+                            <div class="row clearfix">
+                                <div class="col-sm-6 text-center">
+                                    _______________________________<br>
+                                    Elaborado por
+                                </div>
+
+                                <div class="col-sm-6 text-center">
+                                    _______________________________<br>
+                                    Aprobado por
+                                </div>
+                            </div>
                         </div>
                     </div>
 
