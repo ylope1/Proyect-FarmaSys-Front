@@ -149,14 +149,13 @@
         function cerrarSesion() {
 
             var datosSesion = sessionStorage.getItem('datosSesion');
+            var accessToken = sessionStorage.getItem('accessToken');
 
-            if (datosSesion == null) {
-                sessionStorage.removeItem('datosSesion');
+            if (datosSesion == null || accessToken == null) {
+                limpiarSesion();
                 window.location.href = "index.html";
                 return;
             }
-
-            datosSesion = JSON.parse(datosSesion);
 
             swal({
                 title: "Cerrar sesión",
@@ -176,12 +175,12 @@
                         method: "GET",
                         dataType: "json",
                         headers: {
-                            "Authorization": "Bearer " + datosSesion.accessToken
+                            "Authorization": "Bearer " + accessToken
                         }
                     })
                     .done(function(resultado) {
 
-                        sessionStorage.removeItem('datosSesion');
+                        limpiarSesion();
 
                         swal({
                             title: "Correcto",
@@ -195,7 +194,7 @@
                     })
                     .fail(function(a,b,c) {
 
-                        sessionStorage.removeItem('datosSesion');
+                        limpiarSesion();
 
                         swal({
                             title: "Atención",
@@ -211,78 +210,36 @@
                 }
             });
         }
-        /*$(document).ready(function () {
 
-            var datosSesion = sessionStorage.getItem('datosSesion');
-
-            console.log("DATOS SESION:", datosSesion);
-
-            if (datosSesion == null) {
-                window.location.href = "index.html";
-                return;
-            }
-
-            datosSesion = JSON.parse(datosSesion);
-
-            console.log("USUARIO:", datosSesion.user);
-
-            if (datosSesion.user == null) {
-                sessionStorage.removeItem('datosSesion');
-                window.location.href = "index.html";
-                return;
-            }
-
-            $("#nombreUsuario").text(datosSesion.user.name);
-            $("#emailUsuario").text(datosSesion.user.email);
-
-        });*/
-        
-        /*console.log("SCRIPT DEL MENU EJECUTADO");
-
-        $(document).ready(function () {
-            console.log("DOCUMENT READY EJECUTADO");
-
-            var datosSesion = sessionStorage.getItem('datosSesion');
-            console.log("DATOS SESION:", datosSesion);
-
-            if (datosSesion == null) {
-                window.location.href = "index.html";
-                return;
-            }
-
-            datosSesion = JSON.parse(datosSesion);
-
-            $("#nombreUsuario").text(datosSesion.user.name);
-            $("#emailUsuario").text(datosSesion.user.email);
-        });*/
-        console.log("SCRIPT DEL MENU EJECUTADO");
+        function limpiarSesion() {
+            sessionStorage.removeItem('datosSesion');
+            sessionStorage.removeItem('rolSesion');
+            sessionStorage.removeItem('permisosSesion');
+            sessionStorage.removeItem('accessToken');
+            sessionStorage.removeItem('token_type');
+        }
 
         document.addEventListener("DOMContentLoaded", function () {
 
-            console.log("DOM CARGADO");
-
             var datosSesion = sessionStorage.getItem('datosSesion');
+            var rolSesion = sessionStorage.getItem('rolSesion');
+            var accessToken = sessionStorage.getItem('accessToken');
 
-            //console.log("DATOS SESION:", datosSesion);
-
-            if (datosSesion == null) {
+            if (datosSesion == null || accessToken == null) {
+                limpiarSesion();
                 window.location.href = "index.html";
                 return;
             }
 
             datosSesion = JSON.parse(datosSesion);
 
-            //console.log("USUARIO:", datosSesion.user);
+            document.getElementById("nombreUsuario").innerText = datosSesion.name;
+            document.getElementById("emailUsuario").innerText = datosSesion.email;
 
-            if (datosSesion.user == null) {
-                sessionStorage.removeItem('datosSesion');
-                window.location.href = "index.html";
-                return;
+            if (rolSesion != null && document.getElementById("rolUsuario")) {
+                rolSesion = JSON.parse(rolSesion);
+                document.getElementById("rolUsuario").innerText = rolSesion.rol_desc;
             }
-
-            document.getElementById("nombreUsuario").innerText = datosSesion.user.name;
-            document.getElementById("emailUsuario").innerText = datosSesion.user.email;
-
         });
     </script>
 </body>

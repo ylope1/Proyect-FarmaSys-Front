@@ -1,12 +1,14 @@
 var datosSesion = JSON.parse(sessionStorage.getItem("datosSesion"));
-var usuarioLogueado = datosSesion ? datosSesion.user : null;
-var token = datosSesion ? datosSesion.accessToken : null;
+var usuarioLogueado = datosSesion;
+var token = sessionStorage.getItem("accessToken");
 var datosFuncionario = null;
+
+var rutaPantalla = "movimientos/compras/pedidos/";
 
 if (!datosSesion || !usuarioLogueado || !token) {
     swal("Sesión expirada", "Debe iniciar sesión nuevamente", "warning");
     setTimeout(function(){
-        window.location.href = "../../../index.php";
+        window.location.href = "../../../index.html";
     }, 1500);
 } else {
     $("#user_id").val(usuarioLogueado.id);
@@ -17,9 +19,19 @@ if (!datosSesion || !usuarioLogueado || !token) {
             "Authorization": "Bearer " + token
         }
     });
-    //cargarDatosFuncionario();
-    listar();
-    campoFecha();
+
+    if (validarAccesoPantalla(rutaPantalla, "../../../menu.php")) {
+        listar();
+        campoFecha();
+        aplicarPermisosBotones();
+    }
+}
+
+function aplicarPermisosBotones() {
+    controlarBotonPorPermiso(rutaPantalla, "crear", "#btnAgregar");
+    controlarBotonPorPermiso(rutaPantalla, "modificar", "#btnEditar");
+    controlarBotonPorPermiso(rutaPantalla, "anular", "#btnAnular");
+    controlarBotonPorPermiso(rutaPantalla, "confirmar", "#btnConfirmar");
 }
 
 function formatoTabla(){
@@ -86,6 +98,10 @@ function salir(){
 }
 
 function agregar(){
+    if (!tienePermiso(rutaPantalla, "crear")) {
+        mensajeOperacion("Acceso denegado", "No tiene permiso para agregar pedidos.", "warning");
+        return;
+    }
     $("#txtOperacion").val(1);
     $("#id").val(0);
     $("#txtFecha").val(obtenerFechaActualSistema());
@@ -106,6 +122,10 @@ function agregar(){
 }
 
 function editar(){
+    if (!tienePermiso(rutaPantalla, "modificar")) {
+        mensajeOperacion("Acceso denegado", "No tiene permiso para modificar pedidos.", "warning");
+        return;
+    }
     $("#txtOperacion").val(2);
 
     $("#txtFecha").attr("disabled","true");
@@ -129,6 +149,10 @@ function editar(){
 }
 
 function anular(){
+    if (!tienePermiso(rutaPantalla, "anular")) {
+        mensajeOperacion("Acceso denegado", "No tiene permiso para anular pedidos.", "warning");
+        return;
+    }
     $("#txtOperacion").val(3);
     console.log("Operación de Anular activada, txtOperacion:", $("#txtOperacion").val());
 
@@ -142,6 +166,10 @@ function anular(){
 }
 
 function confirmar(){
+    if (!tienePermiso(rutaPantalla, "confirmar")) {
+        mensajeOperacion("Acceso denegado", "No tiene permiso para confirmar pedidos.", "warning");
+        return;
+    }
     $("#txtOperacion").val(4);
     console.log("Operación de Confirmar activada, txtOperacion:", $("#txtOperacion").val());
 
@@ -257,17 +285,23 @@ function seleccionPedido(id_pedido, pedido_fecha, pedido_fec_aprob, empresa_id, 
     $("#btnCancelar").removeAttr("disabled");
 
     if(pedido_estado === "PENDIENTE") {
-        
         $("#btnAgregar").attr("disabled","true");
         $("#btnGrabar").attr("disabled","true");
 
-        $("#btnAnular").removeAttr("disabled");
-        $("#btnConfirmar").removeAttr("disabled");
-        $("#btnEditar").removeAttr("disabled");
+        if (tienePermiso(rutaPantalla, "anular")) {
+            $("#btnAnular").removeAttr("disabled");
+        }
+
+        if (tienePermiso(rutaPantalla, "confirmar")) {
+            $("#btnConfirmar").removeAttr("disabled");
+        }
+
+        if (tienePermiso(rutaPantalla, "modificar")) {
+            $("#btnEditar").removeAttr("disabled");
+        }
+
         $("#formDetalles").attr("style","display:block;");
     }
-    
-
     $(".form-line").attr("class","form-line focused");
 }
 
@@ -565,7 +599,7 @@ function listarDetalles() {
             cantidadDetalle++;
         }
         $("#tableDetalles").html(lista);
-        if($("#pedido_estado").val() === "PENDIENTE" && cantidadDetalle > 0) {
+        if($("#pedido_estado").val() === "PENDIENTE" && cantidadDetalle > 0 && tienePermiso(rutaPantalla, "confirmar")) {
             $("#btnConfirmar").removeAttr("disabled");
         }else{
             $("#btnConfirmar").attr("disabled","true");

@@ -1,11 +1,11 @@
 var datosSesion = JSON.parse(sessionStorage.getItem("datosSesion"));
-var usuarioLogueado = datosSesion ? datosSesion.user : null;
-var token = datosSesion ? datosSesion.accessToken : null;
+var usuarioLogueado = datosSesion;
+var token = sessionStorage.getItem("accessToken");
 
 if (!datosSesion || !usuarioLogueado || !token) {
     swal("Sesión expirada", "Debe iniciar sesión nuevamente", "warning");
     setTimeout(function(){
-        window.location.href = "../../../index.php";
+        window.location.href = "../../../index.html";
     }, 1500);
 } else {
     $.ajaxSetup({

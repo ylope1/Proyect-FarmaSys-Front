@@ -131,7 +131,7 @@
 
                             <div class="button-demo">
                                 <button type="button" id="btnAgregar" class="btn btn-success waves-effect" onclick="agregar();">AGREGAR</button>
-                                <button type="button" id="btnModificar" class="btn btn-primary waves-effect" onclick="editar();" disabled>MODIFICAR</button>
+                                <button type="button" id="btnEditar" class="btn btn-primary waves-effect" onclick="editar();" disabled>MODIFICAR</button>
                                 <button type="button" id="btnAnular" class="btn btn-danger waves-effect" onclick="anular();"disabled>ANULAR</button>
                                 <button type="button" id="btnConfirmar" class="btn btn-success waves-effect" onclick="confirmar();"disabled>CONFIRMAR</button>
                                 <button type="button" id="btnRechazar" class="btn btn-danger waves-effect" onclick="rechazar();"disabled>RECHAZAR</button>
@@ -321,6 +321,8 @@
 
     <!-- Ruta Js (la url del backend o del api rest)-->
     <script src="../../../js/ruta.js"></script>
+
+    <script src="../../../js/seguridad.js"></script>
 
     <script src="metodos.js"></script>
 </body>

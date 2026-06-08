@@ -286,6 +286,8 @@
     <!-- Ruta Js (la url del backend o del api rest)-->
     <script src="../../../js/ruta.js"></script>
 
+    <script src="../../../js/seguridad.js"></script>
+
     <script src="metodos.js"></script>
 </body>
 

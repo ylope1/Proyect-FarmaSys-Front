@@ -1,12 +1,14 @@
 var datosSesion = JSON.parse(sessionStorage.getItem("datosSesion"));
-var usuarioLogueado = datosSesion ? datosSesion.user : null;
-var token = datosSesion ? datosSesion.accessToken : null;
+var usuarioLogueado = datosSesion;
+var token = sessionStorage.getItem("accessToken");
 var datosFuncionario = null;
+
+var rutaPantalla = "movimientos/compras/presupuestos/";
 
 if (!datosSesion || !usuarioLogueado || !token) {
     swal("Sesión expirada", "Debe iniciar sesión nuevamente", "warning");
     setTimeout(function(){
-        window.location.href = "../../../index.php";
+        window.location.href = "../../../index.html";
     }, 1500);
 } else {
     $("#user_id").val(usuarioLogueado.id);
@@ -18,23 +20,22 @@ if (!datosSesion || !usuarioLogueado || !token) {
         }
     });
 
-    listar();
-    campoFecha();
-    validarCamposNumericos();
+    if (validarAccesoPantalla(rutaPantalla, "../../../menu.php")) {
+        listar();
+        campoFecha();
+        aplicarPermisosBotones();
+    }
 }
-function salir(){
-    swal({
-        title: "Salir",
-        text: "¿Desea salir de la ventana de presupuestos?",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonText: "SI",
-        cancelButtonText: "NO",
-        closeOnConfirm: true
-    }, function () {
-        window.location.href = "../../../menu.php";
-    });
+
+function aplicarPermisosBotones() {
+    controlarBotonPorPermiso(rutaPantalla, "crear", "#btnAgregar");
+    controlarBotonPorPermiso(rutaPantalla, "modificar", "#btnEditar");
+    controlarBotonPorPermiso(rutaPantalla, "anular", "#btnAnular");
+    controlarBotonPorPermiso(rutaPantalla, "confirmar", "#btnConfirmar");
+    controlarBotonPorPermiso(rutaPantalla, "rechazar", "#btnRechazar");
+    controlarBotonPorPermiso(rutaPantalla, "aprobar", "#btnAprobar");
 }
+
 function formatoTabla(){
     //Exportable table
     $('.js-exportable').DataTable({
@@ -84,7 +85,25 @@ function cancelar(){
     location.reload(true);
 }
 
+function salir(){
+    swal({
+        title: "Salir",
+        text: "¿Desea salir de la ventana de presupuestos?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonText: "SI",
+        cancelButtonText: "NO",
+        closeOnConfirm: true
+    }, function () {
+        window.location.href = "../../../menu.php";
+    });
+}
+
 function agregar(){
+    if (!tienePermiso(rutaPantalla, "crear")) {
+        mensajeOperacion("Acceso denegado", "No tiene permiso para agregar presupuestos.", "warning");
+        return;
+    }
     $("#txtOperacion").val(1);
     $("#id").val(0);
 
@@ -123,6 +142,10 @@ function agregar(){
 }
 
 function editar(){
+    if (!tienePermiso(rutaPantalla, "modificar")) {
+        mensajeOperacion("Acceso denegado", "No tiene permiso para modificar presupuestos.", "warning");
+        return;
+    }
     $("#txtOperacion").val(2);
 
     $("#txtFecha").removeAttr("disabled");
@@ -154,6 +177,10 @@ function editar(){
 }
 
 function anular(){
+    if (!tienePermiso(rutaPantalla, "anular")) {
+        mensajeOperacion("Acceso denegado", "No tiene permiso para anular presupuestos.", "warning");
+        return;
+    }
     $("#txtOperacion").val(3);
 
     $("#btnAgregar").attr("disabled","true");
@@ -166,6 +193,10 @@ function anular(){
 }
 
 function confirmar(){
+    if (!tienePermiso(rutaPantalla, "confirmar")) {
+        mensajeOperacion("Acceso denegado", "No tiene permiso para confirmar presupuestos.", "warning");
+        return;
+    }
     $("#txtOperacion").val(4);
 
     $("#btnAgregar").attr("disabled","true");
@@ -180,6 +211,10 @@ function confirmar(){
 }
 
 function rechazar(){
+    if (!tienePermiso(rutaPantalla, "rechazar")) {
+        mensajeOperacion("Acceso denegado", "No tiene permiso para rechazar presupuestos.", "warning");
+        return;
+    }    
     $("#txtOperacion").val(5);
 
     $("#btnAgregar").attr("disabled","true");
@@ -194,6 +229,10 @@ function rechazar(){
 }
 
 function aprobar(){
+    if (!tienePermiso(rutaPantalla, "aprobar")) {
+        mensajeOperacion("Acceso denegado", "No tiene permiso para aprobar presupuestos.", "warning");
+        return;
+    }
     $("#txtOperacion").val(6);
 
     $("#txtFecAprob").val(obtenerFechaActualSistema());
@@ -304,19 +343,14 @@ function seleccionPresupuesto(id, presup_comp_fec, presup_comp_fec_aprob, provee
     $("#id").val(id);
     $("#txtFecha").val(presup_comp_fec);
     $("#txtFecAprob").val(presup_comp_fec_aprob);
-
     $("#proveedor_id").val(proveedor_id);
     $("#proveedor_desc").val(proveedor_desc);
-
     $("#empresa_id").val(empresa_id);
     $("#empresa_desc").val(empresa_desc);
-
     $("#sucursal_id").val(sucursal_id);
     $("#suc_desc").val(suc_desc);
-
     $("#pedido_comp_id").val(pedido_comp_id);
     $("#pedido").val(pedido);
-
     $("#pre_estado").val(pre_estado);
     $("#user_id").val(user_id);
     $("#user_name").val(name);
@@ -338,15 +372,39 @@ function seleccionPresupuesto(id, presup_comp_fec, presup_comp_fec_aprob, provee
     $("#btnCancelar").removeAttr("disabled");
 
     if (pre_estado === "PENDIENTE"){
-        $("#btnAnular").removeAttr("disabled");
-        $("#btnConfirmar").removeAttr("disabled");
-        $("#btnEditar").removeAttr("disabled");
+        $("#btnAgregar").attr("disabled","true");
+        $("#btnGrabar").attr("disabled","true");
+        $("#btnRechazar").attr("disabled","true");
+        $("#btnAprobar").attr("disabled","true");
+
+        if (tienePermiso(rutaPantalla, "anular")) {
+            $("#btnAnular").removeAttr("disabled");
+        }
+
+        if (tienePermiso(rutaPantalla, "modificar")) {
+            $("#btnEditar").removeAttr("disabled");
+        }
+        //$("#btnAnular").removeAttr("disabled");
+        //$("#btnConfirmar").removeAttr("disabled");
+        //$("#btnEditar").removeAttr("disabled");
         $("#formDetalles").attr("style","display:block;");
     }
 
     if (pre_estado === "CONFIRMADO"){
-        $("#btnRechazar").removeAttr("disabled");
-        $("#btnAprobar").removeAttr("disabled");
+        $("#btnAgregar").attr("disabled","true");
+        $("#btnModificar").attr("disabled","true");
+        $("#btnGrabar").attr("disabled","true");
+        $("#btnAnular").attr("disabled","true");
+        $("#btnConfirmar").attr("disabled","true");
+
+        if (tienePermiso(rutaPantalla, "rechazar")) {
+            $("#btnRechazar").removeAttr("disabled");
+        }
+        if (tienePermiso(rutaPantalla, "aprobar")) {
+            $("#btnAprobar").removeAttr("disabled");
+        }
+        //$("#btnRechazar").removeAttr("disabled");
+        //$("#btnAprobar").removeAttr("disabled");
     }
 
     $(".form-line").attr("class","form-line focused");
@@ -663,7 +721,11 @@ function listarDetalles() {
         }
         $("#tableDetalles").html(lista);
         $("#txtTotalGral").text(totalGral);
-        if($("#pre_estado").val() === "PENDIENTE" && cantidadDetalle > 0) {
+        if (
+            $("#pre_estado").val() === "PENDIENTE" && 
+            cantidadDetalle > 0 && 
+            tienePermiso(rutaPantalla, "confirmar")
+        ) {
             $("#btnConfirmar").removeAttr("disabled");
         }else{
             $("#btnConfirmar").attr("disabled","true");

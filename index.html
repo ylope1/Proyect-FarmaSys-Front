@@ -120,34 +120,67 @@
     <script src="js/ruta.js"></script>
     <script>
         sessionStorage.removeItem('datosSesion');
+        sessionStorage.removeItem('rolSesion');
+        sessionStorage.removeItem('permisosSesion');
+        sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem('token_type');
+
         function validarUsuario(){
+
             sessionStorage.removeItem('datosSesion');
+            sessionStorage.removeItem('rolSesion');
+            sessionStorage.removeItem('permisosSesion');
+            sessionStorage.removeItem('accessToken');
+            sessionStorage.removeItem('token_type');
+
             $.ajax({
-                url:getUrl()+"login",
-                method:"POST",
-                dataType:"json",
+                url: getUrl() + "login",
+                method: "POST",
+                dataType: "json",
                 data: {
-                    "password":$("#password").val(),
-                    "login":$("#login").val()
+                    "password": $("#password").val(),
+                    "login": $("#login").val()
                 }
             })
             .done(function(resultado){
-                sessionStorage.setItem('datosSesion',JSON.stringify(resultado));
-                console.log(sessionStorage.getItem('datosSesion'));
+
+                sessionStorage.setItem('accessToken', resultado.accessToken);
+                sessionStorage.setItem('token_type', resultado.token_type);
+
+                sessionStorage.setItem('datosSesion', JSON.stringify(resultado.user));
+                sessionStorage.setItem('rolSesion', JSON.stringify(resultado.rol));
+                sessionStorage.setItem('permisosSesion', JSON.stringify(resultado.permisos || []));
+
+                console.log("Usuario:", sessionStorage.getItem('datosSesion'));
+                console.log("Rol:", sessionStorage.getItem('rolSesion'));
+                console.log("Permisos:", sessionStorage.getItem('permisosSesion'));
+                console.log("Token:", sessionStorage.getItem('accessToken'));
+
                 window.location = 'menu.php';
             })
             .fail(function(a,b,c){
-                var error = JSON.parse(a.responseText);
+                var mensaje = "No se pudo iniciar sesión.";
+
+                if (a.responseJSON && a.responseJSON.message) {
+                    mensaje = a.responseJSON.message;
+                } else if (a.responseText) {
+                    try {
+                        var error = JSON.parse(a.responseText);
+                        mensaje = error.message || mensaje;
+                    } catch (e) {
+                        mensaje = a.responseText;
+                    }
+                }
 
                 swal({
                     title: "Atención",
-                    text: error.message,
-                    icon: "warning",
+                    text: mensaje,
+                    type: "warning",
                     button: "Aceptar"
                 });
 
                 console.log(a.responseText);
-            })
+            });
         }
     </script>
 </body>
