@@ -130,7 +130,7 @@
                     
                     <div class="card">
                         <div class="header">
-                            <h2>Registros de ACCESOS</h2>
+                            <h2>Registros de Accesos</h2>
                         </div>
                         <div class="body">
                             <div class="table-responsive">

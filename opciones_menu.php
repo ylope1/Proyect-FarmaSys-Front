@@ -276,7 +276,7 @@
                             <li>
                             <li class="opcion-menu" data-ruta="movimientos/compras/notas_cred_deb/">
                                 <a href="movimientos/compras/notas_cred_deb">
-                                    <span>Registrar Notas Crédito/Débito</span>
+                                    <span>Registrar Notas Crédito Débito</span>
                                 </a>
                             <li>
                             <li class="opcion-menu" data-ruta="movimientos/compras/nota_remision/">
@@ -304,7 +304,7 @@
                             </li>
                             <li class="opcion-menu" data-ruta="movimientos/ventas_cobros/apertura_cierre/">
                                 <a href="movimientos/ventas_cobros/apertura_cierre">
-                                    <span>Registrar Apertura-Cierre de Caja</span>
+                                    <span>Registrar Apertura Cierre</span>
                                 </a>
                             </li>
                             <li class="opcion-menu" data-ruta="movimientos/ventas_cobros/arqueo_caja/">
@@ -324,8 +324,13 @@
                             </li>
                             <li class="opcion-menu" data-ruta="movimientos/ventas_cobros/notas_cred_deb/">
                                 <a href="movimientos/ventas_cobros/notas_cred_deb">
-                                    <span>Registrar Nota de Crédito-Débito</span>
+                                    <span>Registrar Nota de Crédito Débito</span>
                                 </a>
+                            </li>
+                            <li class="opcion-menu" data-ruta="movimientos/ventas_cobros/recaudaciones_depositar/">
+                                <a href="movimientos/ventas_cobros/recaudaciones_depositar">
+                                    <span>Registrar Recaudaciones a Depositar</span>
+                                </a>    
                             </li>
                         </ul>
                     </li>
@@ -376,66 +381,62 @@
                                 </a>    
                             </li>
                             <li>
-                                <a href="movimientos/tesoreria/deposito_bancario">
-                                    <span>Registrar Depositos Bancarios</span>
-                                </a>    
-                            </li>
-                            <li>
                                 <a href="movimientos/tesoreria/otros_creditos_debitos">
                                     <span>Registrar Otros Créditos Débitos</span>
                                 </a>    
                             </li>
                         </ul>
                     </li>  --> 
-                    <li class="header">Elaborar Informes Varios</li>
-                    <li class="opcion-menu" data-ruta="informes/referenciales_compras">
-                        <a href="informes/referenciales_compras">
-                            <i class="material-icons col-red">donut_large</i>
-                            <span>Informes Referenciales de Compras</span>
-                        </a>
+                    <li class="header">Elaborar Informes</li>
+                        <li class="opcion-menu" data-ruta="informes/referenciales_compras/">
+                            <a href="informes/referenciales_compras">
+                                <i class="material-icons col-red">donut_large</i>
+                                <span>Informes Referenciales de Compras</span>
+                            </a>
+                        </li>
+                        <li class="opcion-menu" data-ruta="informes/referenciales_ventas/">
+                            <a href="informes/referenciales_ventas">
+                                <i class="material-icons col-amber">donut_large</i>
+                                <span>Informes Referenciales de Ventas y Cobros</span>
+                            </a>
+                        </li>
+                        <!-- <li>
+                            <a href="informes/referenciales_tesoreria">
+                                <i class="material-icons col-light-blue">donut_large</i>
+                                <span>Informes Referenciales de Tesoreria</span>
+                            </a>
+                        </li> -->
+                        <li class="opcion-menu" data-ruta="informes/seguridad/">
+                            <a href="informes/seguridad">
+                                <i class="material-icons col-green">donut_large</i>
+                                <span>Informes de Seguridad</span>
+                            </a>
+                        </li>
+                        <li class="opcion-menu" data-ruta="informes/referenciales_varios/">
+                            <a href="informes/referenciales_varios">
+                                <i class="material-icons col-purple">donut_large</i>
+                                <span>Informes Referenciales Varios</span>
+                            </a>
+                        </li>
+                        <li class="opcion-menu" data-ruta="informes/movimientos_compras/Compras/">
+                            <a href="informes/movimientos_compras/Compras">
+                                <i class="material-icons col-teal">donut_large</i>
+                                <span>Informes de Compras</span>
+                            </a>
+                        </li>
+                        <li class="opcion-menu" data-ruta="informes/movimientos_ventas/">
+                            <a href="informes/movimientos_ventas">
+                                <i class="material-icons col-orange">donut_large</i>
+                                <span>Informes de Ventas y Cobros</span>
+                            </a>
+                        </li>
+                        <!-- <li>
+                            <a href="informes/movimientos_tesoreria">
+                                <i class="material-icons col-blue-grey">donut_large</i>
+                                <span>Informes de Tesoreria</span>
+                            </a>
+                        </li> -->
                     </li>
-                    <li class="opcion-menu" data-ruta="informes/referenciales_ventas">
-                        <a href="informes/referenciales_ventas">
-                            <i class="material-icons col-amber">donut_large</i>
-                            <span>Informes Referenciales de Ventas y Cobros</span>
-                        </a>
-                    </li>
-                    <!-- <li>
-                        <a href="informes/referenciales_tesoreria">
-                            <i class="material-icons col-light-blue">donut_large</i>
-                            <span>Informes Referenciales de Tesoreria</span>
-                        </a>
-                    </li> -->
-                    <li class="opcion-menu" data-ruta="informes/seguridad">
-                        <a href="informes/seguridad">
-                            <i class="material-icons col-green">donut_large</i>
-                            <span>Informes de Seguridad</span>
-                        </a>
-                    </li>
-                    <li class="opcion-menu" data-ruta="informes/referenciales_varios">
-                        <a href="informes/referenciales_varios">
-                            <i class="material-icons col-purple">donut_large</i>
-                            <span>Informes Referenciales Varios</span>
-                        </a>
-                    </li>
-                    <li class="opcion-menu" data-ruta="informes/movimientos_compras/Compras">
-                        <a href="informes/movimientos_compras/Compras">
-                            <i class="material-icons col-teal">donut_large</i>
-                            <span>Informes de Compras</span>
-                        </a>
-                    </li>
-                    <li class="opcion-menu" data-ruta="informes/movimientos_ventas">
-                        <a href="informes/movimientos_ventas">
-                            <i class="material-icons col-orange">donut_large</i>
-                            <span>Informes de Ventas y Cobros</span>
-                        </a>
-                    </li>
-                    <!-- <li>
-                        <a href="informes/movimientos_tesoreria">
-                            <i class="material-icons col-blue-grey">donut_large</i>
-                            <span>Informes de Tesoreria</span>
-                        </a>
-                    </li> -->
                 </ul>
             </div>
             <!-- #Menu -->
