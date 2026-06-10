@@ -176,11 +176,12 @@
                                 <div class="col-sm-12">
                                     <div class="button-demo">
                                         <button type="button" id="btnAgregar" class="btn btn-success waves-effect" onclick="agregar();">AGREGAR</button>
-                                        <button type="button" id="btnEditar" class="btn btn-primary waves-effect" onclick="editar();" disabled>EDITAR</button>
+                                        <button type="button" id="btnEditar" class="btn btn-primary waves-effect" onclick="editar();" disabled>MODIFICAR</button>
                                         <button type="button" id="btnAnular" class="btn btn-danger waves-effect" onclick="anular();"disabled>ANULAR</button>
                                         <button type="button" id="btnConfirmar" class="btn btn-success waves-effect" onclick="confirmar();"disabled>CONFIRMAR</button>
                                         <button type="button" id="btnGrabar" class="btn btn-default waves-effect" disabled onclick="confirmarOperacion();">GRABAR</button>
                                         <button type="button" id="btnCancelar" class="btn btn-warning waves-effect" onclick="cancelar();" disabled>CANCELAR</button> 
+                                        <button type="button" id="btnSalir" class="btn btn-default waves-effect" onclick="salir();" enabled>SALIR</button>
                                     </div>
                                 </div>
                             </div>
@@ -384,6 +385,8 @@
 
     <!-- Ruta Js (la url del backend o del api rest)-->
     <script src="../../../js/ruta.js"></script>
+
+    <script src="../../../js/seguridad.js"></script>
 
     <script src="metodos.js"></script>
 </body>

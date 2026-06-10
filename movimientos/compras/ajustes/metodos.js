@@ -1,5 +1,41 @@
-listar();
-campoFecha();
+var datosSesion = JSON.parse(sessionStorage.getItem("datosSesion"));
+var usuarioLogueado = datosSesion;
+var token = sessionStorage.getItem("accessToken");
+var datosFuncionario = null;
+
+var rutaPantalla = "movimientos/compras/ajustes/";
+
+if (!datosSesion || !usuarioLogueado || !token) {
+    swal("Sesión expirada", "Debe iniciar sesión nuevamente", "warning");
+    setTimeout(function(){
+        window.location.href = "../../../index.html";
+    }, 1500);
+} else {
+    $("#user_id").val(usuarioLogueado.id);
+    $("#user_name").val(usuarioLogueado.name);
+
+    $.ajaxSetup({
+        headers: {
+            "Authorization": "Bearer " + token
+        }
+    });
+
+    if (validarAccesoPantalla(rutaPantalla, "../../../menu.php")) {
+        listar();
+        campoFecha();
+        aplicarPermisosBotones();
+    }
+}
+
+function aplicarPermisosBotones() {
+    controlarBotonPorPermiso(rutaPantalla, "crear", "#btnAgregar");
+    controlarBotonPorPermiso(rutaPantalla, "modificar", "#btnEditar");
+    controlarBotonPorPermiso(rutaPantalla, "anular", "#btnAnular");
+    controlarBotonPorPermiso(rutaPantalla, "confirmar", "#btnConfirmar");
+    //controlarBotonPorPermiso(rutaPantalla, "rechazar", "#btnRechazar");
+    //controlarBotonPorPermiso(rutaPantalla, "aprobar", "#btnAprobar");
+}
+
 function formatoTabla(){
     //Exportable table
     $('.js-exportable').DataTable({
@@ -49,7 +85,26 @@ function cancelar(){
     location.reload(true);
 }
 
+function salir(){
+    swal({
+        title: "Salir",
+        text: "¿Desea salir de la ventana de presupuestos?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonText: "SI",
+        cancelButtonText: "NO",
+        closeOnConfirm: true
+    }, function () {
+        window.location.href = "../../../menu.php";
+    });
+}
+
 function agregar() {
+    if (!tienePermiso(rutaPantalla, "crear")) {
+        mensajeOperacion("Acceso denegado", "No tiene permiso para agregar ajustes.", "warning");
+        return;
+    }
+
     $("#txtOperacion").val(1);
     $("#id").val(0);
     $("#empresa_desc").removeAttr("disabled");
@@ -73,6 +128,11 @@ function agregar() {
 }
 
 function editar() {
+    if (!tienePermiso(rutaPantalla, "modificar")) {
+        mensajeOperacion("Acceso denegado", "No tiene permiso para modificar ajustes.", "warning");
+        return;
+    }
+
     $("#txtOperacion").val(2);
     $("#empresa_desc").removeAttr("disabled");
     $("#suc_desc").removeAttr("disabled");
@@ -94,6 +154,11 @@ function editar() {
 }
 
 function anular(){
+    if (!tienePermiso(rutaPantalla, "anular")) {
+        mensajeOperacion("Acceso denegado", "No tiene permiso para anular ajustes.", "warning");
+        return;
+    }
+
     $("#txtOperacion").val(3);
 
     $("#btnAgregar").attr("disabled","true");
@@ -106,6 +171,11 @@ function anular(){
 }
 
 function confirmar(){
+    if (!tienePermiso(rutaPantalla, "confirmar")) {
+        mensajeOperacion("Acceso denegado", "No tiene permiso para confirmar ajustes.", "warning");
+        return;
+    }
+
     $("#txtOperacion").val(4);
 
     $("#btnAgregar").attr("disabled","true");
@@ -243,6 +313,15 @@ function seleccionAjuste(id, empresa_id, empresa_desc, sucursal_id, suc_desc, de
         $("#btnAnular").removeAttr("disabled");
         $("#btnConfirmar").removeAttr("disabled");
         $("#btnEditar").removeAttr("disabled");
+
+        if (tienePermiso(rutaPantalla, "anular")) {
+            $("#btnAnular").removeAttr("disabled");
+        }
+
+        if (tienePermiso(rutaPantalla, "modificar")) {
+            $("#btnEditar").removeAttr("disabled");
+        }
+
         $("#formDetalles").attr("style","display:block;");
     }
 
@@ -293,7 +372,7 @@ function grabar(){
             'empresa_id': $("#empresa_id").val(),
             'sucursal_id': $("#sucursal_id").val(),
             'deposito_id': $("#deposito_id").val(),
-            'user_id': $("#user_id").val(),
+            'user_id': usuarioLogueado.id,
             'tipo_ajuste': $("input[name='tipo_ajuste']:checked").val(),
             'ajustes_motivos_id': $("#ajustes_motivos_id").val(),
             'ajuste_fec': $("#txtFecha").val(),

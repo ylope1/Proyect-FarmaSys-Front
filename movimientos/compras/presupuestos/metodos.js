@@ -392,7 +392,7 @@ function seleccionPresupuesto(id, presup_comp_fec, presup_comp_fec_aprob, provee
 
     if (pre_estado === "CONFIRMADO"){
         $("#btnAgregar").attr("disabled","true");
-        $("#btnModificar").attr("disabled","true");
+        $("#btnEditar").attr("disabled","true");
         $("#btnGrabar").attr("disabled","true");
         $("#btnAnular").attr("disabled","true");
         $("#btnConfirmar").attr("disabled","true");
