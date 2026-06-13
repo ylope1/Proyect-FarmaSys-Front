@@ -488,6 +488,7 @@ function grabar(){ //vamos a revisar ultimo
             'presup_comp_id': $("#presup_comp_id").val(),
             'proveedor_id': $("#proveedor_id").val(),
             'user_id': usuarioLogueado.id,
+            'user_id': usuarioLogueado.id,
             'sucursal_id': $("#sucursal_id").val(),
             'empresa_id': $("#empresa_id").val(),
             'pedido_comp_id': $("#pedido_comp_id").val(),

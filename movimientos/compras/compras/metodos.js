@@ -1,5 +1,41 @@
-listar();
-campoFecha();
+var datosSesion = JSON.parse(sessionStorage.getItem("datosSesion"));
+var usuarioLogueado = datosSesion;
+var token = sessionStorage.getItem("accessToken");
+var datosFuncionario = null;
+
+var rutaPantalla = "movimientos/compras/compras/";
+
+if (!datosSesion || !usuarioLogueado || !token) {
+    swal("Sesión expirada", "Debe iniciar sesión nuevamente", "warning");
+    setTimeout(function(){
+        window.location.href = "../../../index.html";
+    }, 1500);
+} else {
+    $("#user_id").val(usuarioLogueado.id);
+    $("#user_name").val(usuarioLogueado.name);
+
+    $.ajaxSetup({
+        headers: {
+            "Authorization": "Bearer " + token
+        }
+    });
+
+    if (validarAccesoPantalla(rutaPantalla, "../../../menu.php")) {
+        listar();
+        campoFecha();
+        aplicarPermisosBotones();
+    }
+}
+
+function aplicarPermisosBotones() {
+    controlarBotonPorPermiso(rutaPantalla, "crear", "#btnAgregar");
+    controlarBotonPorPermiso(rutaPantalla, "modificar", "#btnEditar");
+    controlarBotonPorPermiso(rutaPantalla, "anular", "#btnAnular");
+    controlarBotonPorPermiso(rutaPantalla, "confirmar", "#btnConfirmar");
+    //controlarBotonPorPermiso(rutaPantalla, "rechazar", "#btnRechazar");
+    //controlarBotonPorPermiso(rutaPantalla, "aprobar", "#btnAprobar");
+}
+
 function formatoTabla(){
     //Exportable table
     $('.js-exportable').DataTable({
@@ -49,7 +85,26 @@ function cancelar(){
     location.reload(true);
 }
 
+function salir(){
+    swal({
+        title: "Salir",
+        text: "¿Desea salir de la ventana de presupuestos?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonText: "SI",
+        cancelButtonText: "NO",
+        closeOnConfirm: true
+    }, function () {
+        window.location.href = "../../../menu.php";
+    });
+}
+
 function agregar() {
+    if (!tienePermiso(rutaPantalla, "crear")) {
+        mensajeOperacion("Acceso denegado", "No tiene permiso para agregar compras.", "warning");
+        return;
+    }
+
     $("#txtOperacion").val(1);
     $("#id").val(0);
     $("#empresa_desc").removeAttr("disabled");
@@ -84,6 +139,11 @@ function agregar() {
 }
 
 function editar() {
+    if (!tienePermiso(rutaPantalla, "modificar")) {
+        mensajeOperacion("Acceso denegado", "No tiene permiso para modificar compras.", "warning");
+        return;
+    }
+
     $("#txtOperacion").val(2);
     $("#empresa_desc").removeAttr("disabled");
     $("#suc_desc").removeAttr("disabled");
@@ -113,7 +173,12 @@ function editar() {
     $(".form-line").attr("class", "form-line focused");
 }
 
-function eliminar(){
+function anular(){
+    if (!tienePermiso(rutaPantalla, "anular")) {
+        mensajeOperacion("Acceso denegado", "No tiene permiso para anular compras.", "warning");
+        return;
+    }
+
     $("#txtOperacion").val(3);
 
     $("#btnAgregar").attr("disabled","true");
@@ -126,6 +191,11 @@ function eliminar(){
 }
 
 function confirmar(){
+    if (!tienePermiso(rutaPantalla, "confirmar")) {
+        mensajeOperacion("Acceso denegado", "No tiene permiso para confirmar presupuestos.", "warning");
+        return;
+    }
+
     $("#txtOperacion").val(4);
 
     $("#btnAgregar").attr("disabled","true");
@@ -302,12 +372,22 @@ function seleccionCompra(id, empresa_id, empresa_desc, sucursal_id, suc_desc, de
         $("#btnAnular").removeAttr("disabled");
         $("#btnConfirmar").removeAttr("disabled");
         $("#btnEditar").removeAttr("disabled");
+
+        if (tienePermiso(rutaPantalla, "anular")) {
+            $("#btnAnular").removeAttr("disabled");
+        }
+
+        if (tienePermiso(rutaPantalla, "modificar")) {
+            $("#btnEditar").removeAttr("disabled");
+        }
+
         $("#formDetalles").attr("style","display:block;");
     }
 
     if (compra_estado === "CONFIRMADO"){   
         $("#btnAgregar").attr("disabled","true");
         $("#btnGrabar").attr("disabled","true");
+
         }
     $(".form-line").attr("class","form-line focused");
 }
@@ -339,7 +419,7 @@ function grabar(){
             'id': $("#id").val(),
             'orden_comp_id': ($("#orden_comp_id").val() === "0" || $("#orden_comp_id").val() === "") ? null : $("#orden_comp_id").val(),
             'proveedor_id': $("#proveedor_id").val(),
-            'user_id': $("#user_id").val(),
+            'user_id': usuarioLogueado.id,
             'sucursal_id': $("#sucursal_id").val(),
             'empresa_id': $("#empresa_id").val(),
             'tipo_fact_id': $("input[name='tipo_fact_id']:checked").val(),
