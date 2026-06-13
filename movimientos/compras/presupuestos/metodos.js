@@ -410,7 +410,7 @@ function seleccionPresupuesto(id, presup_comp_fec, presup_comp_fec_aprob, provee
     $(".form-line").attr("class","form-line focused");
 }
 
-function grabar(){
+function grabar(){//este vamos a volver a corregir 
     var endpoint = "presup_comp_cab/create";
     var metodo = "POST";
     var estado = "PENDIENTE";
@@ -514,22 +514,6 @@ function campoFecha(){
         format: 'DD/MM/YYYY HH:mm:ss',
         clearButton: true,
         weekStart: 1
-    });
-}
-
-function validarCamposNumericos(){
-    $("#det_cantidad, #det_costo").on("keypress", function(e){
-        var charCode = (e.which) ? e.which : e.keyCode;
-
-        if (charCode >= 48 && charCode <= 57) {
-            return true;
-        }
-
-        if (charCode == 46) {
-            return true;
-        }
-
-        return false;
     });
 }
 
@@ -906,5 +890,21 @@ function cargarDatosFuncionario(){
     .fail(function(xhr, status, error){
         swal("Error", "No se pudieron obtener los datos del funcionario logueado", "error");
         console.log(xhr.responseText);
+    });
+}
+
+function validarCamposNumericos(){
+    $("#det_cantidad, #det_costo").on("keypress", function(e){
+        var charCode = (e.which) ? e.which : e.keyCode;
+
+        if (charCode >= 48 && charCode <= 57) {
+            return true;
+        }
+
+        if (charCode == 46) {
+            return true;
+        }
+
+        return false;
     });
 }

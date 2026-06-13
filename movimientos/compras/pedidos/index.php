@@ -288,7 +288,15 @@
 
     <script src="../../../js/seguridad.js"></script>
 
+    <script src="../../../js/menu_dinamico.js"></script>
+
     <script src="metodos.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            generarMenuDinamico("../../../");
+        });
+    </script>
 </body>
 
 </html>

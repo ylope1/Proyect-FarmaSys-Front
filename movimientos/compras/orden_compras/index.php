@@ -58,8 +58,8 @@
                         <div class="body">
                             <div class="row clearfix">
                                 <input type="hidden" value="0" id="txtOperacion"/>
-                                <input type="hidden" value="1" id="user_id"/>
-                                <input type="hidden" value="0" id="user_name"/>
+                                <input type="hidden" value="0" id="user_id"/>
+                                <input type="hidden" value="" id="user_name"/>
                                 <input type="hidden" value="PENDIENTE" id="ord_estado"/>
                                 <!-- CAMPO PARA CODIGO CON 4 COLUMNAS -->
                                 <div class="col-sm-4">
@@ -93,7 +93,7 @@
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="hidden" id="proveedor_id" value="0"/>
-                                            <input type="text" id="proveedor_desc" class="form-control" disabled onkeyup="buscarProveedores();">
+                                            <input type="text" id="proveedor_desc" class="form-control" disabled>
                                             <label class="form-label">Proveedor</label>
                                         </div>
                                         <div id="listaProveedores" style="display:none;"></div>
@@ -104,7 +104,7 @@
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="hidden" id="empresa_id" value="0"/>
-                                            <input type="text" id="empresa_desc" class="form-control" disabled onkeyup="buscarEmpresas();">
+                                            <input type="text" id="empresa_desc" class="form-control" disabled>
                                             <label class="form-label">Empresa</label>
                                         </div>
                                         <div id="listaEmpresas" style="display:none;"></div>
@@ -115,7 +115,7 @@
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="hidden" id="sucursal_id" value="0"/>
-                                            <input type="text" id="suc_desc" class="form-control" disabled onkeyup="buscarSucursales();">
+                                            <input type="text" id="suc_desc" class="form-control" disabled>
                                             <label class="form-label">Sucursal</label>
                                         </div>
                                         <div id="listaSucursales" style="display:none;"></div>
@@ -131,7 +131,7 @@
                                         <label for="credito">Crédito</label>
                                     </div>
                                 </div>
-                                <!-- CAMPO PARA ELEGIR PEDIDO  -->
+                                <!-- CAMPO PARA ELEGIR PEDIDO  
                                 <div class="col-sm-4">
                                     <label class="card-inside-title" style="font-weight: normal; font-size: 13px; color: #555;">¿Tiene Pedido?</label>
                                     <div class="demo-radio-button">
@@ -143,8 +143,8 @@
                                             <label for="Sin_Pedido">No</label>
                                         </div>
                                     </div>
-                                </div>
-                                <!-- CAMPO PARA ELEGIR PRESUPUESTO -->
+                                </div>-->
+                                <!-- CAMPO PARA ELEGIR PRESUPUESTO 
                                 <div class="col-sm-4">
                                     <label class="card-inside-title" style="font-weight: normal; font-size: 13px; color: #555;">¿Tiene Presupuesto?</label>
                                     <div class="demo-radio-button">
@@ -156,7 +156,7 @@
                                             <label for="Sin_Presupuesto">No</label>
                                         </div>
                                     </div>
-                                </div>
+                                </div>-->
                                 <!-- CAMPO PARA SELECCIONAR INTERVALO DE FECHA DE VTO CON 4 COLUMNAS -->
                                 <div class="col-sm-4">
                                     <label class="form-label" style="font-weight: normal; font-size: 13px; color: #555;">Intervalo Fecha Vto</label>
@@ -173,10 +173,9 @@
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <input type="hidden" id="pedido_comp_id" value="0"/>
-                                            <input type="text" id="pedido" class="form-control" disabled onkeyup="buscarPedidos();">
+                                            <input type="text" id="pedido" class="form-control" disabled>
                                             <label class="form-label">Pedidos</label>
                                         </div>
-                                        <div id="listaPedidos" style="display:none;"></div>
                                     </div>
                                 </div>
 
@@ -201,7 +200,8 @@
                                 <button type="button" id="btnRechazar" class="btn btn-danger waves-effect" onclick="rechazar();"disabled>RECHAZAR</button>
                                 <button type="button" id="btnAprobar" class="btn btn-success waves-effect" onclick="aprobar();"disabled>APROBAR</button>
                                 <button type="button" id="btnGrabar" class="btn btn-default waves-effect" disabled onclick="confirmarOperacion();">GRABAR</button>
-                                <button type="button" id="btnCancelar" class="btn btn-warning waves-effect" onclick="cancelar();" disabled>CANCELAR</button> 
+                                <button type="button" id="btnCancelar" class="btn btn-warning waves-effect" onclick="cancelar();" disabled>CANCELAR</button>
+                                <button type="button" id="btnSalir" class="btn btn-default waves-effect" onclick="salir();" enabled>SALIR</button>
                             </div>
                         </div>
                     </div>
@@ -391,7 +391,16 @@
     <!-- Ruta Js (la url del backend o del api rest)-->
     <script src="../../../js/ruta.js"></script>
 
+    <script src="../../../js/seguridad.js"></script>
+    <script src="../../../js/menu_dinamico.js"></script>
+
     <script src="metodos.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            generarMenuDinamico("../../../");
+        });
+    </script>
 </body>
 
 </html>

@@ -140,7 +140,8 @@
     <script src="plugins/chartjs/Chart.bundle.js"></script>
     <script src="plugins/jquery-sparkline/jquery.sparkline.js"></script>
     <script src="js/pages/index.js"></script>
-
+    <script src="js/seguridad.js"></script>
+    <script src="js/menu_dinamico.js"></script>
 
     <!-- Demo Js -->
     <script src="js/demo.js"></script>
@@ -241,6 +242,11 @@
                 document.getElementById("rolUsuario").innerText = rolSesion.rol_desc;
             }
         });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            generarMenuDinamico("");
+        });
+
     </script>
 </body>
 

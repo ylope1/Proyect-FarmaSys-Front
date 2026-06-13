@@ -60,7 +60,10 @@
                             <span>Menu</span>
                         </a>
                     </li>
-                    <li>
+                    
+                    <li id="menuDinamico"></li>
+                    
+                    <!--<li>
                         <a href="javascript:void(0);" class="menu-toggle">
                             <i class="material-icons">star_half</i>
                             <span>Gestionar Mantenimiento y Seguridad</span>
@@ -167,7 +170,7 @@
                                     </li>
                                 </ul>
                             </li>-->
-                            <li>
+                            <!--<li>
                                 <a href="javascript:void(0);" class="menu-toggle">
                                     <span>Mantener Seguridad</span>
                                 </a>
@@ -387,7 +390,7 @@
                             </li>
                         </ul>
                     </li>  --> 
-                    <li class="header">Elaborar Informes</li>
+                    <!--<li class="header">Elaborar Informes</li>
                         <li class="opcion-menu" data-ruta="informes/referenciales_compras/">
                             <a href="../../../informes/referenciales_compras">
                                 <i class="material-icons col-red">donut_large</i>
@@ -406,7 +409,7 @@
                                 <span>Informes Referenciales de Tesoreria</span>
                             </a>
                         </li> -->
-                        <li class="opcion-menu" data-ruta="informes/seguridad/">
+                        <!--<li class="opcion-menu" data-ruta="informes/seguridad/">
                             <a href="../../../informes/seguridad">
                                 <i class="material-icons col-green">donut_large</i>
                                 <span>Informes de Seguridad</span>

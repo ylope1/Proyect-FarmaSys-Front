@@ -385,7 +385,16 @@
     <!-- Ruta Js (la url del backend o del api rest)-->
     <script src="../../../js/ruta.js"></script>
 
+    <script src="../../../js/seguridad.js"></script>
+    <script src="../../../js/menu_dinamico.js"></script>
+
     <script src="metodos.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            generarMenuDinamico("../../../");
+        });
+    </script>
 </body>
 
 </html>
