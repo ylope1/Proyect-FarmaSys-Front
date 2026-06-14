@@ -24,6 +24,7 @@ if (!datosSesion || !usuarioLogueado || !token) {
         listar();
         campoFecha();
         aplicarPermisosBotones();
+        validarCamposNumericos();
     }
 }
 
@@ -410,7 +411,7 @@ function seleccionPresupuesto(id, presup_comp_fec, presup_comp_fec_aprob, provee
     $(".form-line").attr("class","form-line focused");
 }
 
-function grabar(){//este vamos a volver a corregir 
+function grabar(){
     var endpoint = "presup_comp_cab/create";
     var metodo = "POST";
     var estado = "PENDIENTE";
@@ -894,17 +895,25 @@ function cargarDatosFuncionario(){
 }
 
 function validarCamposNumericos(){
+
     $("#det_cantidad, #det_costo").on("keypress", function(e){
+
         var charCode = (e.which) ? e.which : e.keyCode;
 
-        if (charCode >= 48 && charCode <= 57) {
+        if (charCode >= 48 && charCode <= 57){
             return true;
         }
 
-        if (charCode == 46) {
+        if (charCode == 46){
+
+            if ($(this).val().indexOf('.') !== -1){
+                return false;
+            }
+
             return true;
         }
 
         return false;
     });
+
 }

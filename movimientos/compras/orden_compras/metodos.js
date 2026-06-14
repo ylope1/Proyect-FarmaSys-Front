@@ -23,9 +23,9 @@ if (!datosSesion || !usuarioLogueado || !token) {
     if (validarAccesoPantalla(rutaPantalla, "../../../menu.php")) {
         listar();
         campoFecha();
-        cargarDatosFuncionario();
         aplicarPermisosBotones();
         toggleCampoCondicionVta();
+        validarCamposNumericos();
     }
 }
 
@@ -90,7 +90,7 @@ function cancelar(){
 function salir(){
     swal({
         title: "Salir",
-        text: "¿Desea salir de la ventana de presupuestos?",
+        text: "¿Desea salir de la ventana de ordenes de compras?",
         type: "warning",
         showCancelButton: true,
         confirmButtonText: "SI",
@@ -119,6 +119,7 @@ function agregar() {
     $("#proveedor_desc").attr("disabled", "true");
     $("#empresa_desc").attr("disabled", "true");
     $("#suc_desc").attr("disabled", "true");
+    cargarDatosFuncionario();
     $("#pedido").attr("disabled", "true");
 
     $("#presupuesto").removeAttr("disabled");
@@ -146,7 +147,7 @@ function agregar() {
 
 function editar() {
     if (!tienePermiso(rutaPantalla, "modificar")) {
-        mensajeOperacion("Acceso denegado", "No tiene permiso para modificar presupuestos.", "warning");
+        mensajeOperacion("Acceso denegado", "No tiene permiso para modificar ordenes de compras.", "warning");
         return;
     }
     if ($("#ord_estado").val() !== "PENDIENTE") {
@@ -157,7 +158,9 @@ function editar() {
     $("#txtOperacion").val(2);
     $("#txtFecha").removeAttr("disabled");
     $("#txtFecAprob").attr("disabled", "true");
-
+    if ($("#txtFecAprob").val() === "null" || $("#txtFecAprob").val() === null) {
+        $("#txtFecAprob").val("");
+    }
     $("#presupuesto").attr("disabled", "true");
     $("#proveedor_desc").attr("disabled", "true");
     $("#empresa_desc").attr("disabled", "true");
@@ -184,7 +187,7 @@ function editar() {
 
 function anular(){
     if (!tienePermiso(rutaPantalla, "anular")) {
-        mensajeOperacion("Acceso denegado", "No tiene permiso para anular presupuestos.", "warning");
+        mensajeOperacion("Acceso denegado", "No tiene permiso para anular ordenes de compras.", "warning");
         return;
     }
     if ($("#ord_estado").val() !== "PENDIENTE") {
@@ -207,7 +210,7 @@ function anular(){
 
 function confirmar(){
     if (!tienePermiso(rutaPantalla, "confirmar")) {
-        mensajeOperacion("Acceso denegado", "No tiene permiso para confirmar presupuestos.", "warning");
+        mensajeOperacion("Acceso denegado", "No tiene permiso para confirmar ordenes de compras.", "warning");
         return;
     }
 
@@ -231,7 +234,7 @@ function confirmar(){
 
 function rechazar(){
     if (!tienePermiso(rutaPantalla, "rechazar")) {
-        mensajeOperacion("Acceso denegado", "No tiene permiso para rechazar presupuestos.", "warning");
+        mensajeOperacion("Acceso denegado", "No tiene permiso para rechazar ordenes de compras.", "warning");
         return;
     } 
 
@@ -255,7 +258,7 @@ function rechazar(){
 
 function aprobar(){
     if (!tienePermiso(rutaPantalla, "aprobar")) {
-        mensajeOperacion("Acceso denegado", "No tiene permiso para aprobar presupuestos.", "warning");
+        mensajeOperacion("Acceso denegado", "No tiene permiso para aprobar ordenes de compras.", "warning");
         return;
     }
 
@@ -265,6 +268,7 @@ function aprobar(){
     }
 
     $("#txtOperacion").val(6);
+    $("#txtFecAprob").val(obtenerFechaActualSistema());
 
     $("#btnAgregar").attr("disabled","true");
     $("#btnEditar").attr("disabled","true");
@@ -296,11 +300,11 @@ function confirmarOperacion() {
     }
     if(oper===5){
         titulo = "RECHAZAR";
-        pregunta = "¿DESEA RECHAZAR EL PRESUPUESTO SELECCIONADO?";
+        pregunta = "¿DESEA RECHAZAR LA ORDEN DE COMPRA SELECCIONADA?";
     }
     if(oper===6){
         titulo = "APROBAR";
-        pregunta = "¿DESEA APROBAR EL PRESUPUESTO SELECCIONADO?";
+        pregunta = "¿DESEA APROBAR LA ORDEN DE COMPRA SELECCIONADA?";
     }
     swal({
         title: titulo,
@@ -328,54 +332,59 @@ function listar(){
         dataType: "json"
     })
     .done(function(resultado){
+        console.log("ORDENES DE COMPRA:", resultado);
+
         var lista = "";
+
         for(rs of resultado){
-            lista = lista + "<tr class=\"item-list\" onclick=\"seleccionOrdencompra("+rs.id+",'"+rs.orden_comp_fec+"','"+(rs.orden_comp_fec_aprob || "")+"',"+rs.proveedor_id+",'"+rs.proveedor_desc+"',"+rs.empresa_id+",'"+rs.empresa_desc+"',"+rs.sucursal_id+",'"+rs.suc_desc+"',"+rs.user_id+",'"+rs.name+"',"+rs.pedido_comp_id+",'"+rs.pedido+"',"+rs.presup_comp_id+",'"+rs.presupuesto+"','"+rs.orden_comp_estado+"','"+rs.orden_comp_ifv+"',"+rs.tipo_fact_id+",'"+rs.tipo_fact_desc+"');\">";
-                lista = lista + "<td>";
-                lista = lista + rs.id;
-                lista = lista +"</td>";
-                lista = lista + "<td>";
-                lista = (rs.orden_comp_fec_aprob || "");
-                lista = lista +"</td>";
-                lista = lista + "<td>";
-                lista = lista + rs.orden_comp_fec_aprob;
-                lista = lista +"</td>";
-                lista = lista + "<td>";
-                lista = lista + rs.proveedor_desc;
-                lista = lista +"</td>";
-                lista = lista + "<td>";
-                lista = lista + rs.empresa_desc;
-                lista = lista +"</td>";
-                lista = lista + "<td>";
-                lista = lista + rs.suc_desc;
-                lista = lista +"</td>";
-                lista = lista + "<td>";
-                lista = lista + rs.name;
-                lista = lista +"</td>";
-                lista = lista + "<td>";
-                lista = lista + rs.orden_comp_estado;
-                lista = lista +"</td>";
-                lista = lista + "<td>";
-                lista = lista + rs.pedido;
-                lista = lista +"</td>";
-                lista = lista + "<td>";
-                lista = lista + rs.presupuesto;
-                lista = lista +"</td>";
-                lista = lista + "<td>";
-                lista = lista + rs.orden_comp_ifv;
-                lista = lista +"</td>";
-                lista = lista + "<td>";
-                lista = lista + rs.tipo_fact_desc;
-                lista = lista +"</td>";
+            var fechaAprob = rs.orden_comp_fec_aprob == null ? "" : rs.orden_comp_fec_aprob;
+            var presupuesto = rs.presupuesto == null ? "" : rs.presupuesto;
+            var pedido = rs.pedido == null ? "" : rs.pedido;
+
+            lista = lista + "<tr class=\"item-list\" onclick=\"seleccionOrdencompra("
+                + rs.id + ",'"
+                + rs.orden_comp_fec + "','"
+                + fechaAprob + "',"
+                + rs.proveedor_id + ",'"
+                + rs.proveedor_desc + "',"
+                + rs.empresa_id + ",'"
+                + rs.empresa_desc + "',"
+                + rs.sucursal_id + ",'"
+                + rs.suc_desc + "',"
+                + rs.user_id + ",'"
+                + rs.name + "',"
+                + rs.pedido_comp_id + ",'"
+                + pedido + "',"
+                + rs.presup_comp_id + ",'"
+                + presupuesto + "','"
+                + rs.orden_comp_estado + "','"
+                + rs.orden_comp_ifv + "',"
+                + rs.tipo_fact_id + ",'"
+                + rs.tipo_fact_desc + "');\">";
+
+            lista = lista + "<td>" + rs.id + "</td>";
+            lista = lista + "<td>" + rs.orden_comp_fec + "</td>";
+            lista = lista + "<td>" + fechaAprob + "</td>";
+            lista = lista + "<td>" + rs.proveedor_desc + "</td>";
+            lista = lista + "<td>" + rs.empresa_desc + "</td>";
+            lista = lista + "<td>" + rs.suc_desc + "</td>";
+            lista = lista + "<td>" + rs.name + "</td>";
+            lista = lista + "<td>" + rs.orden_comp_estado + "</td>";
+            lista = lista + "<td>" + pedido + "</td>";
+            lista = lista + "<td>" + presupuesto + "</td>";
+            lista = lista + "<td>" + rs.orden_comp_ifv + "</td>";
+            lista = lista + "<td>" + rs.tipo_fact_desc + "</td>";
+
             lista = lista + "</tr>";
         }
+
         $("#tableBody").html(lista);
         formatoTabla();
     })
     .fail(function(a,b,c){
         alert(c);
         console.log(a.responseText);
-    })
+    });
 }
 
 function seleccionOrdencompra(id,orden_comp_fec, orden_comp_fec_aprob, proveedor_id, proveedor_desc, empresa_id, empresa_desc, sucursal_id, suc_desc, user_id, name, pedido_comp_id, pedido, presup_comp_id, presupuesto, ord_estado, orden_comp_ifv, tipo_fact_id, tipo_fact_desc){
@@ -450,7 +459,94 @@ function seleccionOrdencompra(id,orden_comp_fec, orden_comp_fec_aprob, proveedor
     $(".form-line").attr("class","form-line focused");
 }
 
-function grabar(){ //vamos a revisar ultimo
+function grabar(){ 
+
+    if($("#txtOperacion").val()==1 || $("#txtOperacion").val()==2){
+
+        if ($("#txtOperacion").val()==1 && ($("#presup_comp_id").val() === "" || $("#presup_comp_id").val() === "0")) {
+            swal("Atención", "Debe seleccionar un presupuesto aprobado válido de la lista", "warning");
+            return;
+        }
+
+        if ($("#proveedor_id").val() === "" || $("#proveedor_id").val() === "0") {
+            swal("Atención", "El presupuesto seleccionado no tiene un proveedor válido", "warning");
+            return;
+        }
+
+        if ($("#empresa_id").val() === "" || $("#empresa_id").val() === "0") {
+            swal("Atención", "No se pudo determinar la empresa del funcionario logueado", "warning");
+            return;
+        }
+
+        if ($("#sucursal_id").val() === "" || $("#sucursal_id").val() === "0") {
+            swal("Atención", "No se pudo determinar la sucursal del funcionario logueado", "warning");
+            return;
+        }
+
+        if ($("#txtFecha").val() === "") {
+            swal("Atención", "Debe ingresar la fecha de la orden de compra", "warning");
+            return;
+        }
+
+        if (!$("input[name='tipo_fact_id']:checked").val()) {
+            swal("Atención", "Debe seleccionar la condición de compra", "warning");
+            return;
+        }
+
+        if ($("#intervalo_fecha_vto").val() === "" || $("#intervalo_fecha_vto").val() === null) {
+            swal("Atención", "Debe seleccionar el intervalo de fecha de vencimiento", "warning");
+            return;
+        }
+    }
+
+    if($("#txtOperacion").val()==3){
+        if ($("#id").val() === "" || $("#id").val() === "0") {
+            swal("Atención", "Debe seleccionar una orden de compra para anular", "warning");
+            return;
+        }
+
+        if ($("#ord_estado").val() !== "PENDIENTE") {
+            swal("Atención", "Solo se pueden anular órdenes de compra en estado PENDIENTE", "warning");
+            return;
+        }
+    }
+
+    if($("#txtOperacion").val()==4){
+        if ($("#id").val() === "" || $("#id").val() === "0") {
+            swal("Atención", "Debe seleccionar una orden de compra para confirmar", "warning");
+            return;
+        }
+
+        if ($("#ord_estado").val() !== "PENDIENTE") {
+            swal("Atención", "Solo se pueden confirmar órdenes de compra en estado PENDIENTE", "warning");
+            return;
+        }
+    }
+
+    if($("#txtOperacion").val()==5){
+        if ($("#id").val() === "" || $("#id").val() === "0") {
+            swal("Atención", "Debe seleccionar una orden de compra para rechazar", "warning");
+            return;
+        }
+
+        if ($("#ord_estado").val() !== "CONFIRMADO") {
+            swal("Atención", "Solo se pueden rechazar órdenes de compra en estado CONFIRMADO", "warning");
+            return;
+        }
+    }
+
+    if($("#txtOperacion").val()==6){
+        if ($("#id").val() === "" || $("#id").val() === "0") {
+            swal("Atención", "Debe seleccionar una orden de compra para aprobar", "warning");
+            return;
+        }
+
+        if ($("#ord_estado").val() !== "CONFIRMADO") {
+            swal("Atención", "Solo se pueden aprobar órdenes de compra en estado CONFIRMADO", "warning");
+            return;
+        }
+    }
+
     var endpoint = "orden_comp_cab/create";
     var metodo = "POST";
     var estado = "PENDIENTE";
@@ -488,7 +584,6 @@ function grabar(){ //vamos a revisar ultimo
             'presup_comp_id': $("#presup_comp_id").val(),
             'proveedor_id': $("#proveedor_id").val(),
             'user_id': usuarioLogueado.id,
-            'user_id': usuarioLogueado.id,
             'sucursal_id': $("#sucursal_id").val(),
             'empresa_id': $("#empresa_id").val(),
             'pedido_comp_id': $("#pedido_comp_id").val(),
@@ -512,7 +607,7 @@ function grabar(){ //vamos a revisar ultimo
                 $("#id").val(resultado.registro.id);
                 $("#detalles").attr("style","display:block;");
                 listarDetalles();
-                if(resultado.registro.ord_estado!= "PENDIENTE"){
+                if(resultado.registro.orden_comp_estado != "PENDIENTE"){
                     location.reload(true);
                 }
             }
@@ -578,6 +673,50 @@ function eliminarDetalle(){
 }
 
 function grabarDetalle(){ 
+
+    if ($("#ord_estado").val() !== "PENDIENTE") {
+        swal("Atención", "Solo se puede modificar el detalle de una orden en estado PENDIENTE", "warning");
+        return;
+    }
+
+    if ($("#txtOperacionDetalle").val() != 3) {
+
+        if ($("#producto_id").val() === "" || $("#producto_id").val() === "0") {
+            swal("Atención", "Debe seleccionar un producto válido de la lista", "warning");
+            return;
+        }
+
+        if ($("#det_cantidad").val() === "") {
+            swal("Atención", "Debe ingresar la cantidad del producto", "warning");
+            return;
+        }
+
+        var cantidad = parseFloat($("#det_cantidad").val());
+
+        if (isNaN(cantidad) || cantidad <= 0) {
+            swal("Atención", "La cantidad debe ser un número mayor a cero", "warning");
+            return;
+        }
+
+        if ($("#det_costo").val() === "") {
+            swal("Atención", "Debe ingresar el costo del producto", "warning");
+            return;
+        }
+
+        var costo = parseFloat($("#det_costo").val());
+
+        if (isNaN(costo) || costo <= 0) {
+            swal("Atención", "El costo debe ser un número mayor a cero", "warning");
+            return;
+        }
+    }
+
+    if ($("#txtOperacionDetalle").val() == 3) {
+        if ($("#producto_id").val() === "" || $("#producto_id").val() === "0") {
+            swal("Atención", "Debe seleccionar un producto para eliminar", "warning");
+            return;
+        }
+    }
     var endpoint = "orden_comp_det/create";
     var metodo = "POST";
     
@@ -991,17 +1130,25 @@ function cargarDatosFuncionario(){
 }
 
 function validarCamposNumericos(){
+
     $("#det_cantidad, #det_costo").on("keypress", function(e){
+
         var charCode = (e.which) ? e.which : e.keyCode;
 
-        if (charCode >= 48 && charCode <= 57) {
+        if (charCode >= 48 && charCode <= 57){
             return true;
         }
 
-        if (charCode == 46) {
+        if (charCode == 46){
+
+            if ($(this).val().indexOf('.') !== -1){
+                return false;
+            }
+
             return true;
         }
 
         return false;
     });
+
 }

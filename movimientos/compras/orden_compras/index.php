@@ -236,7 +236,7 @@
                                 <div class="col-sm-2">
                                     <div class="form-group form-float">
                                         <div class="form-line">
-                                            <input type="text" id="det_cantidad" class="form-control" disabled>
+                                            <input type="text" id="det_cantidad" class="form-control" min="1" step="0.01" disabled>
                                             <label class="form-label">Cantidad</label>
                                         </div>
                                     </div>
@@ -245,7 +245,7 @@
                                 <div class="col-sm-2">
                                     <div class="form-group form-float">
                                         <div class="form-line">
-                                            <input type="text" id="det_costo" class="form-control" disabled>
+                                            <input type="text" id="det_costo" class="form-control" min="1" step="0.01" disabled>
                                             <label class="form-label">Precio Compra</label>
                                         </div>
                                     </div>

@@ -65,6 +65,8 @@
                                                 <option value="HOJA_PREPARACION">Hoja de preparación por pedido</option>
                                                 <option value="PRESUPUESTOS_GENERAL">Informe general de presupuestos</option>
                                                 <option value="HOJA_PRESUPUESTO">Hoja de presupuesto de compra</option>
+                                                <option value="ORDENES_GENERAL">Informe general de órdenes de compras</option>
+                                                <option value="HOJA_ORDEN">Hoja de orden de compra</option>
                                             </select>
                                         </div>
                                     </div>
@@ -72,7 +74,7 @@
 
                                 <!-- CAMPO PARA SELECCIONAR SUCURSAL CON 2 COLUMNAS -->
                                 <div class="col-sm-2">
-                                    <label class="form-label" style="font-weight: normal; font-size: 13px; color: #555;">Estado</label>
+                                    <label class="form-label" style="font-weight: normal; font-size: 13px; color: #555;">Sucursal</label>
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <select id="sucursal_id" class="form-control selectpicker">
@@ -90,7 +92,7 @@
                                             <input type="text" id="proveedor_desc" class="form-control" disabled onkeyup="buscarProveedores();">
                                             <label class="form-label">Proveedor</label>
                                         </div>
-                                        <div id="listaSucursales" style="display:none;"></div>
+                                        <div id="listaProveedores" style="display:none;"></div>
                                     </div>
                                 </div>
 
@@ -123,6 +125,7 @@
                                                 <option value="APROBADO">APROBADO</option>
                                                 <option value="RECHAZADO">RECHAZADO</option>
                                                 <option value="ANULADO">ANULADO</option>
+                                                <option value="PROCESADO">PROCESADO</option>
                                             </select>
                                         </div>
                                     </div>
@@ -268,6 +271,59 @@
                                     <tbody id="tableInformePresupuestos"></tbody>
                                 </table>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="card" id="cardInformeOrdenes" style="display:none;">
+                        <div class="header">
+                            <h2>Informe General de Órdenes de Compra</h2>
+                        </div>
+
+                        <div class="body" id="areaInformeOrdenes">
+
+                            <div class="row clearfix">
+                                <div class="col-sm-12 text-center">
+                                    <h3>FARMASYS</h3>
+                                    <h4>INFORME GENERAL DE ÓRDENES DE COMPRA</h4>
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <div class="row clearfix">
+                                <div class="col-sm-3"><b>Fecha Desde:</b><p id="ord_fecha_desde"></p></div>
+                                <div class="col-sm-3"><b>Fecha Hasta:</b><p id="ord_fecha_hasta"></p></div>
+                                <div class="col-sm-3"><b>Sucursal:</b><p id="ord_sucursal"></p></div>
+                                <div class="col-sm-3"><b>Estado:</b><p id="ord_estado"></p></div>
+                                <div class="col-sm-3"><b>Generado por:</b><p id="ord_usuario"></p></div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped table-hover">
+
+                                    <thead>
+                                        <tr style="background-color:#e6e6e6;">
+                                            <th>Nro.</th>
+                                            <th>Fecha</th>
+                                            <th>Fecha Aprob.</th>
+                                            <th>Proveedor</th>
+                                            <th>Empresa</th>
+                                            <th>Sucursal</th>
+                                            <th>Funcionario</th>
+                                            <th>Tipo Fact.</th>
+                                            <th>Estado</th>
+                                            <th>Ítems</th>
+                                            <th>Total Cant.</th>
+                                            <th>Total Orden</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody id="tableInformeOrdenes">
+                                    </tbody>
+
+                                </table>
+                            </div>
+
                         </div>
                     </div>
 
@@ -427,6 +483,92 @@
                         </div>
                     </div>
 
+                    <div class="card" id="cardHojaOrden" style="display:none;">
+
+                        <div class="header">
+                            <h2>Hoja de Orden de Compra</h2>
+                        </div>
+
+                        <div class="body" id="areaHojaOrden">
+
+                            <div class="row clearfix">
+                                <div class="col-sm-12 text-center">
+                                    <h3>FARMASYS</h3>
+                                    <h4>HOJA DE ORDEN DE COMPRA</h4>
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <div class="row clearfix">
+                                <div class="col-sm-3"><b>Nro. Orden:</b><p id="ho_id"></p></div>
+                                <div class="col-sm-3"><b>Fecha Orden:</b><p id="ho_fecha"></p></div>
+                                <div class="col-sm-3"><b>Fecha Aprobación:</b><p id="ho_fecha_aprob"></p></div>
+                                <div class="col-sm-3"><b>Estado:</b><p id="ho_estado"></p></div>
+                            </div>
+
+                            <div class="row clearfix">
+                                <div class="col-sm-3"><b>Pedido:</b><p id="ho_pedido"></p></div>
+                                <div class="col-sm-3"><b>Presupuesto:</b><p id="ho_presupuesto"></p></div>
+                                <div class="col-sm-3"><b>Proveedor:</b><p id="ho_proveedor"></p></div>
+                                <div class="col-sm-3"><b>Condición:</b><p id="ho_tipo_fact"></p></div>
+                            </div>
+
+                            <div class="row clearfix">
+                                <div class="col-sm-3"><b>Empresa:</b><p id="ho_empresa"></p></div>
+                                <div class="col-sm-3"><b>Sucursal:</b><p id="ho_sucursal"></p></div>
+                                <div class="col-sm-3"><b>Funcionario:</b><p id="ho_funcionario"></p></div>
+                                <div class="col-sm-3"><b>IFV:</b><p id="ho_ifv"></p></div>
+                            </div>
+
+                            <div class="table-responsive">
+
+                                <table class="table table-bordered table-striped table-hover">
+
+                                    <thead>
+                                        <tr style="background-color:#e6e6e6;">
+                                            <th>Cód. Producto</th>
+                                            <th>Producto</th>
+                                            <th>Cantidad</th>
+                                            <th>Costo</th>
+                                            <th>Subtotal</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody id="tableHojaOrden">
+                                    </tbody>
+
+                                    <tfoot>
+                                        <tr>
+                                            <th colspan="4" class="text-right">TOTAL</th>
+                                            <th id="ho_total" class="text-right"></th>
+                                        </tr>
+                                    </tfoot>
+
+                                </table>
+
+                            </div>
+
+                            <br><br>
+
+                            <div class="row clearfix">
+
+                                <div class="col-sm-6 text-center">
+                                    _______________________________<br>
+                                    Elaborado por
+                                </div>
+
+                                <div class="col-sm-6 text-center">
+                                    _______________________________<br>
+                                    Aprobado por
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
                 </div>
             </div>
 
@@ -481,7 +623,16 @@
     <!-- Ruta Js (la url del backend o del api rest)-->
     <script src="../../../js/ruta.js"></script>
 
+    <script src="../../../js/seguridad.js"></script>
+    <script src="../../../js/menu_dinamico.js"></script>
+
     <script src="metodos.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            generarMenuDinamico("../../../");
+        });
+    </script>
 </body>
 
 </html>
