@@ -67,6 +67,8 @@
                                                 <option value="HOJA_PRESUPUESTO">Hoja de presupuesto de compra</option>
                                                 <option value="ORDENES_GENERAL">Informe general de órdenes de compras</option>
                                                 <option value="HOJA_ORDEN">Hoja de orden de compra</option>
+                                                <option value="COMPRAS_GENERAL">Informe general de compras</option>
+                                                <option value="HOJA_COMPRA">Hoja de compra</option>
                                             </select>
                                         </div>
                                     </div>
@@ -122,6 +124,7 @@
                                             <select id="estado" class="form-control selectpicker">
                                                 <option value="PENDIENTE">PENDIENTE</option>
                                                 <option value="CONFIRMADO">CONFIRMADO</option>
+                                                <option value="RECIBIDO">RECIBIDO</option>
                                                 <option value="APROBADO">APROBADO</option>
                                                 <option value="RECHAZADO">RECHAZADO</option>
                                                 <option value="ANULADO">ANULADO</option>
@@ -569,6 +572,196 @@
 
                     </div>
 
+                    <div class="card" id="cardInformeCompras" style="display:none;">
+                        <div class="header">
+                            <h2>INFORME GENERAL DE COMPRAS</h2>
+                        </div>
+
+                        <div class="body" id="areaInformeCompras">
+                            <h3 class="text-center">INFORME GENERAL DE COMPRAS</h3>
+                            <hr>
+
+                            <div class="row clearfix">
+                                <div class="col-sm-3">
+                                    <b>Fecha Desde:</b>
+                                    <p id="comp_fecha_desde"></p>
+                                </div>
+                                <div class="col-sm-3">
+                                    <b>Fecha Hasta:</b>
+                                    <p id="comp_fecha_hasta"></p>
+                                </div>
+                                <div class="col-sm-3">
+                                    <b>Estado:</b>
+                                    <p id="comp_estado"></p>
+                                </div>
+                                <div class="col-sm-3">
+                                    <b>Sucursal:</b>
+                                    <p id="comp_sucursal"></p>
+                                </div>
+                            </div>
+
+                            <div class="row clearfix">
+                                <div class="col-sm-6">
+                                    <b>Usuario:</b>
+                                    <p id="comp_usuario"></p>
+                                </div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Nro.</th>
+                                            <th>Fecha Factura</th>
+                                            <th>Fecha Recepción</th>
+                                            <th>Proveedor</th>
+                                            <th>RUC</th>
+                                            <th>Nro. Factura</th>
+                                            <th>Timbrado</th>
+                                            <th>Condición</th>
+                                            <th>Empresa</th>
+                                            <th>Sucursal</th>
+                                            <th>Depósito</th>
+                                            <th>Usuario</th>
+                                            <th>Estado</th>
+                                            <th>Items</th>
+                                            <th>Cantidad</th>
+                                            <th>Exentas</th>
+                                            <th>Grav. 5%</th>
+                                            <th>IVA 5%</th>
+                                            <th>Grav. 10%</th>
+                                            <th>IVA 10%</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tableInformeCompras"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card" id="cardHojaCompra" style="display:none;">
+                        <div class="header">
+                            <h2>HOJA DE COMPRA</h2>
+                        </div>
+
+                        <div class="body" id="areaHojaCompra">
+                            <h3 class="text-center">HOJA DE COMPRA</h3>
+                            <hr>
+
+                            <div class="row clearfix">
+                                <div class="col-sm-3">
+                                    <b>Nro. Compra:</b>
+                                    <p id="hc_id"></p>
+                                </div>
+                                <div class="col-sm-3">
+                                    <b>Fecha Factura:</b>
+                                    <p id="hc_fecha"></p>
+                                </div>
+                                <div class="col-sm-3">
+                                    <b>Fecha Recepción:</b>
+                                    <p id="hc_fecha_recep"></p>
+                                </div>
+                                <div class="col-sm-3">
+                                    <b>Estado:</b>
+                                    <p id="hc_estado"></p>
+                                </div>
+                            </div>
+
+                            <div class="row clearfix">
+                                <div class="col-sm-3">
+                                    <b>Orden Compra:</b>
+                                    <p id="hc_orden"></p>
+                                </div>
+                                <div class="col-sm-3">
+                                    <b>Proveedor:</b>
+                                    <p id="hc_proveedor"></p>
+                                </div>
+                                <div class="col-sm-3">
+                                    <b>RUC:</b>
+                                    <p id="hc_ruc"></p>
+                                </div>
+                                <div class="col-sm-3">
+                                    <b>Condición:</b>
+                                    <p id="hc_tipo_fact"></p>
+                                </div>
+                            </div>
+
+                            <div class="row clearfix">
+                                <div class="col-sm-3">
+                                    <b>Nro. Factura:</b>
+                                    <p id="hc_factura"></p>
+                                </div>
+                                <div class="col-sm-3">
+                                    <b>Timbrado:</b>
+                                    <p id="hc_timbrado"></p>
+                                </div>
+                                <div class="col-sm-3">
+                                    <b>Cuotas:</b>
+                                    <p id="hc_cuotas"></p>
+                                </div>
+                                <div class="col-sm-3">
+                                    <b>IFV:</b>
+                                    <p id="hc_ifv"></p>
+                                </div>
+                            </div>
+
+                            <div class="row clearfix">
+                                <div class="col-sm-3">
+                                    <b>Empresa:</b>
+                                    <p id="hc_empresa"></p>
+                                </div>
+                                <div class="col-sm-3">
+                                    <b>Sucursal:</b>
+                                    <p id="hc_sucursal"></p>
+                                </div>
+                                <div class="col-sm-3">
+                                    <b>Depósito:</b>
+                                    <p id="hc_deposito"></p>
+                                </div>
+                                <div class="col-sm-3">
+                                    <b>Usuario:</b>
+                                    <p id="hc_funcionario"></p>
+                                </div>
+                            </div>
+
+                            <br>
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Cód.</th>
+                                            <th>Producto</th>
+                                            <th>Cantidad</th>
+                                            <th>Costo</th>
+                                            <th>Exentas</th>
+                                            <th>5%</th>
+                                            <th>10%</th>
+                                            <th>Subtotal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tableHojaCompra"></tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th colspan="4" class="text-right">Totales</th>
+                                            <th class="text-right" id="hc_total_exentas">0</th>
+                                            <th class="text-right" id="hc_total_grav_5">0</th>
+                                            <th class="text-right" id="hc_total_grav_10">0</th>
+                                            <th class="text-right" id="hc_total">0</th>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="4" class="text-right">Liquidación IVA</th>
+                                            <th class="text-right">-</th>
+                                            <th class="text-right">5%: <span id="hc_total_iva_5">0</span></th>
+                                            <th class="text-right">10%: <span id="hc_total_iva_10">0</span></th>
+                                            <th class="text-right">IVA Total: <span id="hc_total_iva">0</span></th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 

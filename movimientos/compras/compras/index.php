@@ -58,8 +58,8 @@
                         <div class="body">
                             <div class="row clearfix">
                                 <input type="hidden" value="0" id="txtOperacion"/>
-                                <input type="hidden" value="1" id="user_id"/>
-                                <input type="hidden" value="0" id="user_name"/>
+                                <input type="hidden" value="0" id="user_id"/>
+                                <input type="hidden" value="" id="user_name"/>
                                 <input type="hidden" value="PENDIENTE" id="compra_estado"/>
                                 <!-- CAMPO PARA CODIGO CON 3 COLUMNAS -->
                                 <div class="col-sm-3">
@@ -165,7 +165,7 @@
                                     <label class="form-label" style="font-weight: normal; font-size: 13px; color: #555;">Intervalo Fecha Vto</label>
                                     <div class="form-group form-float">
                                         <div class="form-line">
-                                            <select id="intervalo_fecha_vto" class="form-control selectpicker">
+                                            <select id="intervalo_fecha_vto" class="form-control selectpicker" disabled>
                                                 <!-- Las opciones se generarán dinámicamente -->
                                             </select>
                                         </div>
@@ -180,23 +180,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row clearfix">
-                                    <!-- CAMPO PARA ELEGIR ORDEN DE COMPRA  -->
-                                    <div class="col-sm-4">
-                                        <label class="card-inside-title" style="font-weight: normal; font-size: 13px; color: #555;">¿Tiene Orden de Compra?</label>
-                                        <div class="demo-radio-button">
-                                            <div>
-                                                <input type="radio" id="Con_Orden" name="orden_option" value="1" disabled>
-                                                <label for="Con_Orden">Sí</label>
-
-                                                <input type="radio" id="Sin_Orden" name="orden_option" value="0" disabled>
-                                                <label for="Sin_Orden">No</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                
+                                <div class="row clearfix">                             
                                     <!-- CAMPO PARA BUSCAR ORDEN DE COMPRAS CON 3 COLUMNAS -->
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-8">
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <input type="hidden" id="orden_comp_id" value="0"/>
@@ -302,11 +288,11 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th colspan="4">Total General</th>
+                                                <th colspan="4" class="text-right">Totales</th>
+                                                <th class="text-right" id="txtTotalExentas">0</th>
+                                                <th class="text-right" id="txtTotalIva5">0</th>
+                                                <th class="text-right" id="txtTotalIva10">0</th>
                                                 <th class="text-right" id="txtTotalGral">0</th>
-                                                <th class="text-right">0</th> <!-- total exentas -->
-                                                <th class="text-right">0</th> <!-- total 5% -->
-                                                <th class="text-right">0</th> <!-- total 10% -->
                                             </tr>
                                         </tfoot>    
                                     </table>

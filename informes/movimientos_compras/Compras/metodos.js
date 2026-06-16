@@ -112,6 +112,21 @@ function consultarInforme(){
         consultarHojaOrden();
         return;
     }
+
+    if(tipoInforme === "COMPRAS_GENERAL"){
+        consultarComprasGeneral();
+        return;
+    }
+
+    if(tipoInforme === "HOJA_COMPRA"){
+        if($("#documento_id").val() === ""){
+            swal("Atención", "Debe ingresar el número de compra", "warning");
+            return;
+        }
+
+        consultarHojaCompra();
+        return;
+    }
 }
 
 function consultarPedidosGeneral(){
@@ -306,6 +321,85 @@ function consultarOrdenesGeneral(){
     });
 }
 
+function consultarComprasGeneral(){
+    if($("#fecha_desde").val() === "" || $("#fecha_hasta").val() === ""){
+        swal("Atención", "Debe ingresar Fecha Desde y Fecha Hasta para generar el informe", "warning");
+        return;
+    }
+
+    if(convertirFechaBD($("#fecha_desde").val()) > convertirFechaBD($("#fecha_hasta").val())){
+        swal("Atención", "La Fecha Desde no puede ser mayor a la Fecha Hasta", "warning");
+        return;
+    }
+
+    $("#cardInformeGeneral").attr("style","display:none;");
+    $("#cardHojaPreparacion").attr("style","display:none;");
+    $("#cardInformePresupuestos").attr("style","display:none;");
+    $("#cardHojaPresupuesto").attr("style","display:none;");
+    $("#cardInformeOrdenes").attr("style","display:none;");
+    $("#cardHojaOrden").attr("style","display:none;");
+    $("#cardHojaCompra").attr("style","display:none;");
+    $("#cardInformeCompras").attr("style","display:block;");
+
+    var sucursalTexto = $("#sucursal_id option:selected").text();
+
+    $.ajax({
+        url: getUrl()+"informes/compras/compras",
+        method: "POST",
+        dataType: "json",
+        data: {
+            fecha_desde: convertirFechaBD($("#fecha_desde").val()),
+            fecha_hasta: convertirFechaBD($("#fecha_hasta").val()),
+            estado: $("#estado").val(),
+            empresa_id: "",
+            sucursal_id: $("#sucursal_id").val(),
+            proveedor_id: $("#proveedor_id").val(),
+            compra_fact: $("#documento_id").val()
+        }
+    })
+    .done(function(resultado){
+        var lista = "";
+
+        $("#comp_fecha_desde").html($("#fecha_desde").val());
+        $("#comp_fecha_hasta").html($("#fecha_hasta").val());
+        $("#comp_estado").html($("#estado").val() === "" ? "TODOS" : $("#estado").val());
+        $("#comp_sucursal").html($("#sucursal_id").val() === "" ? "TODAS" : sucursalTexto);
+        $("#comp_usuario").html(usuarioLogueado.name);
+
+        for(rs of resultado){
+            lista += "<tr>";
+            lista += "<td>"+rs.id+"</td>";
+            lista += "<td>"+rs.compra_fec+"</td>";
+            lista += "<td>"+rs.compra_fec_recep+"</td>";
+            lista += "<td>"+rs.proveedor_desc+"</td>";
+            lista += "<td>"+rs.proveedor_ruc+"</td>";
+            lista += "<td>"+rs.compra_fact+"</td>";
+            lista += "<td>"+rs.compra_timbrado+"</td>";
+            lista += "<td>"+rs.tipo_fact_desc+"</td>";
+            lista += "<td>"+rs.empresa_desc+"</td>";
+            lista += "<td>"+rs.suc_desc+"</td>";
+            lista += "<td>"+rs.deposito_desc+"</td>";
+            lista += "<td>"+rs.encargado+"</td>";
+            lista += "<td>"+rs.compra_estado+"</td>";
+            lista += "<td>"+rs.cantidad_items+"</td>";
+            lista += "<td>"+rs.total_cantidad+"</td>";
+            lista += "<td class='text-right'>"+rs.total_exentas+"</td>";
+            lista += "<td class='text-right'>"+rs.total_grav_5+"</td>";
+            lista += "<td class='text-right'>"+rs.total_iva_5+"</td>";
+            lista += "<td class='text-right'>"+rs.total_grav_10+"</td>";
+            lista += "<td class='text-right'>"+rs.total_iva_10+"</td>";
+            lista += "<td class='text-right'>"+rs.total_compra+"</td>";
+            lista += "</tr>";
+        }
+
+        $("#tableInformeCompras").html(lista);
+    })
+    .fail(function(xhr, status, error){
+        swal("Error", "No se pudo generar el informe general de compras", "error");
+        console.log(xhr.responseText);
+    });
+}
+
 function consultarHojaPreparacion(){
     var pedidoId = $("#documento_id").val();
 
@@ -471,6 +565,93 @@ function consultarHojaOrden(){
     });
 }
 
+function consultarHojaCompra(){
+    var compraId = $("#documento_id").val();
+
+    if(compraId === ""){
+        swal("Atención", "Debe ingresar el número de compra", "warning");
+        return;
+    }
+
+    $("#cardInformeGeneral").attr("style","display:none;");
+    $("#cardHojaPreparacion").attr("style","display:none;");
+    $("#cardInformePresupuestos").attr("style","display:none;");
+    $("#cardHojaPresupuesto").attr("style","display:none;");
+    $("#cardInformeOrdenes").attr("style","display:none;");
+    $("#cardHojaOrden").attr("style","display:none;");
+    $("#cardInformeCompras").attr("style","display:none;");
+    $("#cardHojaCompra").attr("style","display:block;");
+
+    $.ajax({
+        url: getUrl()+"informes/compras/hoja_compra/"+compraId,
+        method: "GET",
+        dataType: "json"
+    })
+    .done(function(resultado){
+        var cab = resultado.cabecera;
+        var detalles = resultado.detalles;
+
+        var total = 0;
+        var totalExentas = 0;
+        var totalGrav5 = 0;
+        var totalGrav10 = 0;
+        var totalIva5 = 0;
+        var totalIva10 = 0;
+
+        $("#hc_id").html(cab.id);
+        $("#hc_fecha").html(cab.compra_fec);
+        $("#hc_fecha_recep").html(cab.compra_fec_recep);
+        $("#hc_estado").html(cab.compra_estado);
+        $("#hc_orden").html(cab.orden_comp_id);
+        $("#hc_proveedor").html(cab.proveedor_desc);
+        $("#hc_ruc").html(cab.proveedor_ruc);
+        $("#hc_tipo_fact").html(cab.tipo_fact_desc);
+        $("#hc_factura").html(cab.compra_fact);
+        $("#hc_timbrado").html(cab.compra_timbrado);
+        $("#hc_empresa").html(cab.empresa_desc);
+        $("#hc_sucursal").html(cab.suc_desc);
+        $("#hc_deposito").html(cab.deposito_desc);
+        $("#hc_funcionario").html(cab.encargado);
+        $("#hc_cuotas").html(cab.compra_cant_cta);
+        $("#hc_ifv").html(cab.compra_ifv);
+
+        var lista = "";
+
+        for(rs of detalles){
+            total += parseFloat(rs.subtotal);
+            totalExentas += parseFloat(rs.exentas);
+            totalGrav5 += parseFloat(rs.grav_5);
+            totalGrav10 += parseFloat(rs.grav_10);
+            totalIva5 += parseFloat(rs.iva_5);
+            totalIva10 += parseFloat(rs.iva_10);
+
+            lista += "<tr>";
+            lista += "<td>"+rs.producto_id+"</td>";
+            lista += "<td>"+rs.prod_desc+"</td>";
+            lista += "<td>"+rs.compra_cant+"</td>";
+            lista += "<td class='text-right'>"+rs.compra_costo+"</td>";
+            lista += "<td class='text-right'>"+rs.exentas+"</td>";
+            lista += "<td class='text-right'>"+rs.grav_5+"</td>";
+            lista += "<td class='text-right'>"+rs.grav_10+"</td>";
+            lista += "<td class='text-right'>"+rs.subtotal+"</td>";
+            lista += "</tr>";
+        }
+
+        $("#tableHojaCompra").html(lista);
+        $("#hc_total_exentas").html(totalExentas.toFixed(0));
+        $("#hc_total_grav_5").html(totalGrav5.toFixed(0));
+        $("#hc_total_grav_10").html(totalGrav10.toFixed(0));
+        $("#hc_total_iva_5").html(totalIva5.toFixed(0));
+        $("#hc_total_iva_10").html(totalIva10.toFixed(0));
+        $("#hc_total_iva").html((totalIva5 + totalIva10).toFixed(0));
+        $("#hc_total").html(total.toFixed(0));
+    })
+    .fail(function(xhr, status, error){
+        swal("Error", "No se pudo generar la hoja de compra", "error");
+        console.log(xhr.responseText);
+    });
+}
+
 function imprimirInforme(){
     var tipoInforme = $("#tipo_informe").val();
 
@@ -506,6 +687,16 @@ function imprimirInforme(){
 
     if(tipoInforme === "HOJA_ORDEN"){
         imprimirAreaInforme("areaHojaOrden", "Hoja de Orden de Compra");
+        return;
+    }
+
+    if(tipoInforme === "COMPRAS_GENERAL"){
+        imprimirAreaInforme("areaInformeCompras", "Informe General de Compras");
+        return;
+    }
+
+    if(tipoInforme === "HOJA_COMPRA"){
+        imprimirAreaInforme("areaHojaCompra", "Hoja de Compra");
         return;
     }
 }
@@ -681,6 +872,8 @@ function controlarCampoDocumento(){
     $("#cardHojaPresupuesto").attr("style","display:none;");
     $("#cardInformeOrdenes").attr("style","display:none;");
     $("#cardHojaOrden").attr("style","display:none;");
+    $("#cardInformeCompras").attr("style","display:none;");
+    $("#cardHojaCompra").attr("style","display:none;");
 
     $("#documento_id").val("");
     $("#documento_id").attr("disabled","true");
@@ -704,6 +897,26 @@ function controlarCampoDocumento(){
         tipoInforme === "HOJA_PRESUPUESTO" ||
         tipoInforme === "ORDENES_GENERAL" ||
         tipoInforme === "HOJA_ORDEN"
+    ) {
+        $("#proveedor_desc").removeAttr("disabled");
+    }
+
+    if (
+        tipoInforme === "HOJA_PREPARACION" ||
+        tipoInforme === "HOJA_PRESUPUESTO" ||
+        tipoInforme === "HOJA_ORDEN" ||
+        tipoInforme === "HOJA_COMPRA"
+    ) {
+        $("#documento_id").removeAttr("disabled");
+    }
+
+    if (
+        tipoInforme === "PRESUPUESTOS_GENERAL" ||
+        tipoInforme === "HOJA_PRESUPUESTO" ||
+        tipoInforme === "ORDENES_GENERAL" ||
+        tipoInforme === "HOJA_ORDEN" ||
+        tipoInforme === "COMPRAS_GENERAL" ||
+        tipoInforme === "HOJA_COMPRA"
     ) {
         $("#proveedor_desc").removeAttr("disabled");
     }
