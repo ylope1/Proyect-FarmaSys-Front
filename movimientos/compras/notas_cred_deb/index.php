@@ -6,7 +6,7 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <title>GUI REGISTRO DE NOTAS DE COMPRAS</title>
     <!-- Favicon-->
-    <link rel="icon" href="../../../favicon.ico" type="image/x-icon">
+    <link rel="icon" href="../../../images/logo_miniatura.jpg" type="image/jpeg">
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
@@ -58,8 +58,8 @@
                         <div class="body">
                             <div class="row clearfix">
                                 <input type="hidden" value="0" id="txtOperacion"/>
-                                <input type="hidden" value="1" id="user_id"/>
-                                <input type="hidden" value="0" id="user_name"/>
+                                <input type="hidden" value="0" id="user_id"/>
+                                <input type="hidden" value="" id="user_name"/>
                                 <input type="hidden" value="PENDIENTE" id="nota_comp_estado"/>
                                 <!-- CAMPO PARA CODIGO CON 3 COLUMNAS -->
                                 <div class="col-sm-3">
@@ -277,10 +277,10 @@
                                         <tfoot>
                                             <tr>
                                                 <th colspan="4">Total General</th>
+                                                <th class="text-right" id="totalExentas">0</th>
+                                                <th class="text-right" id="total5">0</th>
+                                                <th class="text-right" id="total10">0</th>
                                                 <th class="text-right" id="txtTotalGral">0</th>
-                                                <th class="text-right">0</th> <!-- total exentas -->
-                                                <th class="text-right">0</th> <!-- total 5% -->
-                                                <th class="text-right">0</th> <!-- total 10% -->
                                             </tr>
                                         </tfoot>    
                                     </table>

@@ -88,7 +88,7 @@ function cancelar(){
 function salir(){
     swal({
         title: "Salir",
-        text: "¿Desea salir de la ventana de presupuestos?",
+        text: "¿Desea salir de la ventana de notas de compras?",
         type: "warning",
         showCancelButton: true,
         confirmButtonText: "SI",
@@ -101,7 +101,7 @@ function salir(){
 
 function agregar() {
     if (!tienePermiso(rutaPantalla, "crear")) {
-        mensajeOperacion("Acceso denegado", "No tiene permiso para agregar presupuestos.", "warning");
+        mensajeOperacion("Acceso denegado", "No tiene permiso para agregar notas de compras.", "warning");
         return;
     }
 
@@ -109,8 +109,9 @@ function agregar() {
     $("#id").val(0);
     $("#empresa_desc").removeAttr("disabled");
     $("#suc_desc").removeAttr("disabled"); 
+    cargarDatosFuncionario();
     $("#deposito_desc").removeAttr("disabled");
-    $("#txtFecha").removeAttr("disabled");
+    $("#txtFecha").val(obtenerFechaActualSistema());
     $("#proveedor_desc").removeAttr("disabled");
     $("#txtTimbrado").removeAttr("disabled");
     $("#txtNroFact").removeAttr("disabled");
@@ -131,13 +132,19 @@ function agregar() {
     $("#btnGrabar").removeAttr("disabled");
     $("#btnCancelar").removeAttr("disabled");
 
-    $(".form-line").attr("class", "form-line focused");
     $("#registros").attr("style", "display:none;");
+    $("#detalles").attr("style", "display:none;");
+    $(".form-line").attr("class", "form-line focused");
 }
 
 function editar() {
     if (!tienePermiso(rutaPantalla, "modificar")) {
         mensajeOperacion("Acceso denegado", "No tiene permiso para modificar presupuestos.", "warning");
+        return;
+    }
+
+    if ($("#nota_comp_estado").val() !== "PENDIENTE") {
+        mensajeOperacion("Atención", "Solo se pueden modificar notas en estado PENDIENTE.", "warning");
         return;
     }
 
@@ -172,6 +179,11 @@ function anular(){
         return;
     }
 
+    if ($("#nota_comp_estado").val() !== "PENDIENTE") {
+        mensajeOperacion("Atención", "Solo se pueden anular notas en estado PENDIENTE.", "warning");
+        return;
+    }
+
     $("#txtOperacion").val(3);
 
     $("#btnAgregar").attr("disabled","true");
@@ -186,6 +198,11 @@ function anular(){
 function confirmar(){
     if (!tienePermiso(rutaPantalla, "confirmar")) {
         mensajeOperacion("Acceso denegado", "No tiene permiso para confirmar presupuestos.", "warning");
+        return;
+    }
+
+    if ($("#nota_comp_estado").val() !== "PENDIENTE") {
+        mensajeOperacion("Atención", "Solo se pueden confirmar notas en estado PENDIENTE.", "warning");
         return;
     }
 
@@ -312,16 +329,23 @@ function seleccionNotasComp(id, empresa_id, empresa_desc, sucursal_id, suc_desc,
     $("#user_name").val(encargado);
     //condicion de compra
     if (tipo_fact_id == 6) {
-        document.getElementById("contado").checked = true;
+        $("#contado").prop("checked", true);
+        $("#credito").prop("checked", false);
     } else if (tipo_fact_id == 7) {
-        document.getElementById("credito").checked = true;
+        $("#credito").prop("checked", true);
+        $("#contado").prop("checked", false);
     }
+
+    $("#contado").attr("disabled", "true");
+    $("#credito").attr("disabled", "true");
+
     // Actualiza el select de intervalo según la condición
     toggleCampoCondicionVta();
     
     $("#detalles").attr("style","display:block;");
     $("#registros").attr("style","display:none;");
     $("#formDetalles").attr("style","display:none;");
+
     listarDetalles();   
 
     $("#btnAgregar").attr("disabled","true");
@@ -333,8 +357,6 @@ function seleccionNotasComp(id, empresa_id, empresa_desc, sucursal_id, suc_desc,
 
     $("#btnCancelar").removeAttr("disabled");
 
-    var nota_comp_estado = $("#nota_comp_estado").val(); // Tomamos el valor actualizado
-    console.log("Estado actual:", nota_comp_estado);
     if (nota_comp_estado === "PENDIENTE"){   
         $("#btnAgregar").attr("disabled","true");
         $("#btnGrabar").attr("disabled","true");
@@ -361,10 +383,36 @@ function seleccionNotasComp(id, empresa_id, empresa_desc, sucursal_id, suc_desc,
     $(".form-line").attr("class","form-line focused");
 }
 
-function grabar(){
+function grabar(){ //este de grabar tambien no me gusta vamos a ver que genere de nuevo
     var endpoint = "notas_comp_cab/create";
     var metodo = "POST";
-    var estado = "PENDIENTE";
+
+    if ($("#txtOperacion").val() == 1 || $("#txtOperacion").val() == 2) {
+        if ($("#compra_id").val() == "" || $("#compra_id").val() == "0") {
+            mensajeOperacion("Atención", "Debe seleccionar una compra recibida.", "warning");
+            return;
+        }
+
+        if ($("#nota_comp_tipo").val() == "" || $("#nota_comp_tipo").val() == null) {
+            mensajeOperacion("Atención", "Debe seleccionar el tipo de nota.", "warning");
+            return;
+        }
+
+        if ($("#txtFecha").val().trim() == "") {
+            mensajeOperacion("Atención", "Debe ingresar la fecha de la nota.", "warning");
+            return;
+        }
+
+        if ($("#txtTimbrado").val().trim() == "") {
+            mensajeOperacion("Atención", "Debe ingresar el timbrado.", "warning");
+            return;
+        }
+
+        if ($("#txtNroFact").val().trim() == "") {
+            mensajeOperacion("Atención", "Debe ingresar el número de nota.", "warning");
+            return;
+        }
+    }
     
     if($("#txtOperacion").val()==2){
         endpoint = "notas_comp_cab/update/"+$("#id").val();
@@ -385,19 +433,11 @@ function grabar(){
         method:metodo,
         dataType: "json",
         data: { 
-            'id': $("#id").val(),
             'compra_id': $("#compra_id").val(),
-            'proveedor_id': $("#proveedor_id").val(),
-            'user_id': usuarioLogueado.id,
-            'deposito_id': $("#deposito_id").val(),
-            'sucursal_id': $("#sucursal_id").val(),
-            'empresa_id': $("#empresa_id").val(),
-            'tipo_fact_id': $("input[name='tipo_fact_id']:checked").val(),
             'nota_comp_fact': $("#txtNroFact").val(),
             'nota_comp_timbrado': $("#txtTimbrado").val(),
-            'nota_comp_fec': $("#txtFecha").val(), 
-            'nota_comp_tipo': $("#nota_comp_tipo").val(),   
-            'nota_comp_estado': estado,
+            'nota_comp_fec': $("#txtFecha").val(),
+            'nota_comp_tipo': $("#nota_comp_tipo").val(),
             'operacion': $("#txtOperacion").val()
         }
     })
@@ -413,22 +453,29 @@ function grabar(){
                 //location.reload(true);
                 if (resultado.registro && resultado.registro.id) {//borrar si no funciona
                     $("#id").val(resultado.registro.id);
-                }    //borrar si no funciona
-                $("#detalles").attr("style","display:block;");
-                listarDetalles();
-                if(resultado.registro.nota_comp_estado!= "PENDIENTE"){
+                    $("#nota_comp_estado").val(resultado.registro.nota_comp_estado);
+                    $("#detalles").attr("style","display:block;");
+                    $("#formDetalles").attr("style","display:block;");
+                    listarDetalles();
+                } else {
                     location.reload(true);
                 }
-            } else {//borrar si no funciona
-                // Si hubo error, cerramos SweetAlert
-                swal.close(); 
-            }//borrar si no funciona
+            }
         });
     })
     .fail(function(a,b,c){
-        alert(c);
         console.log(a.responseText);
-    })
+
+        let mensaje = "Error desconocido";
+        try {
+            let json = JSON.parse(a.responseText);
+            mensaje = json.mensaje || json.message || mensaje;
+        } catch (e) {
+            mensaje = a.responseText;
+        }
+
+        swal("Error", mensaje, "error");
+    });
 }
 
 function campoFecha(){
@@ -440,6 +487,11 @@ function campoFecha(){
 }
 
 function agregarDetalle(){
+    if ($("#nota_comp_estado").val() !== "PENDIENTE") {
+        mensajeOperacion("Atención", "Solo se pueden agregar detalles a notas en estado PENDIENTE.", "warning");
+        return;
+    }
+
     $("#txtOperacionDetalle").val(1);
     $("#prod_desc").removeAttr("disabled");
     $("#det_cantidad").removeAttr("disabled");
@@ -452,6 +504,16 @@ function agregarDetalle(){
 }
 
 function editarDetalle(){
+    if ($("#nota_comp_estado").val() !== "PENDIENTE") {
+        mensajeOperacion("Atención", "Solo se pueden modificar detalles de notas en estado PENDIENTE.", "warning");
+        return;
+    }
+
+    if ($("#producto_id").val() == "") {
+        mensajeOperacion("Atención", "Debe seleccionar un producto del detalle.", "warning");
+        return;
+    }
+
     $("#txtOperacionDetalle").val(2);
     $("#det_cantidad").removeAttr("disabled");
     $("#det_costo").removeAttr("disabled");
@@ -463,6 +525,16 @@ function editarDetalle(){
 }
 
 function eliminarDetalle(){
+    if ($("#nota_comp_estado").val() !== "PENDIENTE") {
+        mensajeOperacion("Atención", "Solo se pueden eliminar detalles de notas en estado PENDIENTE.", "warning");
+        return;
+    }
+
+    if ($("#producto_id").val() == "") {
+        mensajeOperacion("Atención", "Debe seleccionar un producto del detalle.", "warning");
+        return;
+    }
+
     $("#txtOperacionDetalle").val(3);
     $("#btnAgregarDetalle").attr("Style","display:none");
     $("#btnEditarDetalle").attr("Style","display:none");
@@ -471,6 +543,11 @@ function eliminarDetalle(){
 }
 
 function grabarDetalle(){ 
+    if ($("#nota_comp_estado").val() !== "PENDIENTE") {
+        mensajeOperacion("Atención", "Solo se pueden modificar detalles de notas en estado PENDIENTE.", "warning");
+        return;
+    }
+
     var endpoint = "notas_comp_det/create";
     var metodo = "POST";
     
@@ -487,7 +564,7 @@ function grabarDetalle(){
         method: metodo,
         dataType: "json",
         data: {
-            "nota_compra_id":$("#id").val(),
+            "nota_comp_id":$("#id").val(),
             "producto_id":$("#producto_id").val(),
             "compra_cant":$("#det_cantidad").val(),
             "compra_costo":$("#det_costo").val(),
@@ -495,23 +572,29 @@ function grabarDetalle(){
         }
     })
     .done(function(respuesta) {
+        mensajeOperacion("Respuesta", respuesta.mensaje, respuesta.tipo);
         listarDetalles();
+
+        $("#btnAgregarDetalle").attr("Style","display:inline");
+        $("#btnEditarDetalle").attr("Style","display:inline");
+        $("#btnEliminarDetalle").attr("Style","display:inline");
+        $("#btnGrabarDetalle").attr("Style","display:none");
+
+        $("#txtOperacionDetalle").val(1);
+        $("#prod_desc").val("");
+        $("#det_cantidad").val("");
+        $("#det_costo").val("");
+        $("#motivo").val("");
     })
     .fail(function(a,b,c){
-        alert(c);
+        var respuesta = a.responseJSON;
+        if (respuesta && respuesta.mensaje) {
+            mensajeOperacion("Atención", respuesta.mensaje, respuesta.tipo || "error");
+        } else {
+            alert(c);
+        }
         console.log(a.responseText);
-    })
-    
-    $("#btnAgregarDetalle").attr("Style","display:inline");
-    $("#btnEditarDetalle").attr("Style","display:inline");
-    $("#btnEliminarDetalle").attr("Style","display:inline");
-    $("#btnGrabarDetalle").attr("Style","display:none");
-
-    $("#txtOperacionDetalle").val(1);
-    $("#prod_desc").val("");
-    $("#det_cantidad").val("");
-    $("#det_costo").val("");
-    $("#motivo").val("");
+    });
 }
 
 function buscarProductos(){
@@ -554,18 +637,16 @@ function listarDetalles() {
     var totalExentas = 0;
     var totalGrav5 = 0;
     var totalGrav10 = 0;
-    console.log("ID actual:", $("#id").val()); // Verifica el ID de nota de compra
+
     $.ajax({
         url: getUrl() + "notas_comp_det/read/" + $("#id").val(),
         method: "GET",
         dataType: "json"
     })
     .done(function (resultado) {
-        console.log("Detalles recibidos:", resultado);
         var lista = "";
 
         for (let rs of resultado) {
-            // Aseguramos tipos numéricos
             let costo = Number(rs.compra_costo) || 0;
             let cantidad = Number(rs.compra_cant) || 0;
             let subtotal = cantidad * costo;
@@ -574,69 +655,46 @@ function listarDetalles() {
             let grav5 = 0;
             let grav10 = 0;
 
-            // Preferimos usar impuesto_id (numérico) si está presente
-            if (typeof rs.impuesto_id !== 'undefined' && rs.impuesto_id !== null) {
-                switch (Number(rs.impuesto_id)) {
-                    case 2: // 5%
-                        grav5 = subtotal;
-                        totalGrav5 += subtotal;
-                        break;
-                    case 1: // 10%
-                        grav10 = subtotal;
-                        totalGrav10 += subtotal;
-                        break;
-                    case 3: // exento
-                    default:
-                        exentas = subtotal;
-                        totalExentas += subtotal;
-                        break;
-                }
+            if (Number(rs.impuesto_id) === 2) {
+                grav5 = subtotal;
+                totalGrav5 += subtotal;
+            } else if (Number(rs.impuesto_id) === 1) {
+                grav10 = subtotal;
+                totalGrav10 += subtotal;
             } else {
-                // Fallback: usar impuesto_desc (normalizado)
-                const desc = (rs.impuesto_desc || '').toString().trim().toUpperCase();
-                if (desc.includes('5')) {
-                    grav5 = subtotal;
-                    totalGrav5 += subtotal;
-                } else if (desc.includes('10')) {
-                    grav10 = subtotal;
-                    totalGrav10 += subtotal;
-                } else {
-                    exentas = subtotal;
-                    totalExentas += subtotal;
-                }
+                exentas = subtotal;
+                totalExentas += subtotal;
             }
 
             totalGral += subtotal;
             cantidadDetalle++;
 
-            lista += "<tr class=\"item-list\" onclick=\"seleccionDetalle(" + rs.producto_id + ",'" + (rs.prod_desc||'') + "'," + rs.compra_cant + "," + rs.compra_costo + ",'" + rs.nota_comp_motivo + "');\">";
-            lista += "<td>" + rs.producto_id + "</td>";
-            lista += "<td>" + (rs.prod_desc||'') + "</td>";
-            lista += "<td>" + cantidad + "</td>";
-            lista += "<td class='text-right'>" + costo.toFixed(0) + "</td>";
-            lista += "<td class='text-right'>" + exentas.toFixed(0) + "</td>";
-            lista += "<td class='text-right'>" + grav5.toFixed(0) + "</td>";
-            lista += "<td class='text-right'>" + grav10.toFixed(0) + "</td>";
-            lista += "<td class='text-right'>" + subtotal.toFixed(0) + "</td>";
+            lista += "<tr class=\"item-list\" onclick=\"seleccionDetalle("+
+                rs.producto_id+",'"+
+                (rs.prod_desc || '')+"',"+
+                rs.compra_cant+","+
+                rs.compra_costo+",'"+
+                rs.nota_comp_motivo+"');\">";
+
+            lista += "<td>"+rs.producto_id+"</td>";
+            lista += "<td>"+(rs.prod_desc || '')+"</td>";
+            lista += "<td>"+cantidad+"</td>";
+            lista += "<td class='text-right'>"+costo.toFixed(0)+"</td>";
+            lista += "<td class='text-right'>"+exentas.toFixed(0)+"</td>";
+            lista += "<td class='text-right'>"+grav5.toFixed(0)+"</td>";
+            lista += "<td class='text-right'>"+grav10.toFixed(0)+"</td>";
+            lista += "<td class='text-right'>"+subtotal.toFixed(0)+"</td>";
             lista += "</tr>";
         }
 
         $("#tableDetalles").html(lista);
 
-        // Mostrar los totales en el pie de la tabla
-        var tfoot = `
-            <tr>
-                <th colspan="4" class="text-right">Total General</th>
-                <th class="text-right">${totalExentas.toFixed(0)}</th>
-                <th class="text-right">${totalGrav5.toFixed(0)}</th>
-                <th class="text-right">${totalGrav10.toFixed(0)}</th>
-                <th class="text-right">${totalGral.toFixed(0)}</th>
-            </tr>
-        `;
-        $(".dataTable tfoot").html(tfoot);
+        $("#totalExentas").text(totalExentas.toFixed(0));
+        $("#total5").text(totalGrav5.toFixed(0));
+        $("#total10").text(totalGrav10.toFixed(0));
+        $("#txtTotalGral").text(totalGral.toFixed(0));
 
-        // Activar botón confirmar si corresponde
-        if ($("#nota_comp_estado").val() === "PENDIENTE" && cantidadDetalle > 0) {
+        if ($("#nota_comp_estado").val() === "PENDIENTE" && cantidadDetalle > 0 && tienePermiso(rutaPantalla, "confirmar")) {
             $("#btnConfirmar").removeAttr("disabled");
         } else {
             $("#btnConfirmar").attr("disabled", "true");
@@ -647,15 +705,18 @@ function listarDetalles() {
         console.log(a.responseText);
     });
 }
+
 function seleccionDetalle(producto_id, prod_desc, compra_cant, compra_costo, nota_comp_motivo){
     $("#producto_id").val(producto_id);
     $("#prod_desc").val(prod_desc);
     $("#det_cantidad").val(compra_cant);
     $("#det_costo").val(compra_costo);
     $("#motivo").val(nota_comp_motivo);
+
+    $(".form-line").attr("class","form-line focused");
 }
 
-function buscarProveedores(){
+/*function buscarProveedores(){
     $.ajax({
         url:getUrl()+"proveedore/buscar",
         method:"POST",
@@ -687,7 +748,7 @@ function seleccionProveedor(proveedor_id, proveedor_desc){
     $("#listaProveedores").attr("style","display:none;");
 
     $(".form-line").attr("class","form-line focused");
-}
+}*/
 
 function buscarCompras(){
     $.ajax({
@@ -695,15 +756,23 @@ function buscarCompras(){
         method:"POST",
         dataType: "json",
         data: {
-            'user_id': $("#user_id").val(),
-            'name': $("#compra").val()
+            'buscar': $("#compra").val()
         }
     })
     .done(function(resultado){
         var lista = "<ul class=\"list-group\">";
+
         for(rs of resultado){
-            lista += "<li class=\"list-group-item\" onclick=\"seleccionCompra("+rs.compra_id+",'"+rs.compra+"')\">"+rs.compra+"</li>";
+            lista += "<li class=\"list-group-item\" onclick=\"seleccionCompra("+
+                rs.compra_id+","+
+                rs.empresa_id+",'"+rs.empresa_desc+"',"+
+                rs.sucursal_id+",'"+rs.suc_desc+"',"+
+                rs.deposito_id+",'"+rs.deposito_desc+"',"+
+                rs.proveedor_id+",'"+rs.proveedor_desc+"',"+
+                rs.tipo_fact_id+",'"+rs.tipo_fact_desc+"','"+
+                rs.compra+"')\">"+rs.compra+"</li>";
         }
+
         lista += "</ul>";
         $("#listaCompras").html(lista);
         $("#listaCompras").attr("style","display:block; position:absolute; z-index:2000;");
@@ -711,11 +780,37 @@ function buscarCompras(){
     .fail(function(a,b,c){
         alert(c);
         console.log(a.responseText);
-    })
+    });
 }
-function seleccionCompra(compra_id, compra){
+
+function seleccionCompra(compra_id, empresa_id, empresa_desc, sucursal_id, suc_desc, deposito_id, deposito_desc, proveedor_id, proveedor_desc, tipo_fact_id, tipo_fact_desc, compra){
     $("#compra_id").val(compra_id);
     $("#compra").val(compra);
+
+    $("#empresa_id").val(empresa_id);
+    $("#empresa_desc").val(empresa_desc);
+
+    $("#sucursal_id").val(sucursal_id);
+    $("#suc_desc").val(suc_desc);
+
+    $("#deposito_id").val(deposito_id);
+    $("#deposito_desc").val(deposito_desc);
+
+    $("#proveedor_id").val(proveedor_id);
+    $("#proveedor_desc").val(proveedor_desc);
+
+    if (tipo_fact_id == 6) {
+        $("#contado").prop("checked", true);
+        $("#credito").prop("checked", false);
+    } else if (tipo_fact_id == 7) {
+        $("#credito").prop("checked", true);
+        $("#contado").prop("checked", false);
+    }
+
+    $("#contado").attr("disabled", "true");
+    $("#credito").attr("disabled", "true");
+
+    toggleCampoCondicionVta();
 
     $("#listaCompras").html("");
     $("#listaCompras").attr("style","display:none;");
@@ -723,7 +818,7 @@ function seleccionCompra(compra_id, compra){
     $(".form-line").attr("class","form-line focused");
 }
 
-function buscarEmpresas(){
+/*function buscarEmpresas(){
     $.ajax({
         url: getUrl()+"empresa/buscar", 
         method:"POST",
@@ -814,7 +909,7 @@ function seleccionDeposito(deposito_id, deposito_desc){
 
     $("#listaDepositos").html("");
     $("#listaDepositos").attr("style","display:none;");
-}
+}*/
 
 function cargarTipoNota(seleccionado = null, deshabilitar = true) {
     const opciones = [
@@ -823,9 +918,8 @@ function cargarTipoNota(seleccionado = null, deshabilitar = true) {
     ];
 
     let select = $("#nota_comp_tipo");
-    select.empty(); // Limpiar opciones previas
+    select.empty();
 
-    // Agregar una opción por defecto vacía
     select.append(`<option value="" disabled ${seleccionado ? "" : "selected"}>-- Seleccione --</option>`);
 
     opciones.forEach(op => {
@@ -833,9 +927,6 @@ function cargarTipoNota(seleccionado = null, deshabilitar = true) {
         select.append(`<option value="${op.valor}" ${selectedAttr}>${op.texto}</option>`);
     });
 
-    select.selectpicker("refresh"); // Refrescar
-
-    // Habilitar o deshabilitar el campo
     if (deshabilitar) {
         select.attr("disabled", "disabled");
     } else {
@@ -859,4 +950,63 @@ document.addEventListener("DOMContentLoaded", function () {
     cargarTipoNota(null, true);
 });
 
+function obtenerFechaActualSistema() {
+    var fecha = new Date();
 
+    var dia = ("0" + fecha.getDate()).slice(-2);
+    var mes = ("0" + (fecha.getMonth() + 1)).slice(-2);
+    var anho = fecha.getFullYear();
+
+    var hora = ("0" + fecha.getHours()).slice(-2);
+    var minuto = ("0" + fecha.getMinutes()).slice(-2);
+    var segundo = ("0" + fecha.getSeconds()).slice(-2);
+
+    return dia + "/" + mes + "/" + anho + " " + hora + ":" + minuto + ":" + segundo;
+}
+
+function cargarDatosFuncionario(){
+    $.ajax({
+        url: getUrl()+"funcionario/datosFuncionario",
+        method: "GET",
+        dataType: "json"
+    })
+    .done(function(resultado){
+        datosFuncionario = resultado;
+
+        $("#empresa_id").val(resultado.empresa_id);
+        $("#empresa_desc").val(resultado.empresa_desc);
+
+        $("#sucursal_id").val(resultado.sucursal_id);
+        $("#suc_desc").val(resultado.suc_desc);
+
+        $(".form-line").attr("class","form-line focused");
+    })
+    .fail(function(xhr, status, error){
+        swal("Error", "No se pudieron obtener los datos del funcionario logueado", "error");
+        console.log(xhr.responseText);
+    });
+}
+
+function validarCamposNumericos(){
+
+    $("#det_cantidad, #det_costo").on("keypress", function(e){
+
+        var charCode = (e.which) ? e.which : e.keyCode;
+
+        if (charCode >= 48 && charCode <= 57){
+            return true;
+        }
+
+        if (charCode == 46){
+
+            if ($(this).val().indexOf('.') !== -1){
+                return false;
+            }
+
+            return true;
+        }
+
+        return false;
+    });
+
+}
