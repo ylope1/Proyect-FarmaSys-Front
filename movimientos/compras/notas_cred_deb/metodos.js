@@ -358,13 +358,6 @@ function seleccionNotasComp(id, empresa_id, empresa_desc, sucursal_id, suc_desc,
     $("#btnCancelar").removeAttr("disabled");
 
     if (nota_comp_estado === "PENDIENTE"){   
-        $("#btnAgregar").attr("disabled","true");
-        $("#btnGrabar").attr("disabled","true");
-
-        $("#btnAnular").removeAttr("disabled");
-        $("#btnConfirmar").removeAttr("disabled");
-        $("#btnEditar").removeAttr("disabled");
-
         if (tienePermiso(rutaPantalla, "anular")) {
             $("#btnAnular").removeAttr("disabled");
         }
@@ -372,6 +365,17 @@ function seleccionNotasComp(id, empresa_id, empresa_desc, sucursal_id, suc_desc,
         if (tienePermiso(rutaPantalla, "modificar")) {
             $("#btnEditar").removeAttr("disabled");
         }
+
+        if (tienePermiso(rutaPantalla, "confirmar")) {
+            $("#btnConfirmar").removeAttr("disabled");
+        }
+        
+        $("#btnAgregar").attr("disabled","true");
+        $("#btnGrabar").attr("disabled","true");
+
+        $("#btnAnular").removeAttr("disabled");
+        $("#btnConfirmar").removeAttr("disabled");
+        $("#btnEditar").removeAttr("disabled");
 
         $("#formDetalles").attr("style","display:block;");
     }
