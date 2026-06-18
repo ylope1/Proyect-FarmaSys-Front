@@ -6,7 +6,7 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <title>GUI INFORMES DE COMPRAS</title>
     <!-- Favicon-->
-    <link rel="icon" href="../../../favicon.ico" type="image/x-icon">
+    <link rel="icon" href="../../../images/logo_miniatura.jpg" type="image/jpeg">
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
@@ -69,6 +69,8 @@
                                                 <option value="HOJA_ORDEN">Hoja de orden de compra</option>
                                                 <option value="COMPRAS_GENERAL">Informe general de compras</option>
                                                 <option value="HOJA_COMPRA">Hoja de compra</option>
+                                                <option value="NOTAS_COMPRAS_GENERAL">Informe general de notas de compras</option>
+                                                <option value="HOJA_NOTA_COMPRA">Hoja de nota de compra</option>
                                             </select>
                                         </div>
                                     </div>
@@ -134,6 +136,20 @@
                                     </div>
                                 </div>
 
+                                <div class="col-sm-1" id="div_tipo_nota" style="display:none;">
+                                    <label class="form-label" style="font-weight: normal; font-size: 13px; color: #555;">
+                                        Tipo Nota
+                                    </label>
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <select id="tipo_nota" class="form-control selectpicker">
+                                                <option value="TODOS">TODOS</option>
+                                                <option value="NC">NC</option>
+                                                <option value="ND">ND</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="col-sm-1">
                                     <div class="form-group form-float">
                                         <div class="form-line">
@@ -762,9 +778,220 @@
                             </div>
                         </div>
                     </div>
+                    <div class="card" id="cardInformeNotasCompras" style="display:none;">
+                        <div class="header">
+                            <h2>
+                                INFORME GENERAL DE NOTAS DE COMPRAS
+                            </h2>
+                        </div>
+
+                        <div class="body" id="areaInformeNotasCompras">
+
+                            <div class="row clearfix">
+                                <div class="col-sm-3">
+                                    <b>Fecha Desde:</b>
+                                    <label id="nc_fecha_desde"></label>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <b>Fecha Hasta:</b>
+                                    <label id="nc_fecha_hasta"></label>
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <b>Estado:</b>
+                                    <label id="nc_estado"></label>
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <b>Sucursal:</b>
+                                    <label id="nc_sucursal"></label>
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <b>Tipo Nota:</b>
+                                    <label id="nc_tipo_nota"></label>
+                                </div>
+                            </div>
+
+                            <div class="row clearfix">
+                                <div class="col-sm-12">
+                                    <b>Usuario:</b>
+                                    <label id="nc_usuario"></label>
+                                </div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Nro</th>
+                                            <th>Fecha</th>
+                                            <th>Tipo</th>
+                                            <th>Factura</th>
+                                            <th>Proveedor</th>
+                                            <th>Condición</th>
+                                            <th>Sucursal</th>
+                                            <th>Estado</th>
+                                            <th>Compra</th>
+                                            <th>Items</th>
+                                            <th>Cantidad</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody id="tableInformeNotasCompras">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card" id="cardHojaNotaCompra" style="display:none;">
+                        <div class="header">
+                            <h2>
+                                HOJA DE NOTA DE COMPRA
+                            </h2>
+                        </div>
+
+                        <div class="body" id="areaHojaNotaCompra">
+
+                            <div class="row clearfix">
+                                <div class="col-sm-2">
+                                    <b>Nro Nota:</b>
+                                    <label id="hnc_id"></label>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <b>Fecha:</b>
+                                    <label id="hnc_fecha"></label>
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <b>Estado:</b>
+                                    <label id="hnc_estado"></label>
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <b>Tipo Nota:</b>
+                                    <label id="hnc_tipo_nota"></label>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <b>Condición:</b>
+                                    <label id="hnc_tipo_fact"></label>
+                                </div>
+                            </div>
+
+                            <div class="row clearfix">
+                                <div class="col-sm-4">
+                                    <b>Proveedor:</b>
+                                    <label id="hnc_proveedor"></label>
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <b>RUC:</b>
+                                    <label id="hnc_ruc"></label>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <b>Factura Nota:</b>
+                                    <label id="hnc_factura"></label>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <b>Timbrado:</b>
+                                    <label id="hnc_timbrado"></label>
+                                </div>
+                            </div>
+
+                            <div class="row clearfix">
+                                <div class="col-sm-2">
+                                    <b>Compra Origen:</b>
+                                    <label id="hnc_compra"></label>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <b>Factura Compra:</b>
+                                    <label id="hnc_compra_factura"></label>
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <b>Estado Compra:</b>
+                                    <label id="hnc_compra_estado"></label>
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <b>Empresa:</b>
+                                    <label id="hnc_empresa"></label>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <b>Sucursal:</b>
+                                    <label id="hnc_sucursal"></label>
+                                </div>
+                            </div>
+
+                            <div class="row clearfix">
+                                <div class="col-sm-3">
+                                    <b>Depósito:</b>
+                                    <label id="hnc_deposito"></label>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <b>Funcionario:</b>
+                                    <label id="hnc_funcionario"></label>
+                                </div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Código</th>
+                                            <th>Descripción</th>
+                                            <th>Cantidad</th>
+                                            <th>Costo</th>
+                                            <th>Exentas</th>
+                                            <th>Grav.5%</th>
+                                            <th>Grav.10%</th>
+                                            <th>Subtotal</th>
+                                            <th>Motivo</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody id="tableHojaNotaCompra">
+
+                                    </tbody>
+
+                                    <tfoot>
+                                        <tr>
+                                            <th colspan="4" class="text-right">Totales</th>
+                                            <th id="hnc_total_exentas" class="text-right"></th>
+                                            <th id="hnc_total_grav_5" class="text-right"></th>
+                                            <th id="hnc_total_grav_10" class="text-right"></th>
+                                            <th id="hnc_total" class="text-right"></th>
+                                            <th></th>
+                                        </tr>
+
+                                        <tr>
+                                            <th colspan="4" class="text-right">Liquidación IVA</th>
+                                            <th class="text-right"></th>
+                                            <th id="hnc_total_iva_5" class="text-right"></th>
+                                            <th id="hnc_total_iva_10" class="text-right"></th>
+                                            <th id="hnc_total_iva" class="text-right"></th>
+                                            <th></th>
+                                        </tr>
+                                    </tfoot>
+
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
             </div>
-
         </div>
     </section>
 

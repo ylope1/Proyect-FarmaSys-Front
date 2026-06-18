@@ -276,10 +276,10 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th colspan="4">Total General</th>
-                                                <th class="text-right" id="totalExentas">0</th>
-                                                <th class="text-right" id="total5">0</th>
-                                                <th class="text-right" id="total10">0</th>
+                                                <th colspan="4" class="text-right">Totales</th>
+                                                <th class="text-right" id="txtTotalExentas">0</th>
+                                                <th class="text-right" id="txtTotalIva5">0</th>
+                                                <th class="text-right" id="txtTotalIva10">0</th>
                                                 <th class="text-right" id="txtTotalGral">0</th>
                                             </tr>
                                         </tfoot>    

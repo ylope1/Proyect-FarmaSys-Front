@@ -633,10 +633,14 @@ function seleccionProducto(producto_id, prod_desc){
 
 function listarDetalles() {
     var cantidadDetalle = 0;
+
     var totalGral = 0;
     var totalExentas = 0;
     var totalGrav5 = 0;
     var totalGrav10 = 0;
+
+    var totalIva5 = 0;
+    var totalIva10 = 0;
 
     $.ajax({
         url: getUrl() + "notas_comp_det/read/" + $("#id").val(),
@@ -647,52 +651,76 @@ function listarDetalles() {
         var lista = "";
 
         for (let rs of resultado) {
-            let costo = Number(rs.compra_costo) || 0;
             let cantidad = Number(rs.compra_cant) || 0;
+            let costo = Number(rs.compra_costo) || 0;
             let subtotal = cantidad * costo;
 
             let exentas = 0;
             let grav5 = 0;
             let grav10 = 0;
+            let iva5 = 0;
+            let iva10 = 0;
+
+            if (Number(rs.impuesto_id) === 3) {
+                exentas = subtotal;
+            }
 
             if (Number(rs.impuesto_id) === 2) {
                 grav5 = subtotal;
-                totalGrav5 += subtotal;
-            } else if (Number(rs.impuesto_id) === 1) {
+                iva5 = subtotal - (subtotal / 1.05);
+            }
+
+            if (Number(rs.impuesto_id) === 1) {
                 grav10 = subtotal;
-                totalGrav10 += subtotal;
-            } else {
-                exentas = subtotal;
-                totalExentas += subtotal;
+                iva10 = subtotal - (subtotal / 1.10);
             }
 
             totalGral += subtotal;
+            totalExentas += exentas;
+            totalGrav5 += grav5;
+            totalGrav10 += grav10;
+            totalIva5 += iva5;
+            totalIva10 += iva10;
             cantidadDetalle++;
 
-            lista += "<tr class=\"item-list\" onclick=\"seleccionDetalle("+
-                rs.producto_id+",'"+
-                (rs.prod_desc || '')+"',"+
-                rs.compra_cant+","+
-                rs.compra_costo+",'"+
-                rs.nota_comp_motivo+"');\">";
+            lista += "<tr class=\"item-list\" onclick=\"seleccionDetalle(" + 
+                rs.producto_id + ",'" + 
+                (rs.prod_desc || '') + "'," + 
+                cantidad + "," + 
+                costo + ",'" + 
+                (rs.nota_comp_motivo || '') + "');\">";
 
-            lista += "<td>"+rs.producto_id+"</td>";
-            lista += "<td>"+(rs.prod_desc || '')+"</td>";
-            lista += "<td>"+cantidad+"</td>";
-            lista += "<td class='text-right'>"+costo.toFixed(0)+"</td>";
-            lista += "<td class='text-right'>"+exentas.toFixed(0)+"</td>";
-            lista += "<td class='text-right'>"+grav5.toFixed(0)+"</td>";
-            lista += "<td class='text-right'>"+grav10.toFixed(0)+"</td>";
-            lista += "<td class='text-right'>"+subtotal.toFixed(0)+"</td>";
+            lista += "<td>" + rs.producto_id + "</td>";
+            lista += "<td>" + (rs.prod_desc || '') + "</td>";
+            lista += "<td>" + cantidad + "</td>";
+            lista += "<td class='text-right'>" + costo.toFixed(0) + "</td>";
+            lista += "<td class='text-right'>" + exentas.toFixed(0) + "</td>";
+            lista += "<td class='text-right'>" + grav5.toFixed(0) + "</td>";
+            lista += "<td class='text-right'>" + grav10.toFixed(0) + "</td>";
+            lista += "<td class='text-right'>" + subtotal.toFixed(0) + "</td>";
             lista += "</tr>";
         }
 
         $("#tableDetalles").html(lista);
 
-        $("#totalExentas").text(totalExentas.toFixed(0));
-        $("#total5").text(totalGrav5.toFixed(0));
-        $("#total10").text(totalGrav10.toFixed(0));
-        $("#txtTotalGral").text(totalGral.toFixed(0));
+        var pie = "";
+        pie += "<tr>";
+        pie += "<th colspan='4' class='text-right'>Totales</th>";
+        pie += "<th class='text-right'>" + totalExentas.toFixed(0) + "</th>";
+        pie += "<th class='text-right'>" + totalGrav5.toFixed(0) + "</th>";
+        pie += "<th class='text-right'>" + totalGrav10.toFixed(0) + "</th>";
+        pie += "<th class='text-right'>" + totalGral.toFixed(0) + "</th>";
+        pie += "</tr>";
+
+        pie += "<tr>";
+        pie += "<th colspan='4' class='text-right'>Liquidación IVA</th>";
+        pie += "<th class='text-right'>" + totalExentas.toFixed(0) + "</th>";
+        pie += "<th class='text-right'>" + totalIva5.toFixed(0) + "</th>";
+        pie += "<th class='text-right'>" + totalIva10.toFixed(0) + "</th>";
+        pie += "<th class='text-right'>" + (totalIva5 + totalIva10).toFixed(0) + "</th>";
+        pie += "</tr>";
+
+        $("#tableDetalles").closest("table").find("tfoot").html(pie);
 
         if ($("#nota_comp_estado").val() === "PENDIENTE" && cantidadDetalle > 0 && tienePermiso(rutaPantalla, "confirmar")) {
             $("#btnConfirmar").removeAttr("disabled");
@@ -701,8 +729,8 @@ function listarDetalles() {
         }
     })
     .fail(function (a, b, c) {
-        alert(c);
         console.log(a.responseText);
+        swal("Error", "No se pudo listar el detalle de la nota de compra.", "error");
     });
 }
 
